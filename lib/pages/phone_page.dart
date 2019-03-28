@@ -19,6 +19,9 @@ class PhonePage extends StatelessWidget {
           onSubmitted: (String s) {
             print(s);
           },
+          onChanged: (String s) {
+            print(s);
+          },
         ),
       ],
     );
