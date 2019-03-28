@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pango_lite/model/blocs/account_bloc.dart';
 import 'package:pango_lite/model/model.dart';
 import 'package:pango_lite/pages/phone_page.dart';
+import 'package:pango_lite/locale/locale.dart';
 
 class MainPage extends StatelessWidget {
   @override
@@ -13,7 +14,7 @@ class MainPage extends StatelessWidget {
           case ConnectionState.waiting:
             return Scaffold(
               appBar: AppBar(
-                title: Text('Pango Lite'),
+                title: Text(AppLocalizations.of(context).title),
               ),
               body: Center(
                 child: CircularProgressIndicator(),
@@ -23,7 +24,7 @@ class MainPage extends StatelessWidget {
             if (snapshot.hasError)
               return Scaffold(
                 appBar: AppBar(
-                  title: Text('Error'),
+                  title: Text(AppLocalizations.of(context).title),
                 ),
                 body: Center(
                   child: Text('Error: ${snapshot.error}'),
@@ -34,7 +35,7 @@ class MainPage extends StatelessWidget {
                 default:
                   return Scaffold(
                     appBar: AppBar(
-                      title: Text('Phone'),
+                      title: Text(AppLocalizations.of(context).title),
                     ),
                     body: Center(
                       child: PhonePage(),

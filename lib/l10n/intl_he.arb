@@ -1,0 +1,15 @@
+{
+  "@@last_modified": "2019-03-28T15:02:25.125",
+  "title": "פנגו לייט",
+  "@title": {
+    "description": "Title for the Weather Application",
+    "type": "text",
+    "placeholders": {}
+  },
+  "phoneNumberHint": "הזן מספר נייד",
+  "@phoneNumberHint": {
+    "description": "hint text for phone number text field",
+    "type": "text",
+    "placeholders": {}
+  }
+}
