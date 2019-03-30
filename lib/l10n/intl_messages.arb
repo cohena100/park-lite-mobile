@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2019-03-28T17:21:11.066740",
+  "@@last_modified": "2019-03-29T19:37:54.329557",
   "title": "Pango Lite",
   "@title": {
     "description": "Title for the Weather Application",
@@ -9,6 +9,12 @@
   "phoneNumberHint": "Please enter your phone number",
   "@phoneNumberHint": {
     "description": "hint text for phone number text field",
+    "type": "text",
+    "placeholders": {}
+  },
+  "carNumberHint": "Please enter your car number",
+  "@carNumberHint": {
+    "description": "hint text for car number text field",
     "type": "text",
     "placeholders": {}
   }

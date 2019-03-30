@@ -1,12 +1,13 @@
 import 'package:pango_lite/model/blocs/account_bloc.dart';
+import 'package:pango_lite/model/proxies/network_proxy.dart';
 
 class Model {
 
-  AccountBloc accountBloc;
+  final NetworkProxyProvider networkProxy;
+  final AccountBloc accountBloc;
 
-  Model() {
-    accountBloc = AccountBloc();
-  }
+  Model(this.networkProxy): accountBloc = AccountBloc(networkProxy);
+
 }
 
-final model = Model();
+var model = Model(NetworkProxy());

@@ -20,6 +20,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
+    "carNumberHint" : MessageLookupByLibrary.simpleMessage("Please enter your car number"),
     "phoneNumberHint" : MessageLookupByLibrary.simpleMessage("Please enter your phone number"),
     "title" : MessageLookupByLibrary.simpleMessage("Pango Lite")
   };

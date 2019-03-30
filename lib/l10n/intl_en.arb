@@ -11,5 +11,11 @@
     "description": "hint text for phone number text field",
     "type": "text",
     "placeholders": {}
+  },
+  "carNumberHint": "Please enter your car number",
+  "@carNumberHint": {
+    "description": "hint text for car number text field",
+    "type": "text",
+    "placeholders": {}
   }
 }

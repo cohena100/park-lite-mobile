@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pango_lite/locale/locale.dart';
 import 'package:pango_lite/pages/phone_page_vm.dart';
+import 'package:pango_lite/pages/car_page.dart';
 
 class PhonePage extends StatefulWidget {
   @override
@@ -40,17 +41,25 @@ class PhonePageState extends State<PhonePage> {
             hintText: AppLocalizations.of(context).phoneNumberHint,
           ),
           onSubmitted: (String s) {
-            print(s);
+            navigateToCar(context);
           },
           onChanged: (String s) {
             bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
             if (isIOS && s.length == PhonePageState.textFieldMaxLength) {
-              print(s);
+              navigateToCar(context);
             }
           },
         ),
       ],
     );
+  }
+
+  void navigateToCar(BuildContext context) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CarPage(),
+        ));
   }
 
   @override

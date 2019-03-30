@@ -34,6 +34,14 @@ class AppLocalizations {
       desc: 'hint text for phone number text field',
     );
   }
+
+  String get carNumberHint {
+    return Intl.message(
+      'Please enter your car number',
+      name: 'carNumberHint',
+      desc: 'hint text for car number text field',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

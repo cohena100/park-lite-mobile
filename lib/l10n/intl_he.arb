@@ -11,5 +11,11 @@
     "description": "hint text for phone number text field",
     "type": "text",
     "placeholders": {}
+  },
+  "carNumberHint": "הזן מספר רכב",
+  "@carNumberHint": {
+    "description": "hint text for car number text field",
+    "type": "text",
+    "placeholders": {}
   }
 }
