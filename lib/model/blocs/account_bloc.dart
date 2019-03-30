@@ -8,8 +8,8 @@ class AccountBloc {
 
   AccountBloc(this._networkProxy);
 
-  Future login() async {
-    await _networkProxy.login('phone', 'car');
+  Future login(String phone, String car) async {
+    await _networkProxy.login(phone, car);
     return AccountBlocState.notLoggedIn;
   }
 }

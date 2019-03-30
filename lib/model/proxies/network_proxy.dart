@@ -9,7 +9,7 @@ abstract class NetworkProxyProvider {
 
 class NetworkProxy implements NetworkProxyProvider {
   Future login(String phone, String car) async {
-    var url = 'http://10.0.2.2:3000/weather?address=aa';
+    var url = 'http://10.0.2.2:3000/login?phone=$phone&car=$car';
     var response = await http.get(url);
     if (response.statusCode == 200) {
       print('avic: ${response.body}');
