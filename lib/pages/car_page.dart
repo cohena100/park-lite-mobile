@@ -3,18 +3,21 @@ import 'package:pango_lite/locale/locale.dart';
 import 'package:pango_lite/pages/car_page_vm.dart';
 
 class CarPage extends StatefulWidget {
+  final CarPageVM vm;
+
+  CarPage({Key key, @required this.vm}) : super(key: key);
+
   @override
   CarPageState createState() => CarPageState();
 }
 
 class CarPageState extends State<CarPage> {
   static const textFieldMaxLength = 8;
-  final vm = CarPageVM();
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<Object>(
-        stream: vm.actionStream,
+        stream: widget.vm.actionStream,
         initialData: CarPageVMActions.none,
         builder: (context, snapshot) {
           CarPageVMActions action = snapshot.data;
@@ -43,13 +46,15 @@ class CarPageState extends State<CarPage> {
             decoration: InputDecoration(
               hintText: AppLocalizations.of(context).carNumberHint,
             ),
-            onSubmitted: (String s) {
-              print(s);
+            onSubmitted: (String s) async {
+              final result = await _login(s);
+              print('avic: ' + result.toString());
             },
-            onChanged: (String s) {
+            onChanged: (String s) async {
               bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
               if (isIOS && s.length == CarPageState.textFieldMaxLength) {
-                print(s);
+                final result = await _login(s);
+                print('avic: ' + result.toString());
               }
             },
           ),
@@ -60,7 +65,11 @@ class CarPageState extends State<CarPage> {
 
   @override
   void dispose() {
-    vm.close();
+    widget.vm.close();
     super.dispose();
+  }
+
+  Future _login(String car) {
+    return widget.vm.login(widget.vm.phone, car);
   }
 }

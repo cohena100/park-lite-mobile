@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:pango_lite/locale/locale.dart';
 import 'package:pango_lite/pages/phone_page_vm.dart';
-import 'package:pango_lite/pages/car_page.dart';
+import 'package:pango_lite/model/model.dart';
 
 class PhonePage extends StatefulWidget {
+  final PhonePageVM vm;
+
+  PhonePage({Key key, @required this.vm}) : super(key: key);
+
   @override
   PhonePageState createState() => PhonePageState();
 }
 
 class PhonePageState extends State<PhonePage> {
   static const textFieldMaxLength = 10;
-  final vm = PhonePageVM();
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<Object>(
-        stream: vm.actionStream,
+        stream: widget.vm.actionStream,
         initialData: PhonePageVMActions.none,
         builder: (context, snapshot) {
           PhonePageVMActions action = snapshot.data;
@@ -41,12 +44,12 @@ class PhonePageState extends State<PhonePage> {
             hintText: AppLocalizations.of(context).phoneNumberHint,
           ),
           onSubmitted: (String s) {
-            navigateToCar(context);
+            navigateToCar(context, s);
           },
           onChanged: (String s) {
             bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
             if (isIOS && s.length == PhonePageState.textFieldMaxLength) {
-              navigateToCar(context);
+              navigateToCar(context, s);
             }
           },
         ),
@@ -54,17 +57,17 @@ class PhonePageState extends State<PhonePage> {
     );
   }
 
-  void navigateToCar(BuildContext context) {
+  void navigateToCar(BuildContext context, String phone) {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => CarPage(),
+          builder: (context) => model.carPage(phone),
         ));
   }
 
   @override
   void dispose() {
-    vm.close();
+    widget.vm.close();
     super.dispose();
   }
 }

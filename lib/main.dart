@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pango_lite/pages/main_page.dart';
+import 'package:pango_lite/model/model.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:pango_lite/locale/locale.dart';
 
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       ],
       onGenerateTitle: (BuildContext context) =>
           AppLocalizations.of(context).title,
-      home: MainPage(),
+      home: model.mainPage(),
     );
   }
 }

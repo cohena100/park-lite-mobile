@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:pango_lite/model/model.dart';
 import 'package:pango_lite/pages/main_page_vm.dart';
-import 'package:pango_lite/pages/phone_page.dart';
 import 'package:pango_lite/locale/locale.dart';
 
 class MainPage extends StatefulWidget {
+  final MainPageVM vm;
+
+  MainPage({Key key, @required this.vm}) : super(key: key);
+
   @override
   MainPageState createState() => MainPageState();
 }
 
 class MainPageState extends State<MainPage> {
-  final MainPageVM vm = MainPageVM();
-
   @override
   Widget build(BuildContext context) {
-    vm.login();
+    widget.vm.login();
     return StreamBuilder(
-      stream: vm.actionStream,
+      stream: widget.vm.actionStream,
       initialData: MainPageVMActions.busy,
       builder: (context, snapshot) {
         final MainPageVMActions action = snapshot.data;
@@ -26,7 +28,7 @@ class MainPageState extends State<MainPage> {
             child = CircularProgressIndicator();
             break;
           case MainPageVMActions.phone:
-            child = PhonePage();
+            child = model.phonePage();
             break;
         }
         return Scaffold(
@@ -43,7 +45,7 @@ class MainPageState extends State<MainPage> {
 
   @override
   void dispose() {
-    vm.close();
+    widget.vm.close();
     super.dispose();
   }
 }

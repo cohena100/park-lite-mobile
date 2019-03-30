@@ -1,15 +1,24 @@
 import 'dart:async';
+import 'package:pango_lite/model/proxies/local_db_proxy.dart';
 import 'package:pango_lite/model/proxies/network_proxy.dart';
 
-enum AccountBlocState { notLoggedIn }
+enum AccountBlocState { notLoggedIn, loggedIn }
 
 class AccountBloc {
   final NetworkProxyProvider _networkProxy;
+  final LocalDBProxyProvider _localDBProxy;
 
-  AccountBloc(this._networkProxy);
+  AccountBloc(this._networkProxy, this._localDBProxy);
+
+  Future handshake() async {
+    await Future.delayed(Duration(seconds: 3));
+    if (_localDBProxy.loadToken() == null) {
+      return AccountBlocState.notLoggedIn;
+    }
+  }
 
   Future login(String phone, String car) async {
     await _networkProxy.login(phone, car);
-    return AccountBlocState.notLoggedIn;
+    return AccountBlocState.loggedIn;
   }
 }

@@ -14,7 +14,7 @@ class MainPageVM {
   }
 
   void login() async {
-    final state = await model.accountBloc.login('0570009557', '04455338');
+    final state = await model.accountBloc.handshake();
     switch (state as AccountBlocState) {
       case AccountBlocState.notLoggedIn:
         _actionSubject.add(MainPageVMActions.phone);
