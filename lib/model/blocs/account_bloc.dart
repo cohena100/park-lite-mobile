@@ -12,8 +12,10 @@ class AccountBloc {
 
   Future handshake() async {
     await Future.delayed(Duration(seconds: 3));
-    if (_localDBProxy.loadToken() == null) {
+    if (_localDBProxy.loadAccount() == null) {
       return AccountBlocState.notLoggedIn;
+    } else {
+      return AccountBlocState.loggedIn;
     }
   }
 

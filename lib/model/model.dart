@@ -1,8 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:pango_lite/model/blocs/account_bloc.dart';
 import 'package:pango_lite/model/proxies/local_db_proxy.dart';
 import 'package:pango_lite/model/proxies/network_proxy.dart';
 import 'package:pango_lite/pages/car_page.dart';
 import 'package:pango_lite/pages/car_page_vm.dart';
+import 'package:pango_lite/pages/home_page.dart';
+import 'package:pango_lite/pages/home_page_vm.dart';
 import 'package:pango_lite/pages/main_page.dart';
 import 'package:pango_lite/pages/main_page_vm.dart';
 import 'package:pango_lite/pages/phone_page.dart';
@@ -17,15 +20,19 @@ class Model {
       : accountBloc = AccountBloc(networkProxy, localDBProxy);
 
   MainPage mainPage() {
-    return MainPage(vm: MainPageVM());
+    return MainPage(key: Key('MainPage'), vm: MainPageVM());
   }
 
   PhonePage phonePage() {
-    return PhonePage(vm: PhonePageVM());
+    return PhonePage(key: Key('PhonePage'), vm: PhonePageVM());
   }
 
   CarPage carPage(String phone) {
-    return CarPage(vm: CarPageVM(phone));
+    return CarPage(key: Key('CarPage'), vm: CarPageVM(phone));
+  }
+
+  HomePage homePage() {
+    return HomePage(key: Key('HomePage'), vm: HomePageVM());
   }
 }
 

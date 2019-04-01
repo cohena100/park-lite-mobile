@@ -25,11 +25,13 @@ class MainPageState extends State<MainPage> {
         Widget child;
         switch (action) {
           case MainPageVMActions.busy:
-            child = CircularProgressIndicator();
+            child = CircularProgressIndicator(key: Key('MyApp'),);
             break;
           case MainPageVMActions.phone:
             child = model.phonePage();
             break;
+          case MainPageVMActions.home:
+            child = model.homePage();
         }
         return Scaffold(
           appBar: AppBar(

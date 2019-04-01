@@ -1,15 +1,22 @@
+import 'package:pango_lite/model/elements/account.dart';
+
 enum LocalDBProxyKeys {
-  token,
+  account,
 }
 
 abstract class LocalDBProxyProvider {
-  String loadToken();
+  Account loadAccount();
+  saveAccount(Account account);
 }
 
 class LocalDBProxy implements LocalDBProxyProvider {
   final Map _db = {};
 
-  String loadToken() {
-    return _db[LocalDBProxyKeys.token];
+  Account loadAccount() {
+    return _db[LocalDBProxyKeys.account];
+  }
+
+  saveAccount(Account account) {
+    _db[LocalDBProxyKeys.account] = account;
   }
 }
