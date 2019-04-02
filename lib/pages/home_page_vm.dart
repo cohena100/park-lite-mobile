@@ -6,8 +6,9 @@ class HomePageVM {
   final _actionSubject = BehaviorSubject();
   Stream get actionStream => _actionSubject.stream;
 
+  HomePageVM(Map vmPayload);
+
   void close() {
     _actionSubject.close();
   }
-
 }

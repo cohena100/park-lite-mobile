@@ -5,11 +5,10 @@ enum CarPageVMActions { none }
 
 class CarPageVM {
   final String phone;
-
-  CarPageVM(this.phone);
-
   final _actionSubject = BehaviorSubject();
   Stream get actionStream => _actionSubject.stream;
+
+  CarPageVM(Map vmPayload) : phone = vmPayload['phone'];
 
   void close() {
     _actionSubject.close();

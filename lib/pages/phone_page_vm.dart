@@ -6,8 +6,9 @@ class PhonePageVM {
   final _actionSubject = BehaviorSubject();
   Stream get actionStream => _actionSubject.stream;
 
+  PhonePageVM(Map vmPayload);
+
   void close() {
     _actionSubject.close();
   }
-
 }

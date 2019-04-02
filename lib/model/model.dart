@@ -1,14 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:pango_lite/model/blocs/account_bloc.dart';
 import 'package:pango_lite/model/proxies/local_db_proxy.dart';
 import 'package:pango_lite/model/proxies/network_proxy.dart';
-import 'package:pango_lite/pages/car_page.dart';
 import 'package:pango_lite/pages/car_page_vm.dart';
-import 'package:pango_lite/pages/home_page.dart';
 import 'package:pango_lite/pages/home_page_vm.dart';
-import 'package:pango_lite/pages/main_page.dart';
 import 'package:pango_lite/pages/main_page_vm.dart';
-import 'package:pango_lite/pages/phone_page.dart';
 import 'package:pango_lite/pages/phone_page_vm.dart';
 
 class Model {
@@ -19,20 +14,20 @@ class Model {
   Model(this.networkProxy, this.localDBProxy)
       : accountBloc = AccountBloc(networkProxy, localDBProxy);
 
-  MainPage mainPage() {
-    return MainPage(key: Key('MainPage'), vm: MainPageVM());
+  MainPageVM mainPageVM(Map vmPayload) {
+    return MainPageVM(vmPayload);
   }
 
-  PhonePage phonePage() {
-    return PhonePage(key: Key('PhonePage'), vm: PhonePageVM());
+  PhonePageVM phonePageVM(Map vmPayload) {
+    return PhonePageVM(vmPayload);
   }
 
-  CarPage carPage(String phone) {
-    return CarPage(key: Key('CarPage'), vm: CarPageVM(phone));
+  CarPageVM carPageVM(Map vmPayload) {
+    return CarPageVM(vmPayload);
   }
 
-  HomePage homePage() {
-    return HomePage(key: Key('HomePage'), vm: HomePageVM());
+  HomePageVM homePageVM(Map vmPayload) {
+    return HomePageVM(vmPayload);
   }
 }
 

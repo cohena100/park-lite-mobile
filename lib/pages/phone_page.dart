@@ -1,24 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:pango_lite/locale/locale.dart';
+import 'package:pango_lite/pages/car_page.dart';
 import 'package:pango_lite/pages/phone_page_vm.dart';
 import 'package:pango_lite/model/model.dart';
 
 class PhonePage extends StatefulWidget {
-  final PhonePageVM vm;
+  final Map vmPayload;
 
-  PhonePage({Key key, @required this.vm}) : super(key: key);
+  PhonePage({Key key, @required this.vmPayload}) : super(key: key);
 
   @override
   PhonePageState createState() => PhonePageState();
 }
 
 class PhonePageState extends State<PhonePage> {
+  PhonePageVM vm;
   static const textFieldMaxLength = 10;
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<Object>(
-        stream: widget.vm.actionStream,
+    vm?.close();
+    vm = model.phonePageVM(widget.vmPayload);
+    return StreamBuilder(
+        stream: vm.actionStream,
         initialData: PhonePageVMActions.none,
         builder: (context, snapshot) {
           PhonePageVMActions action = snapshot.data;
@@ -31,13 +35,14 @@ class PhonePageState extends State<PhonePage> {
   }
 
   Widget phone(BuildContext context) {
+    bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         TextField(
-          autofocus: true,
-          keyboardType: TextInputType.number,
+          key: Key('PhoneTextField'),
+          keyboardType: isIOS ? TextInputType.text : TextInputType.number,
           maxLength: PhonePageState.textFieldMaxLength,
           textAlign: TextAlign.center,
           decoration: InputDecoration(
@@ -45,12 +50,6 @@ class PhonePageState extends State<PhonePage> {
           ),
           onSubmitted: (String s) {
             navigateToCar(context, s);
-          },
-          onChanged: (String s) {
-            bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
-            if (isIOS && s.length == PhonePageState.textFieldMaxLength) {
-              navigateToCar(context, s);
-            }
           },
         ),
       ],
@@ -61,13 +60,7 @@ class PhonePageState extends State<PhonePage> {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => model.carPage(phone),
+          builder: (context) => CarPage(key: Key('CarPage'),vmPayload: {}),
         ));
-  }
-
-  @override
-  void dispose() {
-    widget.vm.close();
-    super.dispose();
   }
 }
