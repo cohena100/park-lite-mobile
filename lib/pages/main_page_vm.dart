@@ -14,7 +14,7 @@ class MainPageVM {
     _actionSubject.close();
   }
 
-  void handshake() async {
+  Future handshake() async {
     _actionSubject.add(MainPageVMActions.busy);
     final state = await model.accountBloc.handshake();
     switch (state as AccountBlocState) {

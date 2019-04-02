@@ -14,7 +14,7 @@ class CarPageVM {
     _actionSubject.close();
   }
 
-  Future login(String phone, String car) {
-    return model.accountBloc.login(phone, car);
+  Future login(String car) async {
+    return await model.accountBloc.login(phone, car);
   }
 }

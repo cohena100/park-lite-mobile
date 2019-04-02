@@ -44,13 +44,17 @@ class CarPageState extends State<CarPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           TextField(
+            key: Key('CarTextField'),
+            autofocus: true,
             keyboardType: isIOS ? TextInputType.text : TextInputType.number,
             maxLength: CarPageState.textFieldMaxLength,
             textAlign: TextAlign.center,
             decoration: InputDecoration(
               hintText: AppLocalizations.of(context).carNumberHint,
             ),
-            onSubmitted: (String s) async {},
+            onSubmitted: (String s) async {
+              print(await vm.login(s));
+            },
           ),
         ],
       ),

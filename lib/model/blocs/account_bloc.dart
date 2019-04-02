@@ -20,7 +20,11 @@ class AccountBloc {
   }
 
   Future login(String phone, String car) async {
-    await _networkProxy.login(phone, car);
-    return AccountBlocState.loggedIn;
+    final result = await _networkProxy.login(phone, car);
+    if (result == null) {
+      return AccountBlocState.loggedIn;
+    } else {
+      return AccountBlocState.loggedIn;
+    }
   }
 }

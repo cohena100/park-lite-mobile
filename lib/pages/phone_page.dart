@@ -42,6 +42,7 @@ class PhonePageState extends State<PhonePage> {
       children: [
         TextField(
           key: Key('PhoneTextField'),
+          autofocus: true,
           keyboardType: isIOS ? TextInputType.text : TextInputType.number,
           maxLength: PhonePageState.textFieldMaxLength,
           textAlign: TextAlign.center,
@@ -60,7 +61,7 @@ class PhonePageState extends State<PhonePage> {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => CarPage(key: Key('CarPage'),vmPayload: {}),
+          builder: (context) => CarPage(key: Key('CarPage'),vmPayload: {'phone': phone}),
         ));
   }
 }
