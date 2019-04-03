@@ -19,7 +19,6 @@ class MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    vm?.close();
     vm = model.mainPageVM(widget.vmPayload);
     return StreamBuilder(
       stream: vm.actionStream,
@@ -51,5 +50,11 @@ class MainPageState extends State<MainPage> {
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    vm?.close();
+    super.dispose();
   }
 }

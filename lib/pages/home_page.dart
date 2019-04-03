@@ -16,7 +16,6 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    vm?.close();
     vm = model.homePageVM(widget.vmPayload);
     return StreamBuilder(
         stream: vm.actionStream,
@@ -29,5 +28,11 @@ class HomePageState extends State<HomePage> {
               break;
           }
         });
+  }
+
+  @override
+  void dispose() {
+    vm?.close();
+    super.dispose();
   }
 }

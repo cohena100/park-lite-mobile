@@ -19,7 +19,6 @@ class PhonePageState extends State<PhonePage> {
 
   @override
   Widget build(BuildContext context) {
-    vm?.close();
     vm = model.phonePageVM(widget.vmPayload);
     return StreamBuilder(
         stream: vm.actionStream,
@@ -63,5 +62,11 @@ class PhonePageState extends State<PhonePage> {
         MaterialPageRoute(
           builder: (context) => CarPage(key: Key('CarPage'),vmPayload: {'phone': phone}),
         ));
+  }
+
+  @override
+  void dispose() {
+    vm?.close();
+    super.dispose();
   }
 }

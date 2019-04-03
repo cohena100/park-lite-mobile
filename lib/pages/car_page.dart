@@ -18,7 +18,6 @@ class CarPageState extends State<CarPage> {
 
   @override
   Widget build(BuildContext context) {
-    vm?.close();
     vm = model.carPageVM(widget.vmPayload);
     return StreamBuilder(
         stream: vm.actionStream,
@@ -61,7 +60,9 @@ class CarPageState extends State<CarPage> {
     );
   }
 
-//  Future _login(String car) {
-//    return vm.login(vm.phone, car);
-//  }
+  @override
+  void dispose() {
+    vm?.close();
+    super.dispose();
+  }
 }
