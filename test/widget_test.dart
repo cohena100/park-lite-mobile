@@ -20,7 +20,7 @@ void main() {
   });
 
   testWidgets('Already logged in', (WidgetTester tester) async {
-    model.localDBProxy.saveAccount(Account());
+    model.localDBProxy.saveAccount(Account({}));
     await tester.pumpWidget(MyApp());
     await tester.pumpAndSettle();
     expect(find.byKey(Key('HomePage')), findsOneWidget);

@@ -14,20 +14,20 @@ class Model {
   Model(this.networkProxy, this.localDBProxy)
       : accountBloc = AccountBloc(networkProxy, localDBProxy);
 
-  MainPageVM mainPageVM(Map vmPayload) {
-    return MainPageVM(vmPayload);
+  MainPageVM mainPageVM() {
+    return MainPageVM();
   }
 
-  PhonePageVM phonePageVM(Map vmPayload) {
-    return PhonePageVM(vmPayload);
+  PhonePageVM phonePageVM() {
+    return PhonePageVM();
   }
 
-  CarPageVM carPageVM(Map vmPayload) {
-    return CarPageVM(vmPayload);
+  CarPageVM carPageVM() {
+    return CarPageVM();
   }
 
-  HomePageVM homePageVM(Map vmPayload) {
-    return HomePageVM(vmPayload);
+  HomePageVM homePageVM() {
+    return HomePageVM();
   }
 }
 

@@ -2,27 +2,34 @@ import 'package:pango_lite/model/model.dart';
 import 'package:pango_lite/model/blocs/account_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 
-enum MainPageVMActions { none, busy, phone, home }
+enum MainPageVMActionState { none, phone, home }
+
+enum MainPageVMActionDataKeys { none }
+
+class MainPageVMAction {
+  final Map data;
+  final MainPageVMActionState state;
+  MainPageVMAction(
+      {this.data = const {}, this.state = MainPageVMActionState.none});
+}
 
 class MainPageVM {
   final _actionSubject = BehaviorSubject();
   Stream get actionStream => _actionSubject.stream;
 
-  MainPageVM(Map vmPayload);
-
   void close() {
     _actionSubject.close();
   }
 
-  Future handshake() async {
-    _actionSubject.add(MainPageVMActions.busy);
-    final state = await model.accountBloc.handshake();
-    switch (state as AccountBlocState) {
+  void init() {
+    final state = model.accountBloc.handshake();
+    switch (state) {
       case AccountBlocState.notLoggedIn:
-        _actionSubject.add(MainPageVMActions.phone);
+        _actionSubject
+            .add(MainPageVMAction(state: MainPageVMActionState.phone));
         break;
       case AccountBlocState.loggedIn:
-        _actionSubject.add(MainPageVMActions.home);
+        _actionSubject.add(MainPageVMAction(state: MainPageVMActionState.home));
         break;
     }
   }

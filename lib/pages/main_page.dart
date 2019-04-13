@@ -6,9 +6,7 @@ import 'package:pango_lite/locale/locale.dart';
 import 'package:pango_lite/pages/phone_page.dart';
 
 class MainPage extends StatefulWidget {
-  final Map vmPayload;
-
-  MainPage({Key key, @required this.vmPayload}) : super(key: key);
+  MainPage({Key key}) : super(key: key);
 
   @override
   MainPageState createState() => MainPageState();
@@ -19,26 +17,27 @@ class MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    vm = model.mainPageVM(widget.vmPayload);
+    vm = model.mainPageVM();
     return StreamBuilder(
       stream: vm.actionStream,
-      initialData: MainPageVMActions.none,
+      initialData: MainPageVMAction(),
       builder: (context, snapshot) {
-        final MainPageVMActions action = snapshot.data;
+        final MainPageVMAction action = snapshot.data;
         Widget title = Text(AppLocalizations.of(context).title);
         Widget child;
-        switch (action) {
-          case MainPageVMActions.none:
-            vm.handshake();
+        switch (action.state) {
+          case MainPageVMActionState.none:
+            vm.init();
+            return Container();
             break;
-          case MainPageVMActions.busy:
-            child = CircularProgressIndicator();
+          case MainPageVMActionState.phone:
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              vm.init();
+            }
+            child = PhonePage(key: Key('PhonePage'));
             break;
-          case MainPageVMActions.phone:
-            child = PhonePage(key: Key('PhonePage'),vmPayload: {});
-            break;
-          case MainPageVMActions.home:
-            child = HomePage(key: Key('HomePage'),vmPayload: {});
+          case MainPageVMActionState.home:
+            child = HomePage(key: Key('HomePage'));
         }
         return Scaffold(
           appBar: AppBar(

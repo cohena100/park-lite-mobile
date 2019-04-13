@@ -4,9 +4,7 @@ import 'package:pango_lite/model/model.dart';
 import 'package:pango_lite/pages/car_page_vm.dart';
 
 class CarPage extends StatefulWidget {
-  final Map vmPayload;
-
-  CarPage({Key key, @required this.vmPayload}) : super(key: key);
+  CarPage({Key key}) : super(key: key);
 
   @override
   CarPageState createState() => CarPageState();
@@ -15,24 +13,34 @@ class CarPage extends StatefulWidget {
 class CarPageState extends State<CarPage> {
   CarPageVM vm;
   static const textFieldMaxLength = 8;
+  final _textEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    vm = model.carPageVM(widget.vmPayload);
+    vm = model.carPageVM();
     return StreamBuilder(
         stream: vm.actionStream,
-        initialData: CarPageVMActions.none,
+        initialData: CarPageVMAction(),
         builder: (context, snapshot) {
-          CarPageVMActions action = snapshot.data;
-          switch (action) {
-            case CarPageVMActions.none:
-              return car(context);
+          CarPageVMAction action = snapshot.data;
+          switch (action.state) {
+            case CarPageVMActionState.none:
+              vm.init();
+              return Container();
+              break;
+            case CarPageVMActionState.number:
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                vm.init();
+              }
+              return car(context, action.data[CarPageVMActionDataKeys.number]);
               break;
           }
         });
   }
 
-  Widget car(BuildContext context) {
+  Widget car(BuildContext context, String number) {
+    _textEditingController.value =
+        number == null ? TextEditingValue() : TextEditingValue(text: number);
     bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     return Scaffold(
       appBar: AppBar(
@@ -44,6 +52,7 @@ class CarPageState extends State<CarPage> {
         children: [
           TextField(
             key: Key('CarTextField'),
+            controller: _textEditingController,
             autofocus: true,
             keyboardType: isIOS ? TextInputType.text : TextInputType.number,
             maxLength: CarPageState.textFieldMaxLength,
@@ -51,8 +60,12 @@ class CarPageState extends State<CarPage> {
             decoration: InputDecoration(
               hintText: AppLocalizations.of(context).carNumberHint,
             ),
+            onChanged: (String s) {
+              vm.numberChanged(s);
+            },
             onSubmitted: (String s) async {
-              print(await vm.login(s));
+              await vm.login();
+              Navigator.of(context).popUntil(ModalRoute.withName('/'));
             },
           ),
         ],

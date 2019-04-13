@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       ],
       onGenerateTitle: (BuildContext context) =>
           AppLocalizations.of(context).title,
-      home: MainPage(vmPayload: {}),
+      home: MainPage(),
     );
   }
 }

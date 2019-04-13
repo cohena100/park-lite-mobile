@@ -5,9 +5,7 @@ import 'package:pango_lite/pages/phone_page_vm.dart';
 import 'package:pango_lite/model/model.dart';
 
 class PhonePage extends StatefulWidget {
-  final Map vmPayload;
-
-  PhonePage({Key key, @required this.vmPayload}) : super(key: key);
+  PhonePage({Key key}) : super(key: key);
 
   @override
   PhonePageState createState() => PhonePageState();
@@ -16,24 +14,35 @@ class PhonePage extends StatefulWidget {
 class PhonePageState extends State<PhonePage> {
   PhonePageVM vm;
   static const textFieldMaxLength = 10;
+  final _textEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    vm = model.phonePageVM(widget.vmPayload);
+    vm = model.phonePageVM();
     return StreamBuilder(
         stream: vm.actionStream,
-        initialData: PhonePageVMActions.none,
+        initialData: PhonePageVMAction(),
         builder: (context, snapshot) {
-          PhonePageVMActions action = snapshot.data;
-          switch (action) {
-            case PhonePageVMActions.none:
-              return phone(context);
+          PhonePageVMAction action = snapshot.data;
+          switch (action.state) {
+            case PhonePageVMActionState.none:
+              vm.init();
+              return Container();
+              break;
+            case PhonePageVMActionState.phone:
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                vm.init();
+              }
+              return phone(
+                  context, action.data[PhonePageVMActionDataKeys.phone]);
               break;
           }
         });
   }
 
-  Widget phone(BuildContext context) {
+  Widget phone(BuildContext context, String phone) {
+    _textEditingController.value =
+        phone == null ? TextEditingValue() : TextEditingValue(text: phone);
     bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -41,6 +50,7 @@ class PhonePageState extends State<PhonePage> {
       children: [
         TextField(
           key: Key('PhoneTextField'),
+          controller: _textEditingController,
           autofocus: true,
           keyboardType: isIOS ? TextInputType.text : TextInputType.number,
           maxLength: PhonePageState.textFieldMaxLength,
@@ -48,19 +58,22 @@ class PhonePageState extends State<PhonePage> {
           decoration: InputDecoration(
             hintText: AppLocalizations.of(context).phoneNumberHint,
           ),
+          onChanged: (String s) {
+            vm.phoneChanged(s);
+          },
           onSubmitted: (String s) {
-            navigateToCar(context, s);
+            navigateToCar(context);
           },
         ),
       ],
     );
   }
 
-  void navigateToCar(BuildContext context, String phone) {
+  void navigateToCar(BuildContext context) {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => CarPage(key: Key('CarPage'),vmPayload: {'phone': phone}),
+          builder: (context) => CarPage(key: Key('CarPage')),
         ));
   }
 

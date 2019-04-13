@@ -3,9 +3,7 @@ import 'package:pango_lite/model/model.dart';
 import 'package:pango_lite/pages/home_page_vm.dart';
 
 class HomePage extends StatefulWidget {
-  final Map vmPayload;
-
-  HomePage({Key key, @required this.vmPayload}) : super(key: key);
+  HomePage({Key key}) : super(key: key);
 
   @override
   HomePageState createState() => HomePageState();
@@ -16,14 +14,18 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    vm = model.homePageVM(widget.vmPayload);
+    vm = model.homePageVM();
     return StreamBuilder(
         stream: vm.actionStream,
-        initialData: HomePageVMActions.none,
+        initialData: HomePageVMAction(),
         builder: (context, snapshot) {
-          HomePageVMActions action = snapshot.data;
-          switch (action) {
-            case HomePageVMActions.none:
+          HomePageVMAction action = snapshot.data;
+          switch (action.state) {
+            case HomePageVMActionState.none:
+              vm.init();
+              return Container();
+              break;
+            case HomePageVMActionState.home:
               return Center(child: Text('Home Page'));
               break;
           }

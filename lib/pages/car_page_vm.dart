@@ -1,20 +1,37 @@
 import 'package:pango_lite/model/model.dart';
 import 'package:rxdart/rxdart.dart';
 
-enum CarPageVMActions { none }
+enum CarPageVMActionState { none, number }
+
+enum CarPageVMActionDataKeys { none, number }
+
+class CarPageVMAction {
+  final Map data;
+  final CarPageVMActionState state;
+  CarPageVMAction(
+      {this.data = const {}, this.state = CarPageVMActionState.none});
+}
 
 class CarPageVM {
-  final String phone;
   final _actionSubject = BehaviorSubject();
   Stream get actionStream => _actionSubject.stream;
-
-  CarPageVM(Map vmPayload) : phone = vmPayload['phone'];
 
   void close() {
     _actionSubject.close();
   }
 
-  Future login(String car) async {
-    return await model.accountBloc.login(phone, car);
+  void init() {
+    String number = model.accountBloc.number;
+    _actionSubject.add(CarPageVMAction(
+        data: {CarPageVMActionDataKeys.number: number},
+        state: CarPageVMActionState.number));
+  }
+
+  void numberChanged(String number) {
+    model.accountBloc.number = number;
+  }
+
+  Future login() async {
+    return await model.accountBloc.login();
   }
 }
