@@ -3,7 +3,6 @@ import 'package:pango_lite/model/blocs/account_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 
 enum MainPageVMActionState { none, phone, home }
-
 enum MainPageVMActionDataKeys { none }
 
 class MainPageVMAction {
@@ -14,23 +13,24 @@ class MainPageVMAction {
 }
 
 class MainPageVM {
-  final _actionSubject = BehaviorSubject();
+  BehaviorSubject _actionSubject;
   Stream get actionStream => _actionSubject.stream;
 
-  void close() {
-    _actionSubject.close();
-  }
-
-  void init() {
+  MainPageVM() {
     final state = model.accountBloc.handshake();
     switch (state) {
       case AccountBlocState.notLoggedIn:
-        _actionSubject
-            .add(MainPageVMAction(state: MainPageVMActionState.phone));
+        _actionSubject = BehaviorSubject(
+            seedValue: MainPageVMAction(state: MainPageVMActionState.phone));
         break;
       case AccountBlocState.loggedIn:
-        _actionSubject.add(MainPageVMAction(state: MainPageVMActionState.home));
+        _actionSubject = BehaviorSubject(
+            seedValue: MainPageVMAction(state: MainPageVMActionState.home));
         break;
     }
+  }
+
+  void close() {
+    _actionSubject.close();
   }
 }

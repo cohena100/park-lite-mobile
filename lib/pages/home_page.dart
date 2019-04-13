@@ -14,7 +14,7 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    vm = model.homePageVM();
+    vm = HomePageVM();
     return StreamBuilder(
         stream: vm.actionStream,
         initialData: HomePageVMAction(),

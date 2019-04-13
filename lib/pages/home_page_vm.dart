@@ -1,7 +1,6 @@
 import 'package:rxdart/rxdart.dart';
 
 enum HomePageVMActionState { none, home }
-
 enum HomePageVMActionDataKeys { none }
 
 class HomePageVMAction {

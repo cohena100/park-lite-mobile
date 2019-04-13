@@ -22,21 +22,17 @@ class PhonePageVMOtherAction {
 }
 
 class PhonePageVM {
-  final _actionSubject = BehaviorSubject();
+  BehaviorSubject _actionSubject;
   Stream get actionStream => _actionSubject.stream;
   final _otherActionSubject = BehaviorSubject();
   Stream get otherActionStream => _otherActionSubject.stream;
 
-  void close() {
-    _actionSubject.close();
-    _otherActionSubject.close();
-  }
-
-  void init() {
+  PhonePageVM() {
     String phone = model.accountBloc.phone;
-    _actionSubject.add(PhonePageVMAction(
-        data: {PhonePageVMActionDataKeys.phone: phone},
-        state: PhonePageVMActionState.phone));
+    _actionSubject = BehaviorSubject(
+        seedValue: PhonePageVMAction(
+            data: {PhonePageVMActionDataKeys.phone: phone},
+            state: PhonePageVMActionState.phone));
   }
 
   void phoneChanged(String phone) {
@@ -46,5 +42,10 @@ class PhonePageVM {
   void phoneSubmitted() {
     _otherActionSubject
         .add(PhonePageVMOtherAction(state: PhonePageVMOtherActionState.car));
+  }
+
+  void close() {
+    _actionSubject.close();
+    _otherActionSubject.close();
   }
 }

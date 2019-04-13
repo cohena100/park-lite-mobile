@@ -17,7 +17,7 @@ class MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    vm = model.mainPageVM();
+    vm = MainPageVM();
     return StreamBuilder(
       stream: vm.actionStream,
       initialData: MainPageVMAction(),
@@ -27,13 +27,9 @@ class MainPageState extends State<MainPage> {
         Widget child;
         switch (action.state) {
           case MainPageVMActionState.none:
-            vm.init();
-            return Container();
+            child = Container();
             break;
           case MainPageVMActionState.phone:
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              vm.init();
-            }
             child = PhonePage(key: Key('PhonePage'));
             break;
           case MainPageVMActionState.home:

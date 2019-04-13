@@ -17,7 +17,7 @@ class CarPageState extends State<CarPage> {
 
   @override
   Widget build(BuildContext context) {
-    vm = model.carPageVM();
+    vm = CarPageVM();
     vm.otherActionStream.listen((event) {
       CarPageVMOtherAction action = event;
       switch (action.state) {
@@ -35,13 +35,9 @@ class CarPageState extends State<CarPage> {
           CarPageVMAction action = snapshot.data;
           switch (action.state) {
             case CarPageVMActionState.none:
-              vm.init();
               return Container();
               break;
             case CarPageVMActionState.number:
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                vm.init();
-              }
               return car(context, action.data[CarPageVMActionDataKeys.number]);
               break;
           }

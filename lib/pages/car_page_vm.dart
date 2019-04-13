@@ -22,20 +22,17 @@ class CarPageVMOtherAction {
 }
 
 class CarPageVM {
-  final _actionSubject = BehaviorSubject();
+  BehaviorSubject _actionSubject;
   Stream get actionStream => _actionSubject.stream;
   final _otherActionSubject = BehaviorSubject();
   Stream get otherActionStream => _otherActionSubject.stream;
-  void close() {
-    _actionSubject.close();
-    _otherActionSubject.close();
-  }
 
-  void init() {
+  CarPageVM() {
     String number = model.accountBloc.number;
-    _actionSubject.add(CarPageVMAction(
-        data: {CarPageVMActionDataKeys.number: number},
-        state: CarPageVMActionState.number));
+    _actionSubject = BehaviorSubject(
+        seedValue: CarPageVMAction(
+            data: {CarPageVMActionDataKeys.number: number},
+            state: CarPageVMActionState.number));
   }
 
   void numberChanged(String number) {
@@ -50,5 +47,10 @@ class CarPageVM {
 
   Future login() async {
     return await model.accountBloc.login();
+  }
+
+  void close() {
+    _actionSubject.close();
+    _otherActionSubject.close();
   }
 }

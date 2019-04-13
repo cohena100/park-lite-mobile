@@ -18,14 +18,18 @@ class PhonePageState extends State<PhonePage> {
 
   @override
   Widget build(BuildContext context) {
-    vm = model.phonePageVM();
+    vm = PhonePageVM();
     vm.otherActionStream.listen((event) {
       PhonePageVMOtherAction action = event;
       switch (action.state) {
         case PhonePageVMOtherActionState.none:
           break;
         case PhonePageVMOtherActionState.car:
-          navigateToCar(context);
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CarPage(key: Key('CarPage')),
+              ));
           break;
       }
     });
@@ -36,13 +40,9 @@ class PhonePageState extends State<PhonePage> {
           PhonePageVMAction action = snapshot.data;
           switch (action.state) {
             case PhonePageVMActionState.none:
-              vm.init();
               return Container();
               break;
             case PhonePageVMActionState.phone:
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                vm.init();
-              }
               return phone(
                   context, action.data[PhonePageVMActionDataKeys.phone]);
               break;
@@ -77,14 +77,6 @@ class PhonePageState extends State<PhonePage> {
         ),
       ],
     );
-  }
-
-  void navigateToCar(BuildContext context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => CarPage(key: Key('CarPage')),
-        ));
   }
 
   @override
