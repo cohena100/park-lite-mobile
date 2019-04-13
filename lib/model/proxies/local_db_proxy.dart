@@ -4,12 +4,7 @@ enum LocalDBProxyKeys {
   account,
 }
 
-abstract class LocalDBProxyProvider {
-  Account loadAccount();
-  saveAccount(Account account);
-}
-
-class LocalDBProxy implements LocalDBProxyProvider {
+class LocalDBProxy {
   final Map _db = {};
 
   Account loadAccount() {

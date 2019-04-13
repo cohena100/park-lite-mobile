@@ -6,8 +6,8 @@ import 'package:pango_lite/model/elements/account.dart';
 enum AccountBlocState { notLoggedIn, loggedIn }
 
 class AccountBloc {
-  final NetworkProxyProvider _networkProxy;
-  final LocalDBProxyProvider _localDBProxy;
+  final NetworkProxy _networkProxy;
+  final LocalDBProxy _localDBProxy;
 
   String phone;
   String number;
