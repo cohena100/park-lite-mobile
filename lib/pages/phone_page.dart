@@ -19,6 +19,16 @@ class PhonePageState extends State<PhonePage> {
   @override
   Widget build(BuildContext context) {
     vm = model.phonePageVM();
+    vm.otherActionStream.listen((event) {
+      PhonePageVMOtherAction action = event;
+      switch (action.state) {
+        case PhonePageVMOtherActionState.none:
+          break;
+        case PhonePageVMOtherActionState.car:
+          navigateToCar(context);
+          break;
+      }
+    });
     return StreamBuilder(
         stream: vm.actionStream,
         initialData: PhonePageVMAction(),
@@ -62,7 +72,7 @@ class PhonePageState extends State<PhonePage> {
             vm.phoneChanged(s);
           },
           onSubmitted: (String s) {
-            navigateToCar(context);
+            vm.phoneSubmitted();
           },
         ),
       ],

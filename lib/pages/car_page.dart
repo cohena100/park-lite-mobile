@@ -18,6 +18,16 @@ class CarPageState extends State<CarPage> {
   @override
   Widget build(BuildContext context) {
     vm = model.carPageVM();
+    vm.otherActionStream.listen((event) {
+      CarPageVMOtherAction action = event;
+      switch (action.state) {
+        case CarPageVMOtherActionState.none:
+          break;
+        case CarPageVMOtherActionState.done:
+          Navigator.of(context).popUntil(ModalRoute.withName('/'));
+          break;
+      }
+    });
     return StreamBuilder(
         stream: vm.actionStream,
         initialData: CarPageVMAction(),
@@ -64,8 +74,7 @@ class CarPageState extends State<CarPage> {
               vm.numberChanged(s);
             },
             onSubmitted: (String s) async {
-              await vm.login();
-              Navigator.of(context).popUntil(ModalRoute.withName('/'));
+              vm.numberSubmitted();
             },
           ),
         ],
