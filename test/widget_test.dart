@@ -43,11 +43,11 @@ void main() {
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
       when(model.localDBProxy.loadAccount()).thenReturn(Account({}));
-      await tester.enterText(find.byKey(new Key('PhoneTextField')), phone);
+      await tester.enterText(find.byKey(Key('PhoneTextField')), phone);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
       expect(find.byKey(Key('CarPage')), findsOneWidget);
-      await tester.enterText(find.byKey(new Key('CarTextField')), number);
+      await tester.enterText(find.byKey(Key('CarTextField')), number);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
       expect(find.byKey(Key('HomePage')), findsOneWidget);
@@ -59,14 +59,41 @@ void main() {
       String number = '2';
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
-      await tester.enterText(find.byKey(new Key('PhoneTextField')), phone);
+      await tester.enterText(find.byKey(Key('PhoneTextField')), phone);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
       expect(find.byKey(Key('CarPage')), findsOneWidget);
-      await tester.enterText(find.byKey(new Key('CarTextField')), number);
+      await tester.enterText(find.byKey(Key('CarTextField')), number);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
       expect(find.byKey(Key('PhonePage')), findsOneWidget);
+    });
+
+    testWidgets('Pop and push between phone and car',
+        (WidgetTester tester) async {
+      model = Model(MockNetworkProxy(), MockLocalDB());
+      String phone = '1';
+      String number = '2';
+      await tester.pumpWidget(MyApp());
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byKey(Key('PhoneTextField')), phone);
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byKey(Key('CarTextField')), number);
+      await tester.pumpAndSettle();
+      final NavigatorState navigator =
+          tester.state<NavigatorState>(find.byType(Navigator));
+      navigator.pop();
+      await tester.pumpAndSettle();
+      TextField textField =
+          find.byKey(Key('PhoneTextField')).evaluate().toList().first.widget;
+      expect(textField.controller.value.text, phone);
+      await tester.enterText(find.byKey(Key('PhoneTextField')), phone);
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      await tester.pumpAndSettle();
+      textField =
+          find.byKey(Key('CarTextField')).evaluate().toList().first.widget;
+      expect(textField.controller.value.text, number);
     });
   });
 }
