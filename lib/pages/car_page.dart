@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pango_lite/locale/locale.dart';
-import 'package:pango_lite/model/model.dart';
 import 'package:pango_lite/pages/car_page_vm.dart';
 
 class CarPage extends StatefulWidget {

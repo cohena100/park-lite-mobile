@@ -11,7 +11,7 @@ class PhonePageVMAction {
       {this.data = const {}, this.state = PhonePageVMActionState.none});
 }
 
-enum PhonePageVMOtherActionState { none, car }
+enum PhonePageVMOtherActionState { none, done }
 enum PhonePageVMOtherActionDataKeys { none }
 
 class PhonePageVMOtherAction {
@@ -41,7 +41,7 @@ class PhonePageVM {
 
   void phoneSubmitted() {
     _otherActionSubject
-        .add(PhonePageVMOtherAction(state: PhonePageVMOtherActionState.car));
+        .add(PhonePageVMOtherAction(state: PhonePageVMOtherActionState.done));
   }
 
   void close() {

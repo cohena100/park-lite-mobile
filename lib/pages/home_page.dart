@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pango_lite/model/model.dart';
 import 'package:pango_lite/pages/home_page_vm.dart';
 
 class HomePage extends StatefulWidget {
