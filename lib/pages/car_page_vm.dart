@@ -1,7 +1,7 @@
 import 'package:pango_lite/model/model.dart';
 import 'package:rxdart/rxdart.dart';
 
-enum CarPageVMActionState { none, number }
+enum CarPageVMActionState { none, busy, number }
 enum CarPageVMActionDataKeys { none, number }
 
 class CarPageVMAction {
@@ -40,6 +40,8 @@ class CarPageVM {
   }
 
   Future numberSubmitted() async {
+    _actionSubject
+        .add(CarPageVMAction(state: CarPageVMActionState.busy));
     await login();
     _otherActionSubject
         .add(CarPageVMOtherAction(state: CarPageVMOtherActionState.done));

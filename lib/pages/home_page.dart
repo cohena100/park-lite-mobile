@@ -23,10 +23,8 @@ class HomePageState extends State<HomePage> {
             case HomePageVMActionState.none:
               vm.init();
               return Container();
-              break;
             case HomePageVMActionState.home:
               return Center(child: Text('Home Page'));
-              break;
           }
         });
   }

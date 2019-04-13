@@ -35,10 +35,12 @@ class CarPageState extends State<CarPage> {
           switch (action.state) {
             case CarPageVMActionState.none:
               return Container();
-              break;
+            case CarPageVMActionState.busy:
+              return Center(
+                child: CircularProgressIndicator(),
+              );
             case CarPageVMActionState.number:
               return car(context, action.data[CarPageVMActionDataKeys.number]);
-              break;
           }
         });
   }

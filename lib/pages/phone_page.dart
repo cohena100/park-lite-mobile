@@ -40,11 +40,9 @@ class PhonePageState extends State<PhonePage> {
           switch (action.state) {
             case PhonePageVMActionState.none:
               return Container();
-              break;
             case PhonePageVMActionState.phone:
               return phone(
                   context, action.data[PhonePageVMActionDataKeys.phone]);
-              break;
           }
         });
   }

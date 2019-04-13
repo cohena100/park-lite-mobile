@@ -33,6 +33,7 @@ class MainPageState extends State<MainPage> {
             break;
           case MainPageVMActionState.home:
             child = HomePage(key: Key('HomePage'));
+            break;
         }
         return Scaffold(
           appBar: AppBar(
