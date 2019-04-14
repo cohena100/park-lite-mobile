@@ -9,6 +9,10 @@ class Model {
 
   Model(this.networkProxy, this.localDBProxy)
       : accountBloc = AccountBloc(networkProxy, localDBProxy);
+
+  void setup(bool isIOS) {
+    networkProxy.setup(isIOS);
+  }
 }
 
 var model = Model(NetworkProxy(), LocalDBProxy());

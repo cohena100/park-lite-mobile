@@ -4,8 +4,10 @@ import 'dart:convert';
 enum NetworkProxyKeys { urls, port }
 
 class NetworkProxy {
+  String _baseUrl;
+
   Future login(String phone, String number) async {
-    var url = 'http://10.0.2.2:3000/users/login';
+    var url = _baseUrl + '/users/login';
     var body = json.encode({
       "phone": phone,
       "number": number,
@@ -23,5 +25,9 @@ class NetworkProxy {
     } else {
       return null;
     }
+  }
+
+  void setup(bool isIOS) {
+    _baseUrl = isIOS ? 'http://localhost:3000' : 'http://10.0.2.2:3000';
   }
 }
