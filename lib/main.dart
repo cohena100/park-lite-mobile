@@ -5,6 +5,7 @@ import 'package:pango_lite/model/model.dart';
 import 'package:pango_lite/pages/car_page.dart';
 import 'package:pango_lite/pages/main_page.dart';
 import 'package:pango_lite/pages/nickname_page.dart';
+import 'package:pango_lite/pages/verification_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => MainPage(),
         '/car': (context) => CarPage(),
         '/nickname': (context) => NicknamePage(),
+        '/verification': (context) => VerificationPage(),
       },
       localizationsDelegates: [
         AppLocalizationsDelegate(),

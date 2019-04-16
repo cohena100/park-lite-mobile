@@ -40,8 +40,8 @@ void main() {
       String phone = '1';
       String number = '2';
       String nickname = 'a';
-      when(model.networkProxy.login(phone, number, nickname))
-          .thenAnswer((_) async => {});
+      when(model.networkProxy.login(phone, number, nickname)).thenAnswer(
+          (_) async => {NetworkProxyKeys.code: 200, NetworkProxyKeys.body: {}});
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
       when(model.localDBProxy.loadAccount()).thenReturn(Account({}));
@@ -64,6 +64,8 @@ void main() {
       String phone = '1';
       String number = '2';
       String nickname = 'a';
+      when(model.networkProxy.login(phone, number, nickname)).thenAnswer(
+          (_) async => {NetworkProxyKeys.code: 400, NetworkProxyKeys.body: {}});
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
       await tester.enterText(find.byKey(Key('PhoneTextField')), phone);
@@ -76,12 +78,11 @@ void main() {
       expect(find.byKey(Key('NicknamePage')), findsOneWidget);
       await tester.enterText(find.byKey(Key('NicknameTextField')), nickname);
       await tester.testTextInput.receiveAction(TextInputAction.done);
-      await tester.pumpAndSettle();
-      expect(find.byKey(Key('PhonePage')), findsOneWidget);
+      await tester.pump();
+      expect(find.byKey(Key('NicknamePage')), findsOneWidget);
     });
 
-    testWidgets('Pop and push between pages',
-        (WidgetTester tester) async {
+    testWidgets('Pop and push between pages', (WidgetTester tester) async {
       model = Model(MockNetworkProxy(), MockLocalDB());
       String phone = '1';
       String number = '2';
@@ -116,6 +117,37 @@ void main() {
       textField =
           find.byKey(Key('NicknameTextField')).evaluate().toList().first.widget;
       expect(textField.controller.value.text, nickname);
+    });
+    testWidgets('Verify success', (WidgetTester tester) async {
+      model = Model(MockNetworkProxy(), MockLocalDB());
+      String phone = '1';
+      String number = '2';
+      String nickname = 'a';
+      String verification = '3';
+      when(model.networkProxy.login(phone, number, nickname)).thenAnswer(
+          (_) async => {NetworkProxyKeys.code: 401, NetworkProxyKeys.body: {}});
+      when(model.networkProxy.verify(phone, number, verification)).thenAnswer(
+          (_) async => {NetworkProxyKeys.code: 200, NetworkProxyKeys.body: {}});
+      await tester.pumpWidget(MyApp());
+      await tester.pumpAndSettle();
+      when(model.localDBProxy.loadAccount()).thenReturn(Account({}));
+      await tester.enterText(find.byKey(Key('PhoneTextField')), phone);
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      await tester.pumpAndSettle();
+      expect(find.byKey(Key('CarPage')), findsOneWidget);
+      await tester.enterText(find.byKey(Key('CarTextField')), number);
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      await tester.pumpAndSettle();
+      expect(find.byKey(Key('NicknamePage')), findsOneWidget);
+      await tester.enterText(find.byKey(Key('NicknameTextField')), nickname);
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      await tester.pumpAndSettle();
+      expect(find.byKey(Key('VerificationPage')), findsOneWidget);
+      await tester.enterText(
+          find.byKey(Key('VerificationTextField')), verification);
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      await tester.pumpAndSettle();
+      expect(find.byKey(Key('HomePage')), findsOneWidget);
     });
   });
 }

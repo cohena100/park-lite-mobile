@@ -54,6 +54,8 @@ class NicknamePageVM {
             state: NicknamePageVMOtherActionState.verification));
         break;
       default:
+        _otherActionSubject.add(NicknamePageVMOtherAction(
+            state: NicknamePageVMOtherActionState.none));
         break;
     }
   }

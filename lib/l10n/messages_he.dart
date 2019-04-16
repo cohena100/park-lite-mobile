@@ -26,6 +26,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "carNumberTitle" : MessageLookupByLibrary.simpleMessage("הזנת מספר רכב"),
     "phoneNumberHint" : MessageLookupByLibrary.simpleMessage("הזן מספר נייד"),
     "phoneNumberTitle" : MessageLookupByLibrary.simpleMessage("הזנת מספר נייד"),
-    "title" : MessageLookupByLibrary.simpleMessage("פנגו לייט")
+    "title" : MessageLookupByLibrary.simpleMessage("פנגו לייט"),
+    "verificationHint" : MessageLookupByLibrary.simpleMessage("הזן קוד אימות"),
+    "verificationTitle" : MessageLookupByLibrary.simpleMessage("הזנת קוד אימות")
   };
 }

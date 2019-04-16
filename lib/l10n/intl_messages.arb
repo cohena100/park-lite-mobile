@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2019-04-16T15:45:04.644938",
+  "@@last_modified": "2019-04-16T19:27:28.897245",
   "title": "Pango Lite",
   "@title": {
     "description": "Title for the Weather Application",
@@ -39,6 +39,18 @@
   "carNicknameHint": "Please enter your car number",
   "@carNicknameHint": {
     "description": "hint text for car number text field",
+    "type": "text",
+    "placeholders": {}
+  },
+  "verificationTitle": "Fill code verification",
+  "@verificationTitle": {
+    "description": "Title for code verification filling",
+    "type": "text",
+    "placeholders": {}
+  },
+  "verificationHint": "Please enter code verification",
+  "@verificationHint": {
+    "description": "hint text for code verification text field",
     "type": "text",
     "placeholders": {}
   }

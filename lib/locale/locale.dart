@@ -74,6 +74,22 @@ class AppLocalizations {
       desc: 'hint text for car number text field',
     );
   }
+
+  String get verificationTitle {
+    return Intl.message(
+      'Fill code verification',
+      name: 'verificationTitle',
+      desc: 'Title for code verification filling',
+    );
+  }
+
+  String get verificationHint {
+    return Intl.message(
+      'Please enter code verification',
+      name: 'verificationHint',
+      desc: 'hint text for code verification text field',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

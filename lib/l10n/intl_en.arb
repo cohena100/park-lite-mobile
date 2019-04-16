@@ -41,5 +41,17 @@
     "description": "hint text for car number text field",
     "type": "text",
     "placeholders": {}
+  },
+  "verificationTitle": "Fill code verification",
+  "@verificationTitle": {
+    "description": "Title for code verification filling",
+    "type": "text",
+    "placeholders": {}
+  },
+  "verificationHint": "Please enter code verification",
+  "@verificationHint": {
+    "description": "hint text for code verification text field",
+    "type": "text",
+    "placeholders": {}
   }
 }
