@@ -11,7 +11,7 @@ class NetworkProxy {
     var body = json.encode({
       "phone": phone,
       "number": number,
-      "udid": "1518BCEC-D521-40C2-8CB4-A780CDA382EF"
+      "udid": "1518BCEC-D521-40C2-8CB4-A780CDA382EG"
     });
     var headers = {
       'Content-type': 'application/json',
