@@ -3,7 +3,7 @@ import 'package:pango_lite/model/proxies/local_db_proxy.dart';
 import 'package:pango_lite/model/proxies/network_proxy.dart';
 import 'package:pango_lite/model/elements/account.dart';
 
-enum AccountBlocState { notLoggedIn, loggedIn }
+enum AccountBlocState { notLoggedIn, loggedIn, verification }
 
 class AccountBloc {
   final NetworkProxy _networkProxy;
@@ -24,12 +24,15 @@ class AccountBloc {
   }
 
   Future login() async {
-    final data = await _networkProxy.login(phone, number, nickname);
-    if (data == null) {
-      return AccountBlocState.notLoggedIn;
-    } else {
-      _localDBProxy.saveAccount(Account(data));
-      return AccountBlocState.loggedIn;
+    final data = await _networkProxy.login(phone, number, nickname) as Map;
+    switch (data[NetworkProxyKeys.code] as int) {
+      case 200:
+        _localDBProxy.saveAccount(Account(data[NetworkProxyKeys.body]));
+        return AccountBlocState.loggedIn;
+      case 401:
+        return AccountBlocState.verification;
+      default:
+        return AccountBlocState.notLoggedIn;
     }
   }
 }

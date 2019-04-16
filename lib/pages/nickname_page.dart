@@ -25,6 +25,8 @@ class NicknamePageState extends State<NicknamePage> {
         case NicknamePageVMOtherActionState.done:
           Navigator.of(context).popUntil(ModalRoute.withName('/'));
           break;
+        case NicknamePageVMOtherActionState.verification:
+          break;
       }
     });
     return StreamBuilder(
@@ -40,14 +42,15 @@ class NicknamePageState extends State<NicknamePage> {
                 child: CircularProgressIndicator(),
               );
             case NicknamePageVMActionState.nickname:
-              return nickname(context, action.data[NicknamePageVMActionDataKeys.nickname]);
+              return nickname(
+                  context, action.data[NicknamePageVMActionDataKeys.nickname]);
           }
         });
   }
 
   Widget nickname(BuildContext context, String number) {
     _textEditingController.value =
-    number == null ? TextEditingValue() : TextEditingValue(text: number);
+        number == null ? TextEditingValue() : TextEditingValue(text: number);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context).carNicknameTitle),

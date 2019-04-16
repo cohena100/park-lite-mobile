@@ -19,13 +19,13 @@ class MainPageVM {
   MainPageVM() {
     final state = model.accountBloc.handshake();
     switch (state) {
-      case AccountBlocState.notLoggedIn:
-        _actionSubject = BehaviorSubject(
-            seedValue: MainPageVMAction(state: MainPageVMActionState.phone));
-        break;
       case AccountBlocState.loggedIn:
         _actionSubject = BehaviorSubject(
             seedValue: MainPageVMAction(state: MainPageVMActionState.home));
+        break;
+      default:
+        _actionSubject = BehaviorSubject(
+            seedValue: MainPageVMAction(state: MainPageVMActionState.phone));
         break;
     }
   }

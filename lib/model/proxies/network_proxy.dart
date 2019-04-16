@@ -1,7 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-enum NetworkProxyKeys { urls, port }
+enum NetworkProxyKeys { code, body }
 
 class NetworkProxy {
   String _baseUrl;
@@ -19,12 +19,10 @@ class NetworkProxy {
       'Accept': 'application/json',
     };
     var response = await http.post(url, body: body, headers: headers);
-    if (response.statusCode == 200) {
-      final responseJson = json.decode(response.body);
-      return responseJson;
-    } else {
-      return null;
-    }
+    return {
+      NetworkProxyKeys.code: response.statusCode,
+      NetworkProxyKeys.body: json.decode(response.body)
+    };
   }
 
   void setup(bool isIOS) {

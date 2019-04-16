@@ -1,3 +1,4 @@
+import 'package:pango_lite/model/blocs/account_bloc.dart';
 import 'package:pango_lite/model/model.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -11,7 +12,7 @@ class NicknamePageVMAction {
       {this.data = const {}, this.state = NicknamePageVMActionState.none});
 }
 
-enum NicknamePageVMOtherActionState { none, done }
+enum NicknamePageVMOtherActionState { none, done, verification }
 enum NicknamePageVMOtherActionDataKeys { none }
 
 class NicknamePageVMOtherAction {
@@ -42,13 +43,19 @@ class NicknamePageVM {
   Future nicknameSubmitted() async {
     _actionSubject
         .add(NicknamePageVMAction(state: NicknamePageVMActionState.busy));
-    await login();
-    _otherActionSubject.add(
-        NicknamePageVMOtherAction(state: NicknamePageVMOtherActionState.done));
-  }
-
-  Future login() async {
-    return await model.accountBloc.login();
+    final state = await model.accountBloc.login() as AccountBlocState;
+    switch (state) {
+      case AccountBlocState.loggedIn:
+        _otherActionSubject.add(NicknamePageVMOtherAction(
+            state: NicknamePageVMOtherActionState.done));
+        break;
+      case AccountBlocState.verification:
+        _otherActionSubject.add(NicknamePageVMOtherAction(
+            state: NicknamePageVMOtherActionState.verification));
+        break;
+      default:
+        break;
+    }
   }
 
   void close() {
