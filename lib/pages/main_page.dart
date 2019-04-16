@@ -29,11 +29,11 @@ class MainPageState extends State<MainPage> {
             child = Container();
             break;
           case MainPageVMActionState.phone:
-            child = PhonePage(key: Key('PhonePage'));
+            child = PhonePage();
             title = Text(AppLocalizations.of(context).phoneNumberTitle);
             break;
           case MainPageVMActionState.home:
-            child = HomePage(key: Key('HomePage'));
+            child = HomePage();
             break;
         }
         return Scaffold(

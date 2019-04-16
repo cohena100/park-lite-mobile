@@ -3,7 +3,7 @@ import 'package:pango_lite/locale/locale.dart';
 import 'package:pango_lite/pages/phone_page_vm.dart';
 
 class PhonePage extends StatefulWidget {
-  PhonePage({Key key}) : super(key: key);
+  PhonePage({Key key}) : super(key: Key('PhonePage'));
 
   @override
   PhonePageState createState() => PhonePageState();

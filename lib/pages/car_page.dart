@@ -3,7 +3,7 @@ import 'package:pango_lite/locale/locale.dart';
 import 'package:pango_lite/pages/car_page_vm.dart';
 
 class CarPage extends StatefulWidget {
-  CarPage({Key key}) : super(key: key);
+  CarPage({Key key}) : super(key: Key('CarPage'));
 
   @override
   CarPageState createState() => CarPageState();

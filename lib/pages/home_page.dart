@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pango_lite/pages/home_page_vm.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key key}) : super(key: key);
+  HomePage({Key key}) : super(key: Key('HomePage'));
 
   @override
   HomePageState createState() => HomePageState();
