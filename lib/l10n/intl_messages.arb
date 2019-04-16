@@ -1,8 +1,14 @@
 {
-  "@@last_modified": "2019-03-29T19:37:54.329557",
+  "@@last_modified": "2019-04-16T14:05:47.374922",
   "title": "Pango Lite",
   "@title": {
     "description": "Title for the Weather Application",
+    "type": "text",
+    "placeholders": {}
+  },
+  "phoneNumberTitle": "Fill phone number",
+  "@phoneNumberTitle": {
+    "description": "Title for phone number filling",
     "type": "text",
     "placeholders": {}
   },

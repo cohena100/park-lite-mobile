@@ -6,6 +6,12 @@
     "type": "text",
     "placeholders": {}
   },
+  "phoneNumberTitle": "הזנת מספר נייד",
+  "@phoneNumberTitle": {
+    "description": "Title for phone number filling",
+    "type": "text",
+    "placeholders": {}
+  },
   "phoneNumberHint": "הזן מספר נייד",
   "@phoneNumberHint": {
     "description": "hint text for phone number text field",

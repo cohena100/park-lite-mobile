@@ -6,6 +6,12 @@
     "type": "text",
     "placeholders": {}
   },
+  "phoneNumberTitle": "Fill phone number",
+  "@phoneNumberTitle": {
+    "description": "Title for phone number filling",
+    "type": "text",
+    "placeholders": {}
+  },
   "phoneNumberHint": "Please enter your phone number",
   "@phoneNumberHint": {
     "description": "hint text for phone number text field",

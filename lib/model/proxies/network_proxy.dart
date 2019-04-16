@@ -11,13 +11,12 @@ class NetworkProxy {
     var body = json.encode({
       "phone": phone,
       "number": number,
-      "udid": "1518BCEC-D521-40C2-8CB4-A780CDA382EG"
+      "udid": "1518BCEC-D521-40C2-8CB4-A780CDA382EF"
     });
     var headers = {
       'Content-type': 'application/json',
       'Accept': 'application/json',
     };
-
     var response = await http.post(url, body: body, headers: headers);
     if (response.statusCode == 200) {
       final responseJson = json.decode(response.body);

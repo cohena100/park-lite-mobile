@@ -27,6 +27,14 @@ class AppLocalizations {
     );
   }
 
+  String get phoneNumberTitle {
+    return Intl.message(
+      'Fill phone number',
+      name: 'phoneNumberTitle',
+      desc: 'Title for phone number filling',
+    );
+  }
+
   String get phoneNumberHint {
     return Intl.message(
       'Please enter your phone number',
