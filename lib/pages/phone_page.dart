@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pango_lite/locale/locale.dart';
-import 'package:pango_lite/pages/car_page.dart';
 import 'package:pango_lite/pages/phone_page_vm.dart';
 
 class PhonePage extends StatefulWidget {
@@ -24,11 +23,7 @@ class PhonePageState extends State<PhonePage> {
         case PhonePageVMOtherActionState.none:
           break;
         case PhonePageVMOtherActionState.done:
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => CarPage(key: Key('CarPage')),
-              ));
+          Navigator.pushNamed(context, '/car');
           break;
       }
     });

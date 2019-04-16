@@ -51,7 +51,7 @@ class CarPageState extends State<CarPage> {
     bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).title),
+        title: Text(AppLocalizations.of(context).carNumberTitle),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,

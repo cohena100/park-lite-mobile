@@ -43,6 +43,14 @@ class AppLocalizations {
     );
   }
 
+  String get carNumberTitle {
+    return Intl.message(
+      'Fill car number',
+      name: 'carNumberTitle',
+      desc: 'Title for car number filling',
+    );
+  }
+
   String get carNumberHint {
     return Intl.message(
       'Please enter your car number',

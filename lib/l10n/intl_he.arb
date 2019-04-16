@@ -18,6 +18,12 @@
     "type": "text",
     "placeholders": {}
   },
+  "carNumberTitle": "הזנת מספר רכב",
+  "@carNumberTitle": {
+    "description": "Title for car number filling",
+    "type": "text",
+    "placeholders": {}
+  },
   "carNumberHint": "הזן מספר רכב",
   "@carNumberHint": {
     "description": "hint text for car number text field",

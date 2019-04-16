@@ -18,6 +18,12 @@
     "type": "text",
     "placeholders": {}
   },
+  "carNumberTitle": "Fill car number",
+  "@carNumberTitle": {
+    "description": "Title for car number filling",
+    "type": "text",
+    "placeholders": {}
+  },
   "carNumberHint": "Please enter your car number",
   "@carNumberHint": {
     "description": "hint text for car number text field",
