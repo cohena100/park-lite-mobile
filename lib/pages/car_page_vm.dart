@@ -40,15 +40,8 @@ class CarPageVM {
   }
 
   Future numberSubmitted() async {
-    _actionSubject
-        .add(CarPageVMAction(state: CarPageVMActionState.busy));
-    await login();
     _otherActionSubject
         .add(CarPageVMOtherAction(state: CarPageVMOtherActionState.done));
-  }
-
-  Future login() async {
-    return await model.accountBloc.login();
   }
 
   void close() {

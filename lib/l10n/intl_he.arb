@@ -29,5 +29,17 @@
     "description": "hint text for car number text field",
     "type": "text",
     "placeholders": {}
+  },
+  "carNicknameTitle": "הזנת כינוי רכב",
+  "@carNicknameTitle": {
+    "description": "Title for car number filling",
+    "type": "text",
+    "placeholders": {}
+  },
+  "carNicknameHint": "הזן כינוי לרכב",
+  "@carNicknameHint": {
+    "description": "hint text for car number text field",
+    "type": "text",
+    "placeholders": {}
   }
 }

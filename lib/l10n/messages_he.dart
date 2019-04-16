@@ -20,6 +20,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
+    "carNicknameHint" : MessageLookupByLibrary.simpleMessage("הזן כינוי לרכב"),
+    "carNicknameTitle" : MessageLookupByLibrary.simpleMessage("הזנת כינוי רכב"),
     "carNumberHint" : MessageLookupByLibrary.simpleMessage("הזן מספר רכב"),
     "carNumberTitle" : MessageLookupByLibrary.simpleMessage("הזנת מספר רכב"),
     "phoneNumberHint" : MessageLookupByLibrary.simpleMessage("הזן מספר נייד"),

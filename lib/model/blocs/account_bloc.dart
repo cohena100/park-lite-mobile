@@ -11,6 +11,7 @@ class AccountBloc {
 
   String phone;
   String number;
+  String nickname;
 
   AccountBloc(this._networkProxy, this._localDBProxy);
 
@@ -23,7 +24,7 @@ class AccountBloc {
   }
 
   Future login() async {
-    final data = await _networkProxy.login(phone, number);
+    final data = await _networkProxy.login(phone, number, nickname);
     if (data == null) {
       return AccountBlocState.notLoggedIn;
     } else {

@@ -6,11 +6,12 @@ enum NetworkProxyKeys { urls, port }
 class NetworkProxy {
   String _baseUrl;
 
-  Future login(String phone, String number) async {
+  Future login(String phone, String number, String nickname) async {
     var url = _baseUrl + '/users/login';
     var body = json.encode({
       "phone": phone,
       "number": number,
+      "nickname": nickname,
       "udid": "1518BCEC-D521-40C2-8CB4-A780CDA382EF"
     });
     var headers = {

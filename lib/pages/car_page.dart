@@ -23,7 +23,7 @@ class CarPageState extends State<CarPage> {
         case CarPageVMOtherActionState.none:
           break;
         case CarPageVMOtherActionState.done:
-          Navigator.of(context).popUntil(ModalRoute.withName('/'));
+          Navigator.pushNamed(context, '/nickname');
           break;
       }
     });
