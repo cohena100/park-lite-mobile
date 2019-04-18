@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2019-04-16T19:27:28.897245",
+  "@@last_modified": "2019-04-18T16:07:44.977908",
   "title": "Pango Lite",
   "@title": {
     "description": "Title for the Weather Application",
@@ -14,7 +14,7 @@
   },
   "phoneNumberHint": "Please enter your phone number",
   "@phoneNumberHint": {
-    "description": "hint text for phone number text field",
+    "description": "Hint text for phone number text field",
     "type": "text",
     "placeholders": {}
   },
@@ -26,19 +26,19 @@
   },
   "carNumberHint": "Please enter your car number",
   "@carNumberHint": {
-    "description": "hint text for car number text field",
+    "description": "Hint text for car number text field",
     "type": "text",
     "placeholders": {}
   },
-  "carNicknameTitle": "Fill car number",
+  "carNicknameTitle": "Fill car nickname",
   "@carNicknameTitle": {
-    "description": "Title for car number filling",
+    "description": "Title for car nickname filling",
     "type": "text",
     "placeholders": {}
   },
-  "carNicknameHint": "Please enter your car number",
+  "carNicknameHint": "Please enter your car nickname",
   "@carNicknameHint": {
-    "description": "hint text for car number text field",
+    "description": "Hint text for car nickname text field",
     "type": "text",
     "placeholders": {}
   },
@@ -50,7 +50,7 @@
   },
   "verificationHint": "Please enter code verification",
   "@verificationHint": {
-    "description": "hint text for code verification text field",
+    "description": "Hint text for code verification text field",
     "type": "text",
     "placeholders": {}
   }

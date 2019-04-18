@@ -39,7 +39,7 @@ class AppLocalizations {
     return Intl.message(
       'Please enter your phone number',
       name: 'phoneNumberHint',
-      desc: 'hint text for phone number text field',
+      desc: 'Hint text for phone number text field',
     );
   }
 
@@ -55,23 +55,23 @@ class AppLocalizations {
     return Intl.message(
       'Please enter your car number',
       name: 'carNumberHint',
-      desc: 'hint text for car number text field',
+      desc: 'Hint text for car number text field',
     );
   }
 
   String get carNicknameTitle {
     return Intl.message(
-      'Fill car number',
+      'Fill car nickname',
       name: 'carNicknameTitle',
-      desc: 'Title for car number filling',
+      desc: 'Title for car nickname filling',
     );
   }
 
   String get carNicknameHint {
     return Intl.message(
-      'Please enter your car number',
+      'Please enter your car nickname',
       name: 'carNicknameHint',
-      desc: 'hint text for car number text field',
+      desc: 'Hint text for car nickname text field',
     );
   }
 
@@ -87,7 +87,7 @@ class AppLocalizations {
     return Intl.message(
       'Please enter code verification',
       name: 'verificationHint',
-      desc: 'hint text for code verification text field',
+      desc: 'Hint text for code verification text field',
     );
   }
 }

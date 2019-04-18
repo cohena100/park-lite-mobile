@@ -14,7 +14,7 @@
   },
   "phoneNumberHint": "הזן מספר נייד",
   "@phoneNumberHint": {
-    "description": "hint text for phone number text field",
+    "description": "Hint text for phone number text field",
     "type": "text",
     "placeholders": {}
   },
@@ -26,19 +26,19 @@
   },
   "carNumberHint": "הזן מספר רכב",
   "@carNumberHint": {
-    "description": "hint text for car number text field",
+    "description": "Hint text for car number text field",
     "type": "text",
     "placeholders": {}
   },
   "carNicknameTitle": "הזנת כינוי רכב",
   "@carNicknameTitle": {
-    "description": "Title for car number filling",
+    "description": "Title for car nickname filling",
     "type": "text",
     "placeholders": {}
   },
   "carNicknameHint": "הזן כינוי לרכב",
   "@carNicknameHint": {
-    "description": "hint text for car number text field",
+    "description": "Hint text for car nickname text field",
     "type": "text",
     "placeholders": {}
   },
@@ -50,7 +50,7 @@
   },
   "verificationHint": "הזן קוד אימות",
   "@verificationHint": {
-    "description": "hint text for code verification text field",
+    "description": "Hint text for code verification text field",
     "type": "text",
     "placeholders": {}
   }

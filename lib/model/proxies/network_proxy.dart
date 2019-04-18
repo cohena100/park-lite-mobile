@@ -22,7 +22,7 @@ class NetworkProxy {
     var response = await http.post(url, body: body, headers: headers);
     return {
       NetworkProxyKeys.code: response.statusCode,
-      NetworkProxyKeys.body: json.decode(response.body)
+      NetworkProxyKeys.body: response.body
     };
   }
 
@@ -41,7 +41,7 @@ class NetworkProxy {
     var response = await http.post(url, body: body, headers: headers);
     return {
       NetworkProxyKeys.code: response.statusCode,
-      NetworkProxyKeys.body: json.decode(response.body)
+      NetworkProxyKeys.body: response.body
     };
   }
 

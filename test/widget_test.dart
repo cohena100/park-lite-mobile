@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pango_lite/main.dart';
-import 'package:pango_lite/model/elements/account.dart';
 import 'package:pango_lite/model/model.dart';
 import 'package:pango_lite/model/proxies/local_db_proxy.dart';
 import 'package:pango_lite/model/proxies/network_proxy.dart';
@@ -29,7 +28,7 @@ void main() {
 
     testWidgets('Already logged in', (WidgetTester tester) async {
       model = Model(MockNetworkProxy(), MockLocalDB());
-      when(model.localDBProxy.loadAccount()).thenReturn(Account({}));
+      when(model.localDBProxy.loadAccount()).thenAnswer((_) async => '');
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
       expect(find.byKey(Key('HomePage')), findsOneWidget);
@@ -41,10 +40,10 @@ void main() {
       String number = '2';
       String nickname = 'a';
       when(model.networkProxy.login(phone, number, nickname)).thenAnswer(
-          (_) async => {NetworkProxyKeys.code: 200, NetworkProxyKeys.body: {}});
+          (_) async => {NetworkProxyKeys.code: 200, NetworkProxyKeys.body: ''});
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
-      when(model.localDBProxy.loadAccount()).thenReturn(Account({}));
+      when(model.localDBProxy.loadAccount()).thenAnswer((_) async => '');
       await tester.enterText(find.byKey(Key('PhoneTextField')), phone);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
@@ -65,7 +64,7 @@ void main() {
       String number = '2';
       String nickname = 'a';
       when(model.networkProxy.login(phone, number, nickname)).thenAnswer(
-          (_) async => {NetworkProxyKeys.code: 400, NetworkProxyKeys.body: {}});
+          (_) async => {NetworkProxyKeys.code: 400, NetworkProxyKeys.body: ''});
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
       await tester.enterText(find.byKey(Key('PhoneTextField')), phone);
@@ -125,12 +124,12 @@ void main() {
       String nickname = 'a';
       String verification = '3';
       when(model.networkProxy.login(phone, number, nickname)).thenAnswer(
-          (_) async => {NetworkProxyKeys.code: 401, NetworkProxyKeys.body: {}});
+          (_) async => {NetworkProxyKeys.code: 401, NetworkProxyKeys.body: ''});
       when(model.networkProxy.verify(phone, number, verification)).thenAnswer(
-          (_) async => {NetworkProxyKeys.code: 200, NetworkProxyKeys.body: {}});
+          (_) async => {NetworkProxyKeys.code: 200, NetworkProxyKeys.body: ''});
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
-      when(model.localDBProxy.loadAccount()).thenReturn(Account({}));
+      when(model.localDBProxy.loadAccount()).thenAnswer((_) async => '');
       await tester.enterText(find.byKey(Key('PhoneTextField')), phone);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();

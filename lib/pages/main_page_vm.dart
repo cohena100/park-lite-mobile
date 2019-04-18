@@ -13,19 +13,18 @@ class MainPageVMAction {
 }
 
 class MainPageVM {
-  BehaviorSubject _actionSubject;
+  BehaviorSubject _actionSubject = BehaviorSubject();
   Stream get actionStream => _actionSubject.stream;
 
-  MainPageVM() {
-    final state = model.accountBloc.handshake();
+  Future init() async {
+    final state = await model.accountBloc.handshake();
     switch (state) {
       case AccountBlocState.loggedIn:
-        _actionSubject = BehaviorSubject(
-            seedValue: MainPageVMAction(state: MainPageVMActionState.home));
+        _actionSubject.add(MainPageVMAction(state: MainPageVMActionState.home));
         break;
       default:
-        _actionSubject = BehaviorSubject(
-            seedValue: MainPageVMAction(state: MainPageVMActionState.phone));
+        _actionSubject
+            .add(MainPageVMAction(state: MainPageVMActionState.phone));
         break;
     }
   }
