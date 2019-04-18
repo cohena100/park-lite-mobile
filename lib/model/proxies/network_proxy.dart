@@ -5,6 +5,7 @@ enum NetworkProxyKeys { code, body }
 
 class NetworkProxy {
   String _baseUrl;
+  static const uuid = '6518BCEC-D521-40C2-8CB4-A780CDA382EF';
 
   Future login(String phone, String number, String nickname) async {
     var url = _baseUrl + '/users/login';
@@ -12,7 +13,7 @@ class NetworkProxy {
       "phone": phone,
       "number": number,
       "nickname": nickname,
-      "udid": "1518BCEC-D521-40C2-8CB4-A780CDA382EF"
+      "udid": uuid
     });
     var headers = {
       'Content-type': 'application/json',
@@ -26,12 +27,12 @@ class NetworkProxy {
   }
 
   Future verify(String phone, String number, String code) async {
-    var url = _baseUrl + '/users/login';
+    var url = _baseUrl + '/users/validate';
     var body = json.encode({
       "phone": phone,
       "number": number,
       "code": code,
-      "udid": "1518BCEC-D521-40C2-8CB4-A780CDA382EF"
+      "udid": uuid
     });
     var headers = {
       'Content-type': 'application/json',
