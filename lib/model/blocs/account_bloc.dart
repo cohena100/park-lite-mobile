@@ -10,7 +10,7 @@ class AccountBloc {
   String phone;
   String number;
   String nickname;
-  String verification;
+  String code;
 
   AccountBloc(this._networkProxy, this._localDBProxy);
 
@@ -29,14 +29,14 @@ class AccountBloc {
         await _localDBProxy.saveAccount(data[NetworkProxyKeys.body]);
         return AccountBlocState.loggedIn;
       case NetworkProxy.validate:
-        return AccountBlocState.verify;
+        return AccountBlocState.validate;
       default:
         return AccountBlocState.notLoggedIn;
     }
   }
 
-  Future verify() async {
-    final data = await _networkProxy.sendValidate(phone, number, verification);
+  Future validate() async {
+    final data = await _networkProxy.sendValidate(phone, number, code);
     switch (data[NetworkProxyKeys.code]) {
       case NetworkProxy.success:
         await _localDBProxy.saveAccount(data[NetworkProxyKeys.body]);
@@ -47,4 +47,4 @@ class AccountBloc {
   }
 }
 
-enum AccountBlocState { notLoggedIn, loggedIn, verify }
+enum AccountBlocState { notLoggedIn, loggedIn, validate }

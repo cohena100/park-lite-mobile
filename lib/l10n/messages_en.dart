@@ -27,7 +27,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "phoneNumberHint" : MessageLookupByLibrary.simpleMessage("Please enter your phone number"),
     "phoneNumberTitle" : MessageLookupByLibrary.simpleMessage("Fill phone number"),
     "title" : MessageLookupByLibrary.simpleMessage("Pango Lite"),
-    "verificationHint" : MessageLookupByLibrary.simpleMessage("Please enter code verification"),
-    "verificationTitle" : MessageLookupByLibrary.simpleMessage("Fill code verification")
+    "validateHint" : MessageLookupByLibrary.simpleMessage("Please enter validation code"),
+    "validateTitle" : MessageLookupByLibrary.simpleMessage("Fill validation code")
   };
 }

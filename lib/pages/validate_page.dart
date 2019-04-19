@@ -1,47 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:pango_lite/locale/locale.dart';
-import 'package:pango_lite/pages/verification_page_vm.dart';
+import 'package:pango_lite/pages/validate_page_vm.dart';
 
-class VerifyPage extends StatefulWidget {
-  VerifyPage({Key key}) : super(key: Key('VerifyPage'));
+class ValidatePage extends StatefulWidget {
+  ValidatePage({Key key}) : super(key: Key('ValidatePage'));
 
   @override
-  VerifyPageState createState() => VerifyPageState();
+  ValidatePageState createState() => ValidatePageState();
 }
 
-class VerifyPageState extends State<VerifyPage> {
+class ValidatePageState extends State<ValidatePage> {
   static const textFieldMaxLength = 4;
-  VerificationPageVM vm;
+  ValidatePageVM vm;
   final _textEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    vm = VerificationPageVM();
+    vm = ValidatePageVM();
     vm.otherActionStream.listen((event) {
-      VerificationPageVMOtherAction action = event;
+      ValidatePageVMOtherAction action = event;
       switch (action.state) {
-        case VerificationPageVMOtherActionState.none:
+        case ValidatePageVMOtherActionState.none:
           break;
-        case VerificationPageVMOtherActionState.done:
+        case ValidatePageVMOtherActionState.done:
           Navigator.of(context).popUntil(ModalRoute.withName('/'));
           break;
       }
     });
     return StreamBuilder(
         stream: vm.actionStream,
-        initialData: VerificationPageVMAction(),
+        initialData: ValidatePageVMAction(),
         builder: (context, snapshot) {
-          VerificationPageVMAction action = snapshot.data;
+          ValidatePageVMAction action = snapshot.data;
           switch (action.state) {
-            case VerificationPageVMActionState.none:
+            case ValidatePageVMActionState.none:
               return Container();
-            case VerificationPageVMActionState.busy:
+            case ValidatePageVMActionState.busy:
               return Center(
                 child: CircularProgressIndicator(),
               );
-            case VerificationPageVMActionState.verification:
+            case ValidatePageVMActionState.validate:
               return nickname(context,
-                  action.data[VerificationPageVMActionDataKeys.verification]);
+                  action.data[ValidatePageVMActionDataKeys.validate]);
           }
         });
   }
@@ -52,32 +52,32 @@ class VerifyPageState extends State<VerifyPage> {
     super.dispose();
   }
 
-  Widget nickname(BuildContext context, String verification) {
-    _textEditingController.value = verification == null
+  Widget nickname(BuildContext context, String code) {
+    _textEditingController.value = code == null
         ? TextEditingValue()
-        : TextEditingValue(text: verification);
+        : TextEditingValue(text: code);
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).verificationTitle),
+        title: Text(AppLocalizations.of(context).validateTitle),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           TextField(
-            key: Key('VerificationTextField'),
+            key: Key('ValidateTextField'),
             controller: _textEditingController,
             autofocus: true,
-            maxLength: VerifyPageState.textFieldMaxLength,
+            maxLength: ValidatePageState.textFieldMaxLength,
             textAlign: TextAlign.center,
             decoration: InputDecoration(
-              hintText: AppLocalizations.of(context).verificationHint,
+              hintText: AppLocalizations.of(context).validateHint,
             ),
             onChanged: (String s) {
-              vm.verificationChanged(s);
+              vm.validateChanged(s);
             },
             onSubmitted: (String s) async {
-              vm.verificationSubmitted();
+              vm.validateSubmitted();
             },
           ),
         ],

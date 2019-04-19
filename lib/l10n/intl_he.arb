@@ -42,15 +42,15 @@
     "type": "text",
     "placeholders": {}
   },
-  "verificationTitle": "הזנת קוד אימות",
-  "@verificationTitle": {
-    "description": "Title for code verification filling",
+  "validateTitle": "הזנת קוד אימות",
+  "@validateTitle": {
+    "description": "Title for validation code",
     "type": "text",
     "placeholders": {}
   },
-  "verificationHint": "הזן קוד אימות",
-  "@verificationHint": {
-    "description": "Hint text for code verification text field",
+  "validateHint": "הזן קוד אימות",
+  "@validateHint": {
+    "description": "Hint text for validation code text field",
     "type": "text",
     "placeholders": {}
   }

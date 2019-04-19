@@ -75,19 +75,19 @@ class AppLocalizations {
     );
   }
 
-  String get verificationTitle {
+  String get validateTitle {
     return Intl.message(
-      'Fill code verification',
-      name: 'verificationTitle',
-      desc: 'Title for code verification filling',
+      'Fill validation code',
+      name: 'validateTitle',
+      desc: 'Title for validation code',
     );
   }
 
-  String get verificationHint {
+  String get validateHint {
     return Intl.message(
-      'Please enter code verification',
-      name: 'verificationHint',
-      desc: 'Hint text for code verification text field',
+      'Please enter validation code',
+      name: 'validateHint',
+      desc: 'Hint text for validation code text field',
     );
   }
 }
