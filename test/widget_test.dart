@@ -141,7 +141,7 @@ void main() {
       await tester.enterText(find.byKey(Key('NicknameTextField')), nickname);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
-      expect(find.byKey(Key('VerificationPage')), findsOneWidget);
+      expect(find.byKey(Key('VerifyPage')), findsOneWidget);
       await tester.enterText(
           find.byKey(Key('VerificationTextField')), verification);
       await tester.testTextInput.receiveAction(TextInputAction.done);

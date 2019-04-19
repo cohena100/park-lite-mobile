@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:pango_lite/locale/locale.dart';
 import 'package:pango_lite/pages/verification_page_vm.dart';
 
-class VerificationPage extends StatefulWidget {
-  VerificationPage({Key key}) : super(key: Key('VerificationPage'));
+class VerifyPage extends StatefulWidget {
+  VerifyPage({Key key}) : super(key: Key('VerifyPage'));
 
   @override
-  VerificationPageState createState() => VerificationPageState();
+  VerifyPageState createState() => VerifyPageState();
 }
 
-class VerificationPageState extends State<VerificationPage> {
+class VerifyPageState extends State<VerifyPage> {
   static const textFieldMaxLength = 4;
   VerificationPageVM vm;
   final _textEditingController = TextEditingController();
@@ -68,7 +68,7 @@ class VerificationPageState extends State<VerificationPage> {
             key: Key('VerificationTextField'),
             controller: _textEditingController,
             autofocus: true,
-            maxLength: VerificationPageState.textFieldMaxLength,
+            maxLength: VerifyPageState.textFieldMaxLength,
             textAlign: TextAlign.center,
             decoration: InputDecoration(
               hintText: AppLocalizations.of(context).verificationHint,
