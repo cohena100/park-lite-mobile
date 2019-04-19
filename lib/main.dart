@@ -5,6 +5,7 @@ import 'package:pango_lite/model/model.dart';
 import 'package:pango_lite/pages/car_page.dart';
 import 'package:pango_lite/pages/main_page.dart';
 import 'package:pango_lite/pages/nickname_page.dart';
+import 'package:pango_lite/pages/select_area.dart';
 import 'package:pango_lite/pages/select_car_page.dart';
 import 'package:pango_lite/pages/validate_page.dart';
 
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
         '/nickname': (context) => NicknamePage(),
         '/validate': (context) => ValidatePage(),
         '/selectCar': (context) => SelectCarPage(),
+        '/selectArea': (context) => SelectAreaPage(),
       },
       localizationsDelegates: [
         AppLocalizationsDelegate(),

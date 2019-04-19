@@ -22,10 +22,10 @@ class NicknamePageState extends State<NicknamePage> {
       switch (action.state) {
         case NicknamePageVMOtherActionState.none:
           break;
-        case NicknamePageVMOtherActionState.done:
+        case NicknamePageVMOtherActionState.homePage:
           Navigator.of(context).popUntil(ModalRoute.withName('/'));
           break;
-        case NicknamePageVMOtherActionState.validate:
+        case NicknamePageVMOtherActionState.validatePage:
           Navigator.pushNamed(context, '/validate');
           break;
       }

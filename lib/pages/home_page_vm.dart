@@ -40,7 +40,7 @@ class HomePageVM {
 
   void startParking() {
     _otherActionSubject.add(
-        HomePageVMOtherAction(state: HomePageVMOtherActionState.selectCar));
+        HomePageVMOtherAction(state: HomePageVMOtherActionState.selectCarPage));
   }
 }
 
@@ -75,4 +75,4 @@ class HomePageVMOtherAction {
 
 enum HomePageVMOtherActionDataKey { none }
 
-enum HomePageVMOtherActionState { none, selectCar }
+enum HomePageVMOtherActionState { none, selectCarPage }

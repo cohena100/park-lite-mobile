@@ -22,7 +22,7 @@ class PhonePageState extends State<PhonePage> {
       switch (action.state) {
         case PhonePageVMOtherActionState.none:
           break;
-        case PhonePageVMOtherActionState.done:
+        case PhonePageVMOtherActionState.carPage:
           Navigator.pushNamed(context, '/car');
           break;
       }

@@ -22,7 +22,7 @@ class ValidatePageState extends State<ValidatePage> {
       switch (action.state) {
         case ValidatePageVMOtherActionState.none:
           break;
-        case ValidatePageVMOtherActionState.done:
+        case ValidatePageVMOtherActionState.homePage:
           Navigator.of(context).popUntil(ModalRoute.withName('/'));
           break;
       }

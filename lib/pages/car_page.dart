@@ -22,7 +22,7 @@ class CarPageState extends State<CarPage> {
       switch (action.state) {
         case CarPageVMOtherActionState.none:
           break;
-        case CarPageVMOtherActionState.done:
+        case CarPageVMOtherActionState.nicknamePage:
           Navigator.pushNamed(context, '/nickname');
           break;
       }

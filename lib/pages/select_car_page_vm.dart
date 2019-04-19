@@ -14,7 +14,7 @@ class SelectCarPageVM {
   }
 
   Future init() async {
-    final Account a = await model.accountBloc.account;
+    final Account account = await model.accountBloc.account;
     final decorateItems = [
       SelectCarPageVMItem(type: SelectCarPageVMItemType.blue),
       SelectCarPageVMItem(type: SelectCarPageVMItemType.orange),
@@ -22,7 +22,7 @@ class SelectCarPageVM {
       SelectCarPageVMItem(type: SelectCarPageVMItemType.orange),
       SelectCarPageVMItem(type: SelectCarPageVMItemType.blue),
     ];
-    final items = a.cars.map((car) {
+    final items = account.cars.map((car) {
       final number = car[Account.car][Account.number];
       final nickname = car[Account.nickname];
       final data = {
@@ -38,8 +38,12 @@ class SelectCarPageVM {
     }, state: SelectCarPageVMActionState.cars));
   }
 
-  void selectCar(Map car) {
-    print(car);
+  Future selectCar(Map car) async {
+    _actionSubject
+        .add(SelectCarPageVMAction(state: SelectCarPageVMActionState.busy));
+    await model.parkBloc.currentLocation;
+    _otherActionSubject.add(SelectCarPageVMOtherAction(
+        state: SelectCarPageVMOtherActionState.selectAreaPage));
   }
 }
 
@@ -52,7 +56,7 @@ class SelectCarPageVMAction {
 
 enum SelectCarPageVMActionDataKey { none, items }
 
-enum SelectCarPageVMActionState { none, cars }
+enum SelectCarPageVMActionState { none, busy, cars }
 
 class SelectCarPageVMItem {
   final Map data;
@@ -75,4 +79,4 @@ class SelectCarPageVMOtherAction {
 
 enum SelectCarPageVMOtherActionDataKey { none }
 
-enum SelectCarPageVMOtherActionState { none }
+enum SelectCarPageVMOtherActionState { none, selectAreaPage }

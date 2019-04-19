@@ -21,6 +21,9 @@ class SelectCarPageState extends State<SelectCarPage> {
       switch (action.state) {
         case SelectCarPageVMOtherActionState.none:
           break;
+        case SelectCarPageVMOtherActionState.selectAreaPage:
+          Navigator.pushNamed(context, '/selectArea');
+          break;
       }
     });
     return StreamBuilder(
@@ -42,6 +45,9 @@ class SelectCarPageState extends State<SelectCarPage> {
                     key: Key('SelectCarPageListView'),
                     children: items.map(_buildItem).toList()),
               );
+              break;
+            case SelectCarPageVMActionState.busy:
+              body = Center(child: body = CircularProgressIndicator());
               break;
           }
           return Scaffold(
@@ -66,8 +72,8 @@ class SelectCarPageState extends State<SelectCarPage> {
           child: ListTile(
             key: Key(number),
             title: Center(child: Text('$nickname ($number)')),
-            onTap: () {
-              vm.selectCar(car);
+            onTap: () async {
+              await vm.selectCar(car);
             },
           ),
         );

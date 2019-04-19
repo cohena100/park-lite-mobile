@@ -65,5 +65,11 @@
     "description": "Title for car selection page",
     "type": "text",
     "placeholders": {}
+  },
+  "selectAreaTitle": "Area selection",
+  "@selectAreaTitle": {
+    "description": "Title for area selection page",
+    "type": "text",
+    "placeholders": {}
   }
 }

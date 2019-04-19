@@ -26,7 +26,7 @@ class CarPageVM {
 
   Future numberSubmitted() async {
     _otherActionSubject
-        .add(CarPageVMOtherAction(state: CarPageVMOtherActionState.done));
+        .add(CarPageVMOtherAction(state: CarPageVMOtherActionState.nicknamePage));
   }
 }
 
@@ -50,4 +50,4 @@ class CarPageVMOtherAction {
 
 enum CarPageVMOtherActionDataKey { none }
 
-enum CarPageVMOtherActionState { none, done }
+enum CarPageVMOtherActionState { none, nicknamePage }

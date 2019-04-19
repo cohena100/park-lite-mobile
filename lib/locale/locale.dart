@@ -106,6 +106,14 @@ class AppLocalizations {
       desc: 'Title for car selection page',
     );
   }
+
+  String get selectAreaTitle {
+    return Intl.message(
+      'Area selection',
+      name: 'selectAreaTitle',
+      desc: 'Title for area selection page',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

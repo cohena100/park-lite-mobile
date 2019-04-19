@@ -26,7 +26,7 @@ class PhonePageVM {
 
   void phoneSubmitted() {
     _otherActionSubject
-        .add(PhonePageVMOtherAction(state: PhonePageVMOtherActionState.done));
+        .add(PhonePageVMOtherAction(state: PhonePageVMOtherActionState.carPage));
   }
 }
 
@@ -50,4 +50,4 @@ class PhonePageVMOtherAction {
 
 enum PhonePageVMOtherActionDataKey { none }
 
-enum PhonePageVMOtherActionState { none, done }
+enum PhonePageVMOtherActionState { none, carPage }

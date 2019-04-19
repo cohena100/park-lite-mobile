@@ -21,7 +21,7 @@ class HomePageState extends State<HomePage> {
       switch (action.state) {
         case HomePageVMOtherActionState.none:
           break;
-        case HomePageVMOtherActionState.selectCar:
+        case HomePageVMOtherActionState.selectCarPage:
           Navigator.pushNamed(context, '/selectCar');
           break;
       }

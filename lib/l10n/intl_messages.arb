@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2019-04-19T15:50:34.226728",
+  "@@last_modified": "2019-04-19T17:59:43.287917",
   "title": "Pango Lite",
   "@title": {
     "description": "Title for the Weather Application",
@@ -63,6 +63,12 @@
   "selectCarTitle": "Car selection",
   "@selectCarTitle": {
     "description": "Title for car selection page",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectAreaTitle": "Area selection",
+  "@selectAreaTitle": {
+    "description": "Title for area selection page",
     "type": "text",
     "placeholders": {}
   }
