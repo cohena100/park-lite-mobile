@@ -10,8 +10,8 @@ class PhonePage extends StatefulWidget {
 }
 
 class PhonePageState extends State<PhonePage> {
-  PhonePageVM vm;
   static const textFieldMaxLength = 10;
+  PhonePageVM vm;
   final _textEditingController = TextEditingController();
 
   @override
@@ -42,6 +42,12 @@ class PhonePageState extends State<PhonePage> {
         });
   }
 
+  @override
+  void dispose() {
+    vm?.close();
+    super.dispose();
+  }
+
   Widget phone(BuildContext context, String phone) {
     _textEditingController.value =
         phone == null ? TextEditingValue() : TextEditingValue(text: phone);
@@ -69,11 +75,5 @@ class PhonePageState extends State<PhonePage> {
         ),
       ],
     );
-  }
-
-  @override
-  void dispose() {
-    vm?.close();
-    super.dispose();
   }
 }

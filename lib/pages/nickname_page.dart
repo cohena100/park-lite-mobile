@@ -10,8 +10,8 @@ class NicknamePage extends StatefulWidget {
 }
 
 class NicknamePageState extends State<NicknamePage> {
-  NicknamePageVM vm;
   static const textFieldMaxLength = 20;
+  NicknamePageVM vm;
   final _textEditingController = TextEditingController();
 
   @override
@@ -49,6 +49,12 @@ class NicknamePageState extends State<NicknamePage> {
         });
   }
 
+  @override
+  void dispose() {
+    vm?.close();
+    super.dispose();
+  }
+
   Widget nickname(BuildContext context, String number) {
     _textEditingController.value =
         number == null ? TextEditingValue() : TextEditingValue(text: number);
@@ -79,11 +85,5 @@ class NicknamePageState extends State<NicknamePage> {
         ],
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    vm?.close();
-    super.dispose();
   }
 }

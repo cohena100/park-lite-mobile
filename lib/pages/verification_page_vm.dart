@@ -2,39 +2,23 @@ import 'package:pango_lite/model/blocs/account_bloc.dart';
 import 'package:pango_lite/model/model.dart';
 import 'package:rxdart/rxdart.dart';
 
-enum VerificationPageVMActionState { none, busy, verification }
-enum VerificationPageVMActionDataKeys { none, verification }
-
-class VerificationPageVMAction {
-  final Map data;
-  final VerificationPageVMActionState state;
-  VerificationPageVMAction(
-      {this.data = const {}, this.state = VerificationPageVMActionState.none});
-}
-
-enum VerificationPageVMOtherActionState { none, done }
-enum VerificationPageVMOtherActionDataKeys { none }
-
-class VerificationPageVMOtherAction {
-  final Map data;
-  final VerificationPageVMOtherActionState state;
-  VerificationPageVMOtherAction(
-      {this.data = const {},
-      this.state = VerificationPageVMOtherActionState.none});
-}
-
 class VerificationPageVM {
   BehaviorSubject _actionSubject;
-  Stream get actionStream => _actionSubject.stream;
   final _otherActionSubject = BehaviorSubject();
-  Stream get otherActionStream => _otherActionSubject.stream;
-
   VerificationPageVM() {
     String verification = model.accountBloc.verification;
     _actionSubject = BehaviorSubject(
         seedValue: VerificationPageVMAction(
             data: {VerificationPageVMActionDataKeys.verification: verification},
             state: VerificationPageVMActionState.verification));
+  }
+  Stream get actionStream => _actionSubject.stream;
+
+  Stream get otherActionStream => _otherActionSubject.stream;
+
+  void close() {
+    _actionSubject.close();
+    _otherActionSubject.close();
   }
 
   void verificationChanged(String s) {
@@ -54,9 +38,27 @@ class VerificationPageVM {
         break;
     }
   }
-
-  void close() {
-    _actionSubject.close();
-    _otherActionSubject.close();
-  }
 }
+
+class VerificationPageVMAction {
+  final Map data;
+  final VerificationPageVMActionState state;
+  VerificationPageVMAction(
+      {this.data = const {}, this.state = VerificationPageVMActionState.none});
+}
+
+enum VerificationPageVMActionDataKeys { none, verification }
+
+enum VerificationPageVMActionState { none, busy, verification }
+
+class VerificationPageVMOtherAction {
+  final Map data;
+  final VerificationPageVMOtherActionState state;
+  VerificationPageVMOtherAction(
+      {this.data = const {},
+      this.state = VerificationPageVMOtherActionState.none});
+}
+
+enum VerificationPageVMOtherActionDataKeys { none }
+
+enum VerificationPageVMOtherActionState { none, done }

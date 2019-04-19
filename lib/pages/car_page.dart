@@ -10,8 +10,8 @@ class CarPage extends StatefulWidget {
 }
 
 class CarPageState extends State<CarPage> {
-  CarPageVM vm;
   static const textFieldMaxLength = 8;
+  CarPageVM vm;
   final _textEditingController = TextEditingController();
 
   @override

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pango_lite/locale/locale.dart';
 import 'package:pango_lite/pages/home_page.dart';
 import 'package:pango_lite/pages/main_page_vm.dart';
-import 'package:pango_lite/locale/locale.dart';
 import 'package:pango_lite/pages/phone_page.dart';
 
 class MainPage extends StatefulWidget {

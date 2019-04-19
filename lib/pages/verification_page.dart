@@ -10,8 +10,8 @@ class VerificationPage extends StatefulWidget {
 }
 
 class VerificationPageState extends State<VerificationPage> {
-  VerificationPageVM vm;
   static const textFieldMaxLength = 4;
+  VerificationPageVM vm;
   final _textEditingController = TextEditingController();
 
   @override
@@ -46,6 +46,12 @@ class VerificationPageState extends State<VerificationPage> {
         });
   }
 
+  @override
+  void dispose() {
+    vm?.close();
+    super.dispose();
+  }
+
   Widget nickname(BuildContext context, String verification) {
     _textEditingController.value = verification == null
         ? TextEditingValue()
@@ -77,11 +83,5 @@ class VerificationPageState extends State<VerificationPage> {
         ],
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    vm?.close();
-    super.dispose();
   }
 }

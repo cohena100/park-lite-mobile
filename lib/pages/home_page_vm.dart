@@ -1,7 +1,17 @@
 import 'package:rxdart/rxdart.dart';
 
-enum HomePageVMActionState { none, home }
-enum HomePageVMActionDataKeys { none }
+class HomePageVM {
+  final _actionSubject = BehaviorSubject();
+  Stream get actionStream => _actionSubject.stream;
+
+  void close() {
+    _actionSubject.close();
+  }
+
+  void init() {
+    _actionSubject.add(HomePageVMAction(state: HomePageVMActionState.home));
+  }
+}
 
 class HomePageVMAction {
   final Map data;
@@ -10,15 +20,6 @@ class HomePageVMAction {
       {this.data = const {}, this.state = HomePageVMActionState.none});
 }
 
-class HomePageVM {
-  final _actionSubject = BehaviorSubject();
-  Stream get actionStream => _actionSubject.stream;
+enum HomePageVMActionDataKeys { none }
 
-  void init() {
-    _actionSubject.add(HomePageVMAction(state: HomePageVMActionState.home));
-  }
-
-  void close() {
-    _actionSubject.close();
-  }
-}
+enum HomePageVMActionState { none, home }

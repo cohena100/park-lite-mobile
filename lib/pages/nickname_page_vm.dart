@@ -2,38 +2,23 @@ import 'package:pango_lite/model/blocs/account_bloc.dart';
 import 'package:pango_lite/model/model.dart';
 import 'package:rxdart/rxdart.dart';
 
-enum NicknamePageVMActionState { none, busy, nickname }
-enum NicknamePageVMActionDataKeys { none, nickname }
-
-class NicknamePageVMAction {
-  final Map data;
-  final NicknamePageVMActionState state;
-  NicknamePageVMAction(
-      {this.data = const {}, this.state = NicknamePageVMActionState.none});
-}
-
-enum NicknamePageVMOtherActionState { none, done, verification }
-enum NicknamePageVMOtherActionDataKeys { none }
-
-class NicknamePageVMOtherAction {
-  final Map data;
-  final NicknamePageVMOtherActionState state;
-  NicknamePageVMOtherAction(
-      {this.data = const {}, this.state = NicknamePageVMOtherActionState.none});
-}
-
 class NicknamePageVM {
   BehaviorSubject _actionSubject;
-  Stream get actionStream => _actionSubject.stream;
   final _otherActionSubject = BehaviorSubject();
-  Stream get otherActionStream => _otherActionSubject.stream;
-
   NicknamePageVM() {
     String nickname = model.accountBloc.nickname;
     _actionSubject = BehaviorSubject(
         seedValue: NicknamePageVMAction(
             data: {NicknamePageVMActionDataKeys.nickname: nickname},
             state: NicknamePageVMActionState.nickname));
+  }
+  Stream get actionStream => _actionSubject.stream;
+
+  Stream get otherActionStream => _otherActionSubject.stream;
+
+  void close() {
+    _actionSubject.close();
+    _otherActionSubject.close();
   }
 
   void nicknameChanged(String s) {
@@ -59,9 +44,26 @@ class NicknamePageVM {
         break;
     }
   }
-
-  void close() {
-    _actionSubject.close();
-    _otherActionSubject.close();
-  }
 }
+
+class NicknamePageVMAction {
+  final Map data;
+  final NicknamePageVMActionState state;
+  NicknamePageVMAction(
+      {this.data = const {}, this.state = NicknamePageVMActionState.none});
+}
+
+enum NicknamePageVMActionDataKeys { none, nickname }
+
+enum NicknamePageVMActionState { none, busy, nickname }
+
+class NicknamePageVMOtherAction {
+  final Map data;
+  final NicknamePageVMOtherActionState state;
+  NicknamePageVMOtherAction(
+      {this.data = const {}, this.state = NicknamePageVMOtherActionState.none});
+}
+
+enum NicknamePageVMOtherActionDataKeys { none }
+
+enum NicknamePageVMOtherActionState { none, done, verification }

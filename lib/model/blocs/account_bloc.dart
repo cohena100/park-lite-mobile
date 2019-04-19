@@ -1,8 +1,7 @@
 import 'dart:async';
+
 import 'package:pango_lite/model/proxies/local_db_proxy.dart';
 import 'package:pango_lite/model/proxies/network_proxy.dart';
-
-enum AccountBlocState { notLoggedIn, loggedIn, verification }
 
 class AccountBloc {
   final NetworkProxy _networkProxy;
@@ -47,3 +46,5 @@ class AccountBloc {
     }
   }
 }
+
+enum AccountBlocState { notLoggedIn, loggedIn, verification }
