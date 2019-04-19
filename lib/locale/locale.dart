@@ -98,6 +98,14 @@ class AppLocalizations {
       desc: 'Start parking button label',
     );
   }
+
+  String get selectCarTitle {
+    return Intl.message(
+      'Car selection',
+      name: 'selectCarTitle',
+      desc: 'Title for car selection page',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

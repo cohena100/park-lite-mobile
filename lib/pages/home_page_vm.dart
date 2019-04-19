@@ -18,22 +18,20 @@ class HomePageVM {
       case ParkBlocState.parking:
         break;
       case ParkBlocState.notParking:
-        final items = [
-          HomePageVMItem(type: HomePageVMItemType.blue),
-          HomePageVMItem(type: HomePageVMItemType.orange),
-          HomePageVMItem(type: HomePageVMItemType.blue),
-          HomePageVMItem(type: HomePageVMItemType.orange),
-          HomePageVMItem(type: HomePageVMItemType.blue),
-          HomePageVMItem(type: HomePageVMItemType.start),
+        final decorateItems = [
           HomePageVMItem(type: HomePageVMItemType.blue),
           HomePageVMItem(type: HomePageVMItemType.orange),
           HomePageVMItem(type: HomePageVMItemType.blue),
           HomePageVMItem(type: HomePageVMItemType.orange),
           HomePageVMItem(type: HomePageVMItemType.blue),
         ];
-        _actionSubject.add(HomePageVMAction(
-            data: {HomePageVMActionDataKeys.items: items},
-            state: HomePageVMActionState.home));
+        final items = [
+          HomePageVMItem(type: HomePageVMItemType.start),
+        ];
+        _actionSubject.add(HomePageVMAction(data: {
+          HomePageVMActionDataKeys.items:
+              [decorateItems, items, decorateItems].expand((x) => x).toList()
+        }, state: HomePageVMActionState.home));
         break;
       case ParkBlocState.none:
         break;
@@ -41,7 +39,8 @@ class HomePageVM {
   }
 
   void startParking() {
-
+    _otherActionSubject.add(
+        HomePageVMOtherAction(state: HomePageVMOtherActionState.selectCar));
   }
 }
 
@@ -63,7 +62,7 @@ class HomePageVMItem {
   HomePageVMItem({this.data = const {}, this.type = HomePageVMItemType.none});
 }
 
-enum HomePageVMItemKey { none }
+enum HomePageVMItemDataKey { none }
 
 enum HomePageVMItemType { none, blue, orange, start }
 
@@ -76,4 +75,4 @@ class HomePageVMOtherAction {
 
 enum HomePageVMOtherActionDataKeys { none }
 
-enum HomePageVMOtherActionState { none }
+enum HomePageVMOtherActionState { none, selectCar }

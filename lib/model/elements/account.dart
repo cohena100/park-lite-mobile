@@ -1,9 +1,10 @@
 import 'dart:convert';
 
 class Account {
-  Map data;
   static const car = 'car';
   static const number = 'number';
+  static const nickname = 'nickname';
+  Map data;
 
   Account(String json) {
     data = jsonDecode(json);
@@ -11,11 +12,5 @@ class Account {
 
   List get cars {
     return data['user']['cars'];
-  }
-
-  List get carNumbers {
-    return cars.map((car) {
-      return car[Account.car][Account.number];
-    }).toList();
   }
 }

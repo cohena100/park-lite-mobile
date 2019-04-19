@@ -59,5 +59,11 @@
     "description": "Start parking button label",
     "type": "text",
     "placeholders": {}
+  },
+  "selectCarTitle": "Car selection",
+  "@selectCarTitle": {
+    "description": "Title for car selection page",
+    "type": "text",
+    "placeholders": {}
   }
 }

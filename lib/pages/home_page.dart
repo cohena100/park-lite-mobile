@@ -21,6 +21,9 @@ class HomePageState extends State<HomePage> {
       switch (action.state) {
         case HomePageVMOtherActionState.none:
           break;
+        case HomePageVMOtherActionState.selectCar:
+          Navigator.pushNamed(context, '/selectCar');
+          break;
       }
     });
     return StreamBuilder(
@@ -37,7 +40,7 @@ class HomePageState extends State<HomePage> {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListView(
-                    key: Key('ListView'),
+                    key: Key('HomePageListView'),
                     children: items.map(_buildItem).toList()),
               );
           }
