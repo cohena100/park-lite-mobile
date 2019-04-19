@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pango_lite/locale/locale.dart';
 import 'package:pango_lite/pages/home_page_vm.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,6 +15,14 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     vm = HomePageVM();
+    vm.init().then((_) {});
+    vm.otherActionStream.listen((event) {
+      HomePageVMOtherAction action = event;
+      switch (action.state) {
+        case HomePageVMOtherActionState.none:
+          break;
+      }
+    });
     return StreamBuilder(
         stream: vm.actionStream,
         initialData: HomePageVMAction(),
@@ -21,10 +30,16 @@ class HomePageState extends State<HomePage> {
           HomePageVMAction action = snapshot.data;
           switch (action.state) {
             case HomePageVMActionState.none:
-              vm.init();
               return Container();
             case HomePageVMActionState.home:
-              return Center(child: Text('Home Page'));
+              final List<HomePageVMItem> items =
+                  action.data[HomePageVMActionDataKeys.items];
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListView(
+                    key: Key('ListView'),
+                    children: items.map(_buildItem).toList()),
+              );
           }
         });
   }
@@ -33,5 +48,40 @@ class HomePageState extends State<HomePage> {
   void dispose() {
     vm?.close();
     super.dispose();
+  }
+
+  Widget _buildItem(HomePageVMItem item) {
+    switch (item.type) {
+      case HomePageVMItemType.none:
+        return Container();
+
+      case HomePageVMItemType.blue:
+        return Container(
+          color: Colors.blue,
+          child: ListTile(
+            key: Key('Blue'),
+          ),
+        );
+      case HomePageVMItemType.orange:
+        return Container(
+          color: Colors.orange,
+          child: ListTile(
+            key: Key('White'),
+          ),
+        );
+      case HomePageVMItemType.start:
+        return Container(
+          color: Colors.white,
+          child: ListTile(
+            key: Key('Start'),
+            title: Center(
+                child: Text(AppLocalizations.of(context).startParkingLabel)),
+            onTap: () {
+              vm.startParking();
+            },
+          ),
+        );
+    }
+    return Container();
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:pango_lite/model/elements/account.dart';
 import 'package:pango_lite/model/proxies/local_db_proxy.dart';
 import 'package:pango_lite/model/proxies/network_proxy.dart';
 
@@ -44,6 +45,11 @@ class AccountBloc {
       default:
         return AccountBlocState.notLoggedIn;
     }
+  }
+
+  Future get account async {
+    final account = await _localDBProxy.loadAccount();
+    return Account(account);
   }
 }
 

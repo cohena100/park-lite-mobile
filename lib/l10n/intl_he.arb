@@ -53,5 +53,11 @@
     "description": "Hint text for validation code text field",
     "type": "text",
     "placeholders": {}
+  },
+  "startParkingLabel": "הפעלת חניה",
+  "@startParkingLabel": {
+    "description": "Start parking button label",
+    "type": "text",
+    "placeholders": {}
   }
 }

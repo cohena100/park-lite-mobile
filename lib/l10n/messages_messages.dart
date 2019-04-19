@@ -26,6 +26,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "carNumberTitle" : MessageLookupByLibrary.simpleMessage("Fill car number"),
     "phoneNumberHint" : MessageLookupByLibrary.simpleMessage("Please enter your phone number"),
     "phoneNumberTitle" : MessageLookupByLibrary.simpleMessage("Fill phone number"),
+    "startParkingLabel" : MessageLookupByLibrary.simpleMessage("Start parking"),
     "title" : MessageLookupByLibrary.simpleMessage("Pango Lite"),
     "validateHint" : MessageLookupByLibrary.simpleMessage("Please enter validation code"),
     "validateTitle" : MessageLookupByLibrary.simpleMessage("Fill validation code")

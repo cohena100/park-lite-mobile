@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2019-04-19T10:54:58.642260",
+  "@@last_modified": "2019-04-19T14:10:21.101071",
   "title": "Pango Lite",
   "@title": {
     "description": "Title for the Weather Application",
@@ -51,6 +51,12 @@
   "validateHint": "Please enter validation code",
   "@validateHint": {
     "description": "Hint text for validation code text field",
+    "type": "text",
+    "placeholders": {}
+  },
+  "startParkingLabel": "Start parking",
+  "@startParkingLabel": {
+    "description": "Start parking button label",
     "type": "text",
     "placeholders": {}
   }

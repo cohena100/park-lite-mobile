@@ -90,6 +90,14 @@ class AppLocalizations {
       desc: 'Hint text for validation code text field',
     );
   }
+
+  String get startParkingLabel {
+    return Intl.message(
+      'Start parking',
+      name: 'startParkingLabel',
+      desc: 'Start parking button label',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -13,7 +13,6 @@ class ValidatePageVM {
             state: ValidatePageVMActionState.validate));
   }
   Stream get actionStream => _actionSubject.stream;
-
   Stream get otherActionStream => _otherActionSubject.stream;
 
   void close() {
@@ -26,8 +25,8 @@ class ValidatePageVM {
   }
 
   Future validateSubmitted() async {
-    _actionSubject.add(
-        ValidatePageVMAction(state: ValidatePageVMActionState.busy));
+    _actionSubject
+        .add(ValidatePageVMAction(state: ValidatePageVMActionState.busy));
     final state = await model.accountBloc.validate() as AccountBlocState;
     switch (state) {
       case AccountBlocState.loggedIn:
@@ -55,8 +54,7 @@ class ValidatePageVMOtherAction {
   final Map data;
   final ValidatePageVMOtherActionState state;
   ValidatePageVMOtherAction(
-      {this.data = const {},
-      this.state = ValidatePageVMOtherActionState.none});
+      {this.data = const {}, this.state = ValidatePageVMOtherActionState.none});
 }
 
 enum ValidatePageVMOtherActionDataKeys { none }
