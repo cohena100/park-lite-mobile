@@ -34,9 +34,9 @@ class NicknamePageVM {
         _otherActionSubject.add(NicknamePageVMOtherAction(
             state: NicknamePageVMOtherActionState.done));
         break;
-      case AccountBlocState.verification:
+      case AccountBlocState.verify:
         _otherActionSubject.add(NicknamePageVMOtherAction(
-            state: NicknamePageVMOtherActionState.verification));
+            state: NicknamePageVMOtherActionState.verify));
         break;
       default:
         _otherActionSubject.add(NicknamePageVMOtherAction(
@@ -66,4 +66,4 @@ class NicknamePageVMOtherAction {
 
 enum NicknamePageVMOtherActionDataKeys { none }
 
-enum NicknamePageVMOtherActionState { none, done, verification }
+enum NicknamePageVMOtherActionState { none, done, verify }

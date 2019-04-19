@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => MainPage(),
         '/car': (context) => CarPage(),
         '/nickname': (context) => NicknamePage(),
-        '/verification': (context) => VerificationPage(),
+        '/verify': (context) => VerificationPage(),
       },
       localizationsDelegates: [
         AppLocalizationsDelegate(),

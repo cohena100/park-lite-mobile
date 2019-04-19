@@ -8,9 +8,12 @@ class NetworkProxy {
     'Content-type': 'application/json',
     'Accept': 'application/json',
   };
+  static const success = 200;
+  static const validate = 401;
+  static const error = 400;
   String _baseUrl;
 
-  Future login(String phone, String number, String nickname) async {
+  Future sendLogin(String phone, String number, String nickname) async {
     var url = _baseUrl + '/users/login';
     var body = json.encode(
         {"phone": phone, "number": number, "nickname": nickname, "udid": uuid});
@@ -25,7 +28,7 @@ class NetworkProxy {
     _baseUrl = isIOS ? 'http://localhost:3000' : 'http://10.0.2.2:3000';
   }
 
-  Future verify(String phone, String number, String code) async {
+  Future sendValidate(String phone, String number, String code) async {
     var url = _baseUrl + '/users/validate';
     var body = json
         .encode({"phone": phone, "number": number, "code": code, "udid": uuid});

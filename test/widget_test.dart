@@ -39,7 +39,7 @@ void main() {
       String phone = '1';
       String number = '2';
       String nickname = 'a';
-      when(model.networkProxy.login(phone, number, nickname)).thenAnswer(
+      when(model.networkProxy.sendLogin(phone, number, nickname)).thenAnswer(
           (_) async => {NetworkProxyKeys.code: 200, NetworkProxyKeys.body: ''});
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
@@ -63,7 +63,7 @@ void main() {
       String phone = '1';
       String number = '2';
       String nickname = 'a';
-      when(model.networkProxy.login(phone, number, nickname)).thenAnswer(
+      when(model.networkProxy.sendLogin(phone, number, nickname)).thenAnswer(
           (_) async => {NetworkProxyKeys.code: 400, NetworkProxyKeys.body: ''});
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
@@ -123,9 +123,9 @@ void main() {
       String number = '2';
       String nickname = 'a';
       String verification = '3';
-      when(model.networkProxy.login(phone, number, nickname)).thenAnswer(
+      when(model.networkProxy.sendLogin(phone, number, nickname)).thenAnswer(
           (_) async => {NetworkProxyKeys.code: 401, NetworkProxyKeys.body: ''});
-      when(model.networkProxy.verify(phone, number, verification)).thenAnswer(
+      when(model.networkProxy.sendValidate(phone, number, verification)).thenAnswer(
           (_) async => {NetworkProxyKeys.code: 200, NetworkProxyKeys.body: ''});
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();

@@ -23,22 +23,22 @@ class AccountBloc {
   }
 
   Future login() async {
-    final data = await _networkProxy.login(phone, number, nickname);
+    final data = await _networkProxy.sendLogin(phone, number, nickname);
     switch (data[NetworkProxyKeys.code]) {
-      case 200:
+      case NetworkProxy.success:
         await _localDBProxy.saveAccount(data[NetworkProxyKeys.body]);
         return AccountBlocState.loggedIn;
-      case 401:
-        return AccountBlocState.verification;
+      case NetworkProxy.validate:
+        return AccountBlocState.verify;
       default:
         return AccountBlocState.notLoggedIn;
     }
   }
 
   Future verify() async {
-    final data = await _networkProxy.verify(phone, number, verification);
+    final data = await _networkProxy.sendValidate(phone, number, verification);
     switch (data[NetworkProxyKeys.code]) {
-      case 200:
+      case NetworkProxy.success:
         await _localDBProxy.saveAccount(data[NetworkProxyKeys.body]);
         return AccountBlocState.loggedIn;
       default:
@@ -47,4 +47,4 @@ class AccountBloc {
   }
 }
 
-enum AccountBlocState { notLoggedIn, loggedIn, verification }
+enum AccountBlocState { notLoggedIn, loggedIn, verify }

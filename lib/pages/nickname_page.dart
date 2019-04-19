@@ -25,8 +25,8 @@ class NicknamePageState extends State<NicknamePage> {
         case NicknamePageVMOtherActionState.done:
           Navigator.of(context).popUntil(ModalRoute.withName('/'));
           break;
-        case NicknamePageVMOtherActionState.verification:
-          Navigator.pushNamed(context, '/verification');
+        case NicknamePageVMOtherActionState.verify:
+          Navigator.pushNamed(context, '/verify');
           break;
       }
     });
