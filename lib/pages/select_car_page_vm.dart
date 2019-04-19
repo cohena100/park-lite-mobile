@@ -33,7 +33,7 @@ class SelectCarPageVM {
       return SelectCarPageVMItem(data: data, type: SelectCarPageVMItemType.car);
     }).toList();
     _actionSubject.add(SelectCarPageVMAction(data: {
-      SelectCarPageVMActionDataKeys.items:
+      SelectCarPageVMActionDataKey.items:
           [decorateItems, items, decorateItems].expand((x) => x).toList()
     }, state: SelectCarPageVMActionState.cars));
   }
@@ -50,7 +50,7 @@ class SelectCarPageVMAction {
       {this.data = const {}, this.state = SelectCarPageVMActionState.none});
 }
 
-enum SelectCarPageVMActionDataKeys { none, items }
+enum SelectCarPageVMActionDataKey { none, items }
 
 enum SelectCarPageVMActionState { none, cars }
 
@@ -73,6 +73,6 @@ class SelectCarPageVMOtherAction {
       this.state = SelectCarPageVMOtherActionState.none});
 }
 
-enum SelectCarPageVMOtherActionDataKeys { none }
+enum SelectCarPageVMOtherActionDataKey { none }
 
 enum SelectCarPageVMOtherActionState { none }

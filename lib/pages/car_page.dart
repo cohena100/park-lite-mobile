@@ -40,7 +40,7 @@ class CarPageState extends State<CarPage> {
                 child: CircularProgressIndicator(),
               );
             case CarPageVMActionState.number:
-              return car(context, action.data[CarPageVMActionDataKeys.number]);
+              return car(context, action.data[CarPageVMActionDataKey.number]);
           }
         });
   }

@@ -37,7 +37,7 @@ class PhonePageState extends State<PhonePage> {
               return Container();
             case PhonePageVMActionState.phone:
               return phone(
-                  context, action.data[PhonePageVMActionDataKeys.phone]);
+                  context, action.data[PhonePageVMActionDataKey.phone]);
           }
         });
   }

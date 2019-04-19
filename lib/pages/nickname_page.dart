@@ -44,7 +44,7 @@ class NicknamePageState extends State<NicknamePage> {
               );
             case NicknamePageVMActionState.nickname:
               return nickname(
-                  context, action.data[NicknamePageVMActionDataKeys.nickname]);
+                  context, action.data[NicknamePageVMActionDataKey.nickname]);
           }
         });
   }

@@ -9,7 +9,7 @@ class ValidatePageVM {
     String code = model.accountBloc.code;
     _actionSubject = BehaviorSubject(
         seedValue: ValidatePageVMAction(
-            data: {ValidatePageVMActionDataKeys.validate: code},
+            data: {ValidatePageVMActionDataKey.validate: code},
             state: ValidatePageVMActionState.validate));
   }
   Stream get actionStream => _actionSubject.stream;
@@ -46,7 +46,7 @@ class ValidatePageVMAction {
       {this.data = const {}, this.state = ValidatePageVMActionState.none});
 }
 
-enum ValidatePageVMActionDataKeys { none, validate }
+enum ValidatePageVMActionDataKey { none, validate }
 
 enum ValidatePageVMActionState { none, busy, validate }
 
@@ -57,6 +57,6 @@ class ValidatePageVMOtherAction {
       {this.data = const {}, this.state = ValidatePageVMOtherActionState.none});
 }
 
-enum ValidatePageVMOtherActionDataKeys { none }
+enum ValidatePageVMOtherActionDataKey { none }
 
 enum ValidatePageVMOtherActionState { none, done }

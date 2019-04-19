@@ -29,7 +29,7 @@ class HomePageVM {
           HomePageVMItem(type: HomePageVMItemType.start),
         ];
         _actionSubject.add(HomePageVMAction(data: {
-          HomePageVMActionDataKeys.items:
+          HomePageVMActionDataKey.items:
               [decorateItems, items, decorateItems].expand((x) => x).toList()
         }, state: HomePageVMActionState.home));
         break;
@@ -51,7 +51,7 @@ class HomePageVMAction {
       {this.data = const {}, this.state = HomePageVMActionState.none});
 }
 
-enum HomePageVMActionDataKeys { none, items }
+enum HomePageVMActionDataKey { none, items }
 
 enum HomePageVMActionState { none, home }
 
@@ -73,6 +73,6 @@ class HomePageVMOtherAction {
       {this.data = const {}, this.state = HomePageVMOtherActionState.none});
 }
 
-enum HomePageVMOtherActionDataKeys { none }
+enum HomePageVMOtherActionDataKey { none }
 
 enum HomePageVMOtherActionState { none, selectCar }

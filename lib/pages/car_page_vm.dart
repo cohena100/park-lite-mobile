@@ -8,7 +8,7 @@ class CarPageVM {
     String number = model.accountBloc.number;
     _actionSubject = BehaviorSubject(
         seedValue: CarPageVMAction(
-            data: {CarPageVMActionDataKeys.number: number},
+            data: {CarPageVMActionDataKey.number: number},
             state: CarPageVMActionState.number));
   }
   Stream get actionStream => _actionSubject.stream;
@@ -37,7 +37,7 @@ class CarPageVMAction {
       {this.data = const {}, this.state = CarPageVMActionState.none});
 }
 
-enum CarPageVMActionDataKeys { none, number }
+enum CarPageVMActionDataKey { none, number }
 
 enum CarPageVMActionState { none, busy, number }
 
@@ -48,6 +48,6 @@ class CarPageVMOtherAction {
       {this.data = const {}, this.state = CarPageVMOtherActionState.none});
 }
 
-enum CarPageVMOtherActionDataKeys { none }
+enum CarPageVMOtherActionDataKey { none }
 
 enum CarPageVMOtherActionState { none, done }

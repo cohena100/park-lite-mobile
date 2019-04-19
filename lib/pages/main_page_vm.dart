@@ -31,6 +31,6 @@ class MainPageVMAction {
       {this.data = const {}, this.state = MainPageVMActionState.none});
 }
 
-enum MainPageVMActionDataKeys { none }
+enum MainPageVMActionDataKey { none }
 
 enum MainPageVMActionState { none, phone, home }

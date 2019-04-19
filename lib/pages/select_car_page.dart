@@ -35,7 +35,7 @@ class SelectCarPageState extends State<SelectCarPage> {
               break;
             case SelectCarPageVMActionState.cars:
               final List<SelectCarPageVMItem> items =
-                  action.data[SelectCarPageVMActionDataKeys.items];
+                  action.data[SelectCarPageVMActionDataKey.items];
               body = Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListView(

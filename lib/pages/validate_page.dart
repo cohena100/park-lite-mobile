@@ -41,7 +41,7 @@ class ValidatePageState extends State<ValidatePage> {
               );
             case ValidatePageVMActionState.validate:
               return nickname(context,
-                  action.data[ValidatePageVMActionDataKeys.validate]);
+                  action.data[ValidatePageVMActionDataKey.validate]);
           }
         });
   }

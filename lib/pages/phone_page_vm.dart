@@ -8,7 +8,7 @@ class PhonePageVM {
     String phone = model.accountBloc.phone;
     _actionSubject = BehaviorSubject(
         seedValue: PhonePageVMAction(
-            data: {PhonePageVMActionDataKeys.phone: phone},
+            data: {PhonePageVMActionDataKey.phone: phone},
             state: PhonePageVMActionState.phone));
   }
   Stream get actionStream => _actionSubject.stream;
@@ -37,7 +37,7 @@ class PhonePageVMAction {
       {this.data = const {}, this.state = PhonePageVMActionState.none});
 }
 
-enum PhonePageVMActionDataKeys { none, phone }
+enum PhonePageVMActionDataKey { none, phone }
 
 enum PhonePageVMActionState { none, phone }
 
@@ -48,6 +48,6 @@ class PhonePageVMOtherAction {
       {this.data = const {}, this.state = PhonePageVMOtherActionState.none});
 }
 
-enum PhonePageVMOtherActionDataKeys { none }
+enum PhonePageVMOtherActionDataKey { none }
 
 enum PhonePageVMOtherActionState { none, done }

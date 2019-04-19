@@ -9,7 +9,7 @@ class NicknamePageVM {
     String nickname = model.accountBloc.nickname;
     _actionSubject = BehaviorSubject(
         seedValue: NicknamePageVMAction(
-            data: {NicknamePageVMActionDataKeys.nickname: nickname},
+            data: {NicknamePageVMActionDataKey.nickname: nickname},
             state: NicknamePageVMActionState.nickname));
   }
   Stream get actionStream => _actionSubject.stream;
@@ -53,7 +53,7 @@ class NicknamePageVMAction {
       {this.data = const {}, this.state = NicknamePageVMActionState.none});
 }
 
-enum NicknamePageVMActionDataKeys { none, nickname }
+enum NicknamePageVMActionDataKey { none, nickname }
 
 enum NicknamePageVMActionState { none, busy, nickname }
 
@@ -64,6 +64,6 @@ class NicknamePageVMOtherAction {
       {this.data = const {}, this.state = NicknamePageVMOtherActionState.none});
 }
 
-enum NicknamePageVMOtherActionDataKeys { none }
+enum NicknamePageVMOtherActionDataKey { none }
 
 enum NicknamePageVMOtherActionState { none, done, validate }

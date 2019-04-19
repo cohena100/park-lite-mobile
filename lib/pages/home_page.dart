@@ -36,7 +36,7 @@ class HomePageState extends State<HomePage> {
               return Container();
             case HomePageVMActionState.home:
               final List<HomePageVMItem> items =
-                  action.data[HomePageVMActionDataKeys.items];
+                  action.data[HomePageVMActionDataKey.items];
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListView(
