@@ -1,37 +1,30 @@
-import 'dart:convert';
+import 'package:pango_lite/model/elements/car.dart';
 
 class Account {
   static const _userKey = 'user';
   static const _carsKey = 'cars';
-  static const _carKey = 'car';
-  static const _numberKey = 'number';
   static const _phoneKey = 'phone';
-  static const _pangoKey = 'pango';
-  static const _nicknameKey = 'nickname';
+  static const _companyKey = 'pango';
   Map data;
 
-  Account(String json) {
-    data = jsonDecode(json);
-  }
+  Account(this.data);
 
-  Map get car {
+  Car get car {
     return cars[0];
   }
 
-  List get cars {
-    return data[_userKey][_carsKey];
+  List<Car> get cars {
+    List allCars = data[_userKey][_carsKey];
+    return allCars.map((data) => Car(data)).toList();
   }
 
-  String get nickname {
-    return cars[0][_nicknameKey];
+  Map get company {
+    return data[_companyKey];
   }
 
-  String get number {
-    return cars[0][_carKey][_numberKey];
-  }
-
-  Map get pango {
-    return data[_pangoKey];
+  Car get loginCar {
+    final allCars = cars;
+    return allCars.length > 0 ? cars[0] : null;
   }
 
   String get phone {

@@ -28,7 +28,7 @@ void main() {
 
     testWidgets('Already logged in', (WidgetTester tester) async {
       model = Model(MockNetworkProxy(), MockLocalDB());
-      when(model.localDBProxy.loadAccount()).thenAnswer((_) async => '');
+      when(model.localDBProxy.loadAccount()).thenAnswer((_) async => {});
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
       expect(find.byKey(Key('HomePage')), findsOneWidget);
@@ -43,7 +43,7 @@ void main() {
           (_) async => {NetworkProxyKeys.code: 200, NetworkProxyKeys.body: ''});
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
-      when(model.localDBProxy.loadAccount()).thenAnswer((_) async => '');
+      when(model.localDBProxy.loadAccount()).thenAnswer((_) async => {});
       await tester.enterText(find.byKey(Key('PhoneTextField')), phone);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
@@ -129,7 +129,7 @@ void main() {
           (_) async => {NetworkProxyKeys.code: 200, NetworkProxyKeys.body: ''});
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
-      when(model.localDBProxy.loadAccount()).thenAnswer((_) async => '');
+      when(model.localDBProxy.loadAccount()).thenAnswer((_) async => {});
       await tester.enterText(find.byKey(Key('PhoneTextField')), phone);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();

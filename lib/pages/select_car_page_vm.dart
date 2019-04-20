@@ -25,11 +25,9 @@ class SelectCarPageVM {
       SelectCarPageVMItem(type: SelectCarPageVMItemType.blue),
     ];
     final items = account.cars.map((car) {
-      final number = Car(car).number;
-      final nickname = Car(car).nickname;
       final data = {
-        SelectCarPageVMItemDataKey.number: number,
-        SelectCarPageVMItemDataKey.nickname: nickname,
+        SelectCarPageVMItemDataKey.number: car.number,
+        SelectCarPageVMItemDataKey.nickname: car.nickname,
         SelectCarPageVMItemDataKey.car: car
       };
       return SelectCarPageVMItem(data: data, type: SelectCarPageVMItemType.car);
@@ -40,13 +38,14 @@ class SelectCarPageVM {
     }, state: SelectCarPageVMActionState.cars));
   }
 
-  Future selectCar(Map car) async {
+  Future selectCar(Car car) async {
     _actionSubject
         .add(SelectCarPageVMAction(state: SelectCarPageVMActionState.busy));
     await model.parkBloc.currentLocation;
     final ParkBlocState state = await model.parkBloc.areas();
     switch (state) {
       case ParkBlocState.areas:
+        model.parkBloc.car = car;
         _otherActionSubject.add(SelectCarPageVMOtherAction(
             state: SelectCarPageVMOtherActionState.selectAreaPage));
         break;

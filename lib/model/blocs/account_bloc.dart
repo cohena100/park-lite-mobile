@@ -48,8 +48,8 @@ class AccountBloc {
   }
 
   Future get account async {
-    final account = await _localDBProxy.loadAccount();
-    return Account(account);
+    final data = await _localDBProxy.loadAccount();
+    return Account(data);
   }
 }
 
