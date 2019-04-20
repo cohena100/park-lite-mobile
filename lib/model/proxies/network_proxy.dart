@@ -14,14 +14,14 @@ class NetworkProxy {
   String _baseUrl;
 
   Future<Map> sendAreas(
-      String phone, String number, String lat, String lon, Map pango) async {
+      String phone, String number, String lat, String lon, Map company) async {
     var url = _baseUrl + '/park/areas';
     var body = json.encode({
       "phone": phone,
       "number": number,
       "lat": lat,
       "lon": lon,
-      "pango": pango
+      "pango": company
     });
     var response = await http.post(url, body: body, headers: headers);
     return {
