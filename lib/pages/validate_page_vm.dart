@@ -4,10 +4,10 @@ import 'package:rxdart/rxdart.dart';
 
 class ValidatePageVM {
   BehaviorSubject _actionSubject;
-  final _otherActionSubject = BehaviorSubject();
+  final _otherActionSubject = BehaviorSubject<ValidatePageVMOtherAction>();
   ValidatePageVM() {
     String code = model.accountBloc.code;
-    _actionSubject = BehaviorSubject(
+    _actionSubject = BehaviorSubject<ValidatePageVMAction>(
         seedValue: ValidatePageVMAction(
             data: {ValidatePageVMActionDataKey.validate: code},
             state: ValidatePageVMActionState.validate));
@@ -27,7 +27,7 @@ class ValidatePageVM {
   Future validateSubmitted() async {
     _actionSubject
         .add(ValidatePageVMAction(state: ValidatePageVMActionState.busy));
-    final state = await model.accountBloc.validate() as AccountBlocState;
+    final state = await model.accountBloc.validate();
     switch (state) {
       case AccountBlocState.loggedIn:
         _otherActionSubject.add(ValidatePageVMOtherAction(

@@ -17,8 +17,7 @@ class PhonePageState extends State<PhonePage> {
   @override
   Widget build(BuildContext context) {
     vm = PhonePageVM();
-    vm.otherActionStream.listen((event) {
-      PhonePageVMOtherAction action = event;
+    vm.otherActionStream.listen((action) {
       switch (action.state) {
         case PhonePageVMOtherActionState.none:
           break;
@@ -31,7 +30,7 @@ class PhonePageState extends State<PhonePage> {
         stream: vm.actionStream,
         initialData: PhonePageVMAction(),
         builder: (context, snapshot) {
-          PhonePageVMAction action = snapshot.data;
+          final action = snapshot.data;
           switch (action.state) {
             case PhonePageVMActionState.none:
               return Container();

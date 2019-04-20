@@ -5,8 +5,8 @@ import 'package:pango_lite/model/model.dart';
 import 'package:rxdart/rxdart.dart';
 
 class SelectCarPageVM {
-  BehaviorSubject _actionSubject = BehaviorSubject();
-  final _otherActionSubject = BehaviorSubject();
+  BehaviorSubject _actionSubject = BehaviorSubject<SelectCarPageVMAction>();
+  final _otherActionSubject = BehaviorSubject<SelectCarPageVMOtherAction>();
   Stream get actionStream => _actionSubject.stream;
   Stream get otherActionStream => _otherActionSubject.stream;
 
@@ -42,7 +42,7 @@ class SelectCarPageVM {
     _actionSubject
         .add(SelectCarPageVMAction(state: SelectCarPageVMActionState.busy));
     await model.parkBloc.currentLocation;
-    final ParkBlocState state = await model.parkBloc.areas();
+    final state = await model.parkBloc.areas();
     switch (state) {
       case ParkBlocState.areas:
         model.parkBloc.car = car;

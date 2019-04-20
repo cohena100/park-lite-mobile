@@ -3,10 +3,10 @@ import 'package:rxdart/rxdart.dart';
 
 class CarPageVM {
   BehaviorSubject _actionSubject;
-  final _otherActionSubject = BehaviorSubject();
+  final _otherActionSubject = BehaviorSubject<CarPageVMOtherAction>();
   CarPageVM() {
     String number = model.accountBloc.number;
-    _actionSubject = BehaviorSubject(
+    _actionSubject = BehaviorSubject<CarPageVMAction>(
         seedValue: CarPageVMAction(
             data: {CarPageVMActionDataKey.number: number},
             state: CarPageVMActionState.number));

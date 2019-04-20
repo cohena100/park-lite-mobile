@@ -1,9 +1,8 @@
-import 'package:pango_lite/model/model.dart';
 import 'package:rxdart/rxdart.dart';
 
 class SelectAreaPageVM {
-  BehaviorSubject _actionSubject = BehaviorSubject();
-  final _otherActionSubject = BehaviorSubject();
+  BehaviorSubject _actionSubject = BehaviorSubject<SelectAreaPageVMAction>();
+  final _otherActionSubject = BehaviorSubject<SelectAreaPageVMOtherAction>();
   Stream get actionStream => _actionSubject.stream;
   Stream get otherActionStream => _otherActionSubject.stream;
 

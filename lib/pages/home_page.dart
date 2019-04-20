@@ -16,8 +16,7 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     vm = HomePageVM();
     vm.init().then((_) {});
-    vm.otherActionStream.listen((event) {
-      HomePageVMOtherAction action = event;
+    vm.otherActionStream.listen((action) {
       switch (action.state) {
         case HomePageVMOtherActionState.none:
           break;
@@ -30,7 +29,7 @@ class HomePageState extends State<HomePage> {
         stream: vm.actionStream,
         initialData: HomePageVMAction(),
         builder: (context, snapshot) {
-          HomePageVMAction action = snapshot.data;
+          final action = snapshot.data;
           switch (action.state) {
             case HomePageVMActionState.none:
               return Container();

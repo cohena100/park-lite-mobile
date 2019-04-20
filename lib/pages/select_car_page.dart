@@ -16,8 +16,7 @@ class SelectCarPageState extends State<SelectCarPage> {
   Widget build(BuildContext context) {
     vm = SelectCarPageVM();
     vm.init().then((_) {});
-    vm.otherActionStream.listen((event) {
-      SelectCarPageVMOtherAction action = event;
+    vm.otherActionStream.listen((action) {
       switch (action.state) {
         case SelectCarPageVMOtherActionState.none:
           break;
@@ -30,7 +29,7 @@ class SelectCarPageState extends State<SelectCarPage> {
         stream: vm.actionStream,
         initialData: SelectCarPageVMAction(),
         builder: (context, snapshot) {
-          SelectCarPageVMAction action = snapshot.data;
+          final action = snapshot.data;
           Widget body;
           switch (action.state) {
             case SelectCarPageVMActionState.none:

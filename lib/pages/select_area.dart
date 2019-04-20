@@ -16,8 +16,7 @@ class SelectAreaPageState extends State<SelectAreaPage> {
   Widget build(BuildContext context) {
     vm = SelectAreaPageVM();
     vm.init().then((_) {});
-    vm.otherActionStream.listen((event) {
-      SelectAreaPageVMOtherAction action = event;
+    vm.otherActionStream.listen((action) {
       switch (action.state) {
         case SelectAreaPageVMOtherActionState.none:
           break;
@@ -27,7 +26,7 @@ class SelectAreaPageState extends State<SelectAreaPage> {
         stream: vm.actionStream,
         initialData: SelectAreaPageVMAction(),
         builder: (context, snapshot) {
-          SelectAreaPageVMAction action = snapshot.data;
+          final action = snapshot.data;
           Widget body;
           switch (action.state) {
             case SelectAreaPageVMActionState.none:

@@ -17,8 +17,7 @@ class NicknamePageState extends State<NicknamePage> {
   @override
   Widget build(BuildContext context) {
     vm = NicknamePageVM();
-    vm.otherActionStream.listen((event) {
-      NicknamePageVMOtherAction action = event;
+    vm.otherActionStream.listen((action) {
       switch (action.state) {
         case NicknamePageVMOtherActionState.none:
           break;
@@ -34,7 +33,7 @@ class NicknamePageState extends State<NicknamePage> {
         stream: vm.actionStream,
         initialData: NicknamePageVMAction(),
         builder: (context, snapshot) {
-          NicknamePageVMAction action = snapshot.data;
+          final action = snapshot.data;
           switch (action.state) {
             case NicknamePageVMActionState.none:
               return Container();

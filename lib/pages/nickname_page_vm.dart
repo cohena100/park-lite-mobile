@@ -4,10 +4,10 @@ import 'package:rxdart/rxdart.dart';
 
 class NicknamePageVM {
   BehaviorSubject _actionSubject;
-  final _otherActionSubject = BehaviorSubject();
+  final _otherActionSubject = BehaviorSubject<NicknamePageVMOtherAction>();
   NicknamePageVM() {
     String nickname = model.accountBloc.nickname;
-    _actionSubject = BehaviorSubject(
+    _actionSubject = BehaviorSubject<NicknamePageVMAction>(
         seedValue: NicknamePageVMAction(
             data: {NicknamePageVMActionDataKey.nickname: nickname},
             state: NicknamePageVMActionState.nickname));
@@ -28,7 +28,7 @@ class NicknamePageVM {
   Future nicknameSubmitted() async {
     _actionSubject
         .add(NicknamePageVMAction(state: NicknamePageVMActionState.busy));
-    final state = await model.accountBloc.login() as AccountBlocState;
+    final state = await model.accountBloc.login();
     switch (state) {
       case AccountBlocState.loggedIn:
         _otherActionSubject.add(NicknamePageVMOtherAction(

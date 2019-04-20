@@ -13,7 +13,7 @@ class NetworkProxy {
   static const error = 400;
   String _baseUrl;
 
-  Future sendAreas(
+  Future<Map> sendAreas(
       String phone, String number, String lat, String lon, Map pango) async {
     var url = _baseUrl + '/park/areas';
     var body = json.encode({
@@ -30,7 +30,7 @@ class NetworkProxy {
     };
   }
 
-  Future sendLogin(String phone, String number, String nickname) async {
+  Future<Map> sendLogin(String phone, String number, String nickname) async {
     var url = _baseUrl + '/users/login';
     var body = json.encode(
         {"phone": phone, "number": number, "nickname": nickname, "udid": uuid});
@@ -41,7 +41,7 @@ class NetworkProxy {
     };
   }
 
-  Future sendValidate(String phone, String number, String code) async {
+  Future<Map> sendValidate(String phone, String number, String code) async {
     var url = _baseUrl + '/users/validate';
     var body = json
         .encode({"phone": phone, "number": number, "code": code, "udid": uuid});

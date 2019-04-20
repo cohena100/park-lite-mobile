@@ -32,7 +32,7 @@ class ParkBloc {
   }
 
   Future<ParkBlocState> areas() async {
-    final Account account = await _account;
+    final account = await _account;
     final data = await _networkProxy.sendAreas(
         account.phone,
         account.loginCar.number,

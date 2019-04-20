@@ -22,7 +22,7 @@ class MainPageState extends State<MainPage> {
       stream: vm.actionStream,
       initialData: MainPageVMAction(),
       builder: (context, snapshot) {
-        final MainPageVMAction action = snapshot.data;
+        final action = snapshot.data;
         Widget title = Text(AppLocalizations.of(context).title);
         Widget child;
         switch (action.state) {

@@ -3,10 +3,10 @@ import 'package:rxdart/rxdart.dart';
 
 class PhonePageVM {
   BehaviorSubject _actionSubject;
-  final _otherActionSubject = BehaviorSubject();
+  final _otherActionSubject = BehaviorSubject<PhonePageVMOtherAction>();
   PhonePageVM() {
     String phone = model.accountBloc.phone;
-    _actionSubject = BehaviorSubject(
+    _actionSubject = BehaviorSubject<PhonePageVMAction>(
         seedValue: PhonePageVMAction(
             data: {PhonePageVMActionDataKey.phone: phone},
             state: PhonePageVMActionState.phone));

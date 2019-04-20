@@ -3,7 +3,7 @@ import 'package:pango_lite/model/model.dart';
 import 'package:rxdart/rxdart.dart';
 
 class MainPageVM {
-  BehaviorSubject _actionSubject = BehaviorSubject();
+  BehaviorSubject _actionSubject = BehaviorSubject<MainPageVMAction>();
   Stream get actionStream => _actionSubject.stream;
 
   void close() {

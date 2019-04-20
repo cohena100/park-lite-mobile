@@ -3,8 +3,8 @@ import 'package:pango_lite/model/model.dart';
 import 'package:rxdart/rxdart.dart';
 
 class HomePageVM {
-  final _actionSubject = BehaviorSubject();
-  final _otherActionSubject = BehaviorSubject();
+  final _actionSubject = BehaviorSubject<HomePageVMAction>();
+  final _otherActionSubject = BehaviorSubject<HomePageVMOtherAction>();
   Stream get actionStream => _actionSubject.stream;
   Stream get otherActionStream => _otherActionSubject.stream;
 

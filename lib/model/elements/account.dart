@@ -9,10 +9,6 @@ class Account {
 
   Account(this.data);
 
-  Car get car {
-    return cars[0];
-  }
-
   List<Car> get cars {
     List allCars = data[_userKey][_carsKey];
     return allCars.map((data) => Car(data)).toList();

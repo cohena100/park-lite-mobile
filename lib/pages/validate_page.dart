@@ -17,8 +17,7 @@ class ValidatePageState extends State<ValidatePage> {
   @override
   Widget build(BuildContext context) {
     vm = ValidatePageVM();
-    vm.otherActionStream.listen((event) {
-      ValidatePageVMOtherAction action = event;
+    vm.otherActionStream.listen((action) {
       switch (action.state) {
         case ValidatePageVMOtherActionState.none:
           break;
@@ -31,7 +30,7 @@ class ValidatePageState extends State<ValidatePage> {
         stream: vm.actionStream,
         initialData: ValidatePageVMAction(),
         builder: (context, snapshot) {
-          ValidatePageVMAction action = snapshot.data;
+          final action = snapshot.data;
           switch (action.state) {
             case ValidatePageVMActionState.none:
               return Container();

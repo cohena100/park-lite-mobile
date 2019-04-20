@@ -15,7 +15,12 @@ class AccountBloc {
 
   AccountBloc(this._networkProxy, this._localDBProxy);
 
-  Future handshake() async {
+  Future<Account> get account async {
+    final data = await _localDBProxy.loadAccount();
+    return Account(data);
+  }
+
+  Future<AccountBlocState> handshake() async {
     if (await _localDBProxy.loadAccount() == null) {
       return AccountBlocState.notLoggedIn;
     } else {
@@ -23,7 +28,7 @@ class AccountBloc {
     }
   }
 
-  Future login() async {
+  Future<AccountBlocState> login() async {
     final data = await _networkProxy.sendLogin(phone, number, nickname);
     switch (data[NetworkProxyKeys.code]) {
       case NetworkProxy.success:
@@ -36,7 +41,7 @@ class AccountBloc {
     }
   }
 
-  Future validate() async {
+  Future<AccountBlocState> validate() async {
     final data = await _networkProxy.sendValidate(phone, number, code);
     switch (data[NetworkProxyKeys.code]) {
       case NetworkProxy.success:
@@ -45,11 +50,6 @@ class AccountBloc {
       default:
         return AccountBlocState.notLoggedIn;
     }
-  }
-
-  Future get account async {
-    final data = await _localDBProxy.loadAccount();
-    return Account(data);
   }
 }
 
