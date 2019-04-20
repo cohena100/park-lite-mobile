@@ -3,21 +3,22 @@ import 'package:pango_lite/model/model.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ValidatePageVM {
-  BehaviorSubject _actionSubject;
+  final _actionSubject = BehaviorSubject<ValidatePageVMAction>();
   final _otherActionSubject = BehaviorSubject<ValidatePageVMOtherAction>();
-  ValidatePageVM() {
-    String code = model.accountBloc.code;
-    _actionSubject = BehaviorSubject<ValidatePageVMAction>(
-        seedValue: ValidatePageVMAction(
-            data: {ValidatePageVMActionDataKey.validate: code},
-            state: ValidatePageVMActionState.validate));
-  }
+
   Stream get actionStream => _actionSubject.stream;
   Stream get otherActionStream => _otherActionSubject.stream;
 
   void close() {
     _actionSubject.close();
     _otherActionSubject.close();
+  }
+
+  Future init() async {
+    String code = model.accountBloc.code;
+    _actionSubject.add(ValidatePageVMAction(
+        data: {ValidatePageVMActionDataKey.validate: code},
+        state: ValidatePageVMActionState.validate));
   }
 
   void validateChanged(String s) {

@@ -17,6 +17,7 @@ class CarPageState extends State<CarPage> {
   @override
   Widget build(BuildContext context) {
     vm = CarPageVM();
+    vm.init().then((_) {});
     vm.otherActionStream.listen((action) {
       switch (action.state) {
         case CarPageVMOtherActionState.none:

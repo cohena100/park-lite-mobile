@@ -17,6 +17,7 @@ class PhonePageState extends State<PhonePage> {
   @override
   Widget build(BuildContext context) {
     vm = PhonePageVM();
+    vm.init().then((_) {});
     vm.otherActionStream.listen((action) {
       switch (action.state) {
         case PhonePageVMOtherActionState.none:

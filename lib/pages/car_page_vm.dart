@@ -2,15 +2,9 @@ import 'package:pango_lite/model/model.dart';
 import 'package:rxdart/rxdart.dart';
 
 class CarPageVM {
-  BehaviorSubject _actionSubject;
+  final _actionSubject = BehaviorSubject<CarPageVMAction>();
   final _otherActionSubject = BehaviorSubject<CarPageVMOtherAction>();
-  CarPageVM() {
-    String number = model.accountBloc.number;
-    _actionSubject = BehaviorSubject<CarPageVMAction>(
-        seedValue: CarPageVMAction(
-            data: {CarPageVMActionDataKey.number: number},
-            state: CarPageVMActionState.number));
-  }
+
   Stream get actionStream => _actionSubject.stream;
 
   Stream get otherActionStream => _otherActionSubject.stream;
@@ -20,13 +14,20 @@ class CarPageVM {
     _otherActionSubject.close();
   }
 
+  Future init() async {
+    String number = model.accountBloc.number;
+    _actionSubject.add(CarPageVMAction(
+        data: {CarPageVMActionDataKey.number: number},
+        state: CarPageVMActionState.number));
+  }
+
   void numberChanged(String number) {
     model.accountBloc.number = number;
   }
 
   Future numberSubmitted() async {
-    _otherActionSubject
-        .add(CarPageVMOtherAction(state: CarPageVMOtherActionState.nicknamePage));
+    _otherActionSubject.add(
+        CarPageVMOtherAction(state: CarPageVMOtherActionState.nicknamePage));
   }
 }
 

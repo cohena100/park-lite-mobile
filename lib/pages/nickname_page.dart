@@ -17,6 +17,7 @@ class NicknamePageState extends State<NicknamePage> {
   @override
   Widget build(BuildContext context) {
     vm = NicknamePageVM();
+    vm.init().then((_) {});
     vm.otherActionStream.listen((action) {
       switch (action.state) {
         case NicknamePageVMOtherActionState.none:

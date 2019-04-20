@@ -3,15 +3,9 @@ import 'package:pango_lite/model/model.dart';
 import 'package:rxdart/rxdart.dart';
 
 class NicknamePageVM {
-  BehaviorSubject _actionSubject;
+  final _actionSubject = BehaviorSubject<NicknamePageVMAction>();
   final _otherActionSubject = BehaviorSubject<NicknamePageVMOtherAction>();
-  NicknamePageVM() {
-    String nickname = model.accountBloc.nickname;
-    _actionSubject = BehaviorSubject<NicknamePageVMAction>(
-        seedValue: NicknamePageVMAction(
-            data: {NicknamePageVMActionDataKey.nickname: nickname},
-            state: NicknamePageVMActionState.nickname));
-  }
+
   Stream get actionStream => _actionSubject.stream;
 
   Stream get otherActionStream => _otherActionSubject.stream;
@@ -19,6 +13,13 @@ class NicknamePageVM {
   void close() {
     _actionSubject.close();
     _otherActionSubject.close();
+  }
+
+  Future init() async {
+    String nickname = model.accountBloc.nickname;
+    _actionSubject.add(NicknamePageVMAction(
+        data: {NicknamePageVMActionDataKey.nickname: nickname},
+        state: NicknamePageVMActionState.nickname));
   }
 
   void nicknameChanged(String s) {

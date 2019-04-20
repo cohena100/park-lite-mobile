@@ -2,15 +2,8 @@ import 'package:pango_lite/model/model.dart';
 import 'package:rxdart/rxdart.dart';
 
 class PhonePageVM {
-  BehaviorSubject _actionSubject;
+  final _actionSubject = BehaviorSubject<PhonePageVMAction>();
   final _otherActionSubject = BehaviorSubject<PhonePageVMOtherAction>();
-  PhonePageVM() {
-    String phone = model.accountBloc.phone;
-    _actionSubject = BehaviorSubject<PhonePageVMAction>(
-        seedValue: PhonePageVMAction(
-            data: {PhonePageVMActionDataKey.phone: phone},
-            state: PhonePageVMActionState.phone));
-  }
   Stream get actionStream => _actionSubject.stream;
 
   Stream get otherActionStream => _otherActionSubject.stream;
@@ -20,13 +13,20 @@ class PhonePageVM {
     _otherActionSubject.close();
   }
 
+  Future init() async {
+    String phone = model.accountBloc.phone;
+    _actionSubject.add(PhonePageVMAction(
+        data: {PhonePageVMActionDataKey.phone: phone},
+        state: PhonePageVMActionState.phone));
+  }
+
   void phoneChanged(String phone) {
     model.accountBloc.phone = phone;
   }
 
   void phoneSubmitted() {
-    _otherActionSubject
-        .add(PhonePageVMOtherAction(state: PhonePageVMOtherActionState.carPage));
+    _otherActionSubject.add(
+        PhonePageVMOtherAction(state: PhonePageVMOtherActionState.carPage));
   }
 }
 
