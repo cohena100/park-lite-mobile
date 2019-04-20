@@ -1,3 +1,4 @@
+import 'package:pango_lite/model/model.dart';
 import 'package:rxdart/rxdart.dart';
 
 class SelectAreaPageVM {

@@ -13,6 +13,23 @@ class NetworkProxy {
   static const error = 400;
   String _baseUrl;
 
+  Future sendAreas(
+      String phone, String number, String lat, String lon, Map pango) async {
+    var url = _baseUrl + '/park/areas';
+    var body = json.encode({
+      "phone": phone,
+      "number": number,
+      "lat": lat,
+      "lon": lon,
+      "pango": pango
+    });
+    var response = await http.post(url, body: body, headers: headers);
+    return {
+      NetworkProxyKeys.code: response.statusCode,
+      NetworkProxyKeys.body: response.body
+    };
+  }
+
   Future sendLogin(String phone, String number, String nickname) async {
     var url = _baseUrl + '/users/login';
     var body = json.encode(
@@ -24,10 +41,6 @@ class NetworkProxy {
     };
   }
 
-  void setup(bool isIOS) {
-    _baseUrl = isIOS ? 'http://localhost:3000' : 'http://10.0.2.2:3000';
-  }
-
   Future sendValidate(String phone, String number, String code) async {
     var url = _baseUrl + '/users/validate';
     var body = json
@@ -37,6 +50,10 @@ class NetworkProxy {
       NetworkProxyKeys.code: response.statusCode,
       NetworkProxyKeys.body: response.body
     };
+  }
+
+  void setup(bool isIOS) {
+    _baseUrl = isIOS ? 'http://localhost:3000' : 'http://10.0.2.2:3000';
   }
 }
 

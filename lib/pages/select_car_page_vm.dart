@@ -1,3 +1,4 @@
+import 'package:pango_lite/model/blocs/park_bloc.dart';
 import 'package:pango_lite/model/elements/account.dart';
 import 'package:pango_lite/model/model.dart';
 import 'package:rxdart/rxdart.dart';
@@ -22,16 +23,14 @@ class SelectCarPageVM {
       SelectCarPageVMItem(type: SelectCarPageVMItemType.orange),
       SelectCarPageVMItem(type: SelectCarPageVMItemType.blue),
     ];
-    final items = account.cars.map((car) {
-      final number = car[Account.car][Account.number];
-      final nickname = car[Account.nickname];
-      final data = {
-        SelectCarPageVMItemDataKey.number: number,
-        SelectCarPageVMItemDataKey.nickname: nickname,
-        SelectCarPageVMItemDataKey.car: car
-      };
-      return SelectCarPageVMItem(data: data, type: SelectCarPageVMItemType.car);
-    }).toList();
+    final data = {
+      SelectCarPageVMItemDataKey.number: account.number,
+      SelectCarPageVMItemDataKey.nickname: account.nickname,
+      SelectCarPageVMItemDataKey.car: account.car,
+    };
+    final items = [
+      SelectCarPageVMItem(data: data, type: SelectCarPageVMItemType.car)
+    ];
     _actionSubject.add(SelectCarPageVMAction(data: {
       SelectCarPageVMActionDataKey.items:
           [decorateItems, items, decorateItems].expand((x) => x).toList()
@@ -42,8 +41,15 @@ class SelectCarPageVM {
     _actionSubject
         .add(SelectCarPageVMAction(state: SelectCarPageVMActionState.busy));
     await model.parkBloc.currentLocation;
-    _otherActionSubject.add(SelectCarPageVMOtherAction(
-        state: SelectCarPageVMOtherActionState.selectAreaPage));
+    final ParkBlocState state = await model.parkBloc.areas();
+    switch (state) {
+      case ParkBlocState.areas:
+        _otherActionSubject.add(SelectCarPageVMOtherAction(
+            state: SelectCarPageVMOtherActionState.selectAreaPage));
+        break;
+      default:
+        break;
+    }
   }
 }
 

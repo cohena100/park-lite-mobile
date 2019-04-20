@@ -13,7 +13,7 @@ class Model {
 
   Model(this.networkProxy, this.localDBProxy)
       : accountBloc = AccountBloc(networkProxy, localDBProxy),
-        parkBloc = ParkBloc(localDBProxy);
+        parkBloc = ParkBloc(localDBProxy, networkProxy);
 
   void setup(bool isIOS) {
     networkProxy.setup(isIOS);

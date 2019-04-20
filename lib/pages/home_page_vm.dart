@@ -33,7 +33,7 @@ class HomePageVM {
               [decorateItems, items, decorateItems].expand((x) => x).toList()
         }, state: HomePageVMActionState.home));
         break;
-      case ParkBlocState.none:
+      default:
         break;
     }
   }

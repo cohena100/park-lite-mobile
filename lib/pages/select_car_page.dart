@@ -36,6 +36,9 @@ class SelectCarPageState extends State<SelectCarPage> {
             case SelectCarPageVMActionState.none:
               body = Container();
               break;
+            case SelectCarPageVMActionState.busy:
+              body = Center(child: body = CircularProgressIndicator());
+              break;
             case SelectCarPageVMActionState.cars:
               final List<SelectCarPageVMItem> items =
                   action.data[SelectCarPageVMActionDataKey.items];
@@ -45,9 +48,6 @@ class SelectCarPageState extends State<SelectCarPage> {
                     key: Key('SelectCarPageListView'),
                     children: items.map(_buildItem).toList()),
               );
-              break;
-            case SelectCarPageVMActionState.busy:
-              body = Center(child: body = CircularProgressIndicator());
               break;
           }
           return Scaffold(
@@ -72,8 +72,8 @@ class SelectCarPageState extends State<SelectCarPage> {
           child: ListTile(
             key: Key(number),
             title: Center(child: Text('$nickname ($number)')),
-            onTap: () async {
-              await vm.selectCar(car);
+            onTap: () {
+              vm.selectCar(car);
             },
           ),
         );
