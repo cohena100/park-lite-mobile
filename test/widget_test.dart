@@ -64,11 +64,6 @@ void main() {
     testWidgets('Login success', (WidgetTester tester) async {
       model =
           Model(MockNetworkProxy(), MockLocalDBProxy(), MockLocationProxy());
-      when(model.networkProxy.sendLogin(phone1, number1, nickname1)).thenAnswer(
-          (_) async => {
-                NetworkProxyKeys.code: 200,
-                NetworkProxyKeys.body: jsonEncode(account1)
-              });
       when(model.localDBProxy.loadAccount()).thenAnswer((_) async => null);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
@@ -81,6 +76,11 @@ void main() {
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
       expect(find.byKey(Key('NicknamePage')), findsOneWidget);
+      when(model.networkProxy.sendLogin(phone1, number1, nickname1)).thenAnswer(
+              (_) async => {
+            NetworkProxyKeys.code: 200,
+            NetworkProxyKeys.body: jsonEncode(account1)
+          });
       await tester.enterText(find.byKey(Key('NicknameTextField')), nickname1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
@@ -108,8 +108,7 @@ void main() {
     testWidgets('Login failed', (WidgetTester tester) async {
       model =
           Model(MockNetworkProxy(), MockLocalDBProxy(), MockLocationProxy());
-      when(model.networkProxy.sendLogin(phone1, number1, nickname1)).thenAnswer(
-          (_) async => {NetworkProxyKeys.code: 400, NetworkProxyKeys.body: null});
+      when(model.localDBProxy.loadAccount()).thenAnswer((_) async => null);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
       await tester.enterText(find.byKey(Key('PhoneTextField')), phone1);
@@ -119,6 +118,8 @@ void main() {
       await tester.enterText(find.byKey(Key('CarTextField')), number1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
+      when(model.networkProxy.sendLogin(phone1, number1, nickname1)).thenAnswer(
+              (_) async => {NetworkProxyKeys.code: 400, NetworkProxyKeys.body: null});
       expect(find.byKey(Key('NicknamePage')), findsOneWidget);
       await tester.enterText(find.byKey(Key('NicknameTextField')), nickname1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
@@ -163,14 +164,6 @@ void main() {
     testWidgets('Validate success', (WidgetTester tester) async {
       model =
           Model(MockNetworkProxy(), MockLocalDBProxy(), MockLocationProxy());
-      when(model.networkProxy.sendLogin(phone1, number1, nickname1)).thenAnswer(
-          (_) async =>
-              {NetworkProxyKeys.code: 401, NetworkProxyKeys.body: null});
-      when(model.networkProxy.sendValidate(phone1, number1, code1)).thenAnswer(
-          (_) async => {
-                NetworkProxyKeys.code: 200,
-                NetworkProxyKeys.body: jsonEncode(account1)
-              });
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
       when(model.localDBProxy.loadAccount()).thenAnswer((_) async => account1);
@@ -181,10 +174,18 @@ void main() {
       await tester.enterText(find.byKey(Key('CarTextField')), number1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
+      when(model.networkProxy.sendLogin(phone1, number1, nickname1)).thenAnswer(
+              (_) async =>
+          {NetworkProxyKeys.code: 401, NetworkProxyKeys.body: null});
       expect(find.byKey(Key('NicknamePage')), findsOneWidget);
       await tester.enterText(find.byKey(Key('NicknameTextField')), nickname1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
+      when(model.networkProxy.sendValidate(phone1, number1, code1)).thenAnswer(
+              (_) async => {
+            NetworkProxyKeys.code: 200,
+            NetworkProxyKeys.body: jsonEncode(account1)
+          });
       expect(find.byKey(Key('ValidatePage')), findsOneWidget);
       await tester.enterText(find.byKey(Key('ValidateTextField')), code1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
