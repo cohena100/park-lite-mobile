@@ -20,8 +20,8 @@ class SelectCarPageState extends State<SelectCarPage> {
       switch (action.state) {
         case SelectCarPageVMOtherActionState.none:
           break;
-        case SelectCarPageVMOtherActionState.selectAreaPage:
-          Navigator.pushNamed(context, '/selectArea');
+        case SelectCarPageVMOtherActionState.selectCityPage:
+          Navigator.pushNamed(context, '/selectCity');
           break;
       }
     });

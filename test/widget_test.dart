@@ -207,7 +207,7 @@ void main() {
               {NetworkProxyKeys.code: 200, NetworkProxyKeys.body: '{}'});
       await tester.tap(find.byKey(Key('2')));
       await tester.pumpAndSettle();
-      expect(find.byKey(Key('SelectAreaPage')), findsOneWidget);
+      expect(find.byKey(Key('SelectCityPage')), findsOneWidget);
     });
   });
 }

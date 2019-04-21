@@ -107,11 +107,11 @@ class AppLocalizations {
     );
   }
 
-  String get selectAreaTitle {
+  String get selectCityTitle {
     return Intl.message(
-      'Area selection',
-      name: 'selectAreaTitle',
-      desc: 'Title for area selection page',
+      'City selection',
+      name: 'selectCityTitle',
+      desc: 'Title for city selection page',
     );
   }
 }

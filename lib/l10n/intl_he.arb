@@ -66,9 +66,9 @@
     "type": "text",
     "placeholders": {}
   },
-  "selectAreaTitle": "בחירת איזור",
-  "@selectAreaTitle": {
-    "description": "Title for area selection page",
+  "selectCityTitle": "בחירת עיר",
+  "@selectCityTitle": {
+    "description": "Title for city selection page",
     "type": "text",
     "placeholders": {}
   }

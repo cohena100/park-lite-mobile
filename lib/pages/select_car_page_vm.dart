@@ -44,10 +44,10 @@ class SelectCarPageVM {
     await model.parkBloc.currentLocation;
     final state = await model.parkBloc.areas();
     switch (state) {
-      case ParkBlocState.areas:
+      case ParkBlocState.cities:
         model.parkBloc.car = car;
         _otherActionSubject.add(SelectCarPageVMOtherAction(
-            state: SelectCarPageVMOtherActionState.selectAreaPage));
+            state: SelectCarPageVMOtherActionState.selectCityPage));
         break;
       default:
         break;
@@ -87,4 +87,4 @@ class SelectCarPageVMOtherAction {
 
 enum SelectCarPageVMOtherActionDataKey { none }
 
-enum SelectCarPageVMOtherActionState { none, selectAreaPage }
+enum SelectCarPageVMOtherActionState { none, selectCityPage }

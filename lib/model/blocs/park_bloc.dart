@@ -40,11 +40,11 @@ class ParkBloc {
     switch (data[NetworkProxyKeys.code]) {
       case NetworkProxy.success:
         _lastAreas = jsonDecode(data[NetworkProxyKeys.body]);
-        return ParkBlocState.areas;
+        return ParkBlocState.cities;
       default:
         return ParkBlocState.none;
     }
   }
 }
 
-enum ParkBlocState { none, parking, notParking, areas }
+enum ParkBlocState { none, parking, notParking, cities }
