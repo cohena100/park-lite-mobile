@@ -14,11 +14,10 @@ class NetworkProxy {
   String _baseUrl;
 
   Future<Map> sendAreas(
-      String phone, String number, String lat, String lon, Map company) async {
+      String phone, String lat, String lon, Map company) async {
     var url = _baseUrl + '/park/areas';
     var body = json.encode({
       "phone": phone,
-      "number": number,
       "lat": lat,
       "lon": lon,
       "pango": company

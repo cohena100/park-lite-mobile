@@ -37,7 +37,6 @@ class ParkBloc {
     final account = await _account;
     final data = await _networkProxy.sendAreas(
         account.phone,
-        account.loginCar.number,
         _lastLocation.latitude.toString(),
         _lastLocation.longitude.toString(),
         account.company);

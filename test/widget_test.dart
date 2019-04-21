@@ -265,7 +265,6 @@ void main() {
           .thenAnswer((_) async => location1);
       when(model.networkProxy.sendAreas(
               phone1,
-              number1,
               location1.latitude.toString(),
               location1.longitude.toString(),
               company1))

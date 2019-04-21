@@ -18,11 +18,6 @@ class Account {
     return data[_companyKey];
   }
 
-  Car get loginCar {
-    final allCars = cars;
-    return allCars.length > 0 ? cars[0] : null;
-  }
-
   String get phone {
     return data[_userKey][_phoneKey];
   }
