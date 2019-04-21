@@ -44,7 +44,7 @@ class SelectCarPageVM {
     await model.parkBloc.currentLocation;
     final state = await model.parkBloc.areas();
     switch (state) {
-      case ParkBlocState.cities:
+      case ParkBlocState.areas:
         model.parkBloc.car = car;
         _otherActionSubject.add(SelectCarPageVMOtherAction(
             state: SelectCarPageVMOtherActionState.selectCityPage));

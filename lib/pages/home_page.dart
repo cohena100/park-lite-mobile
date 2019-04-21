@@ -58,30 +58,30 @@ class HomePageState extends State<HomePage> {
         return Container();
 
       case HomePageVMItemType.blue:
-        return Container(
+        return Card(
+          key: Key('Blue'),
           color: Colors.blue,
-          child: ListTile(
-            key: Key('Blue'),
-          ),
+          child: Padding(padding: const EdgeInsets.all(24), child: Container()),
         );
       case HomePageVMItemType.orange:
-        return Container(
+        return Card(
+          key: Key('Orange'),
           color: Colors.orange,
-          child: ListTile(
-            key: Key('White'),
-          ),
+          child: Padding(padding: const EdgeInsets.all(24), child: Container()),
         );
       case HomePageVMItemType.start:
-        return Container(
-          color: Colors.white,
-          child: ListTile(
+        return InkWell(
+          child: Card(
             key: Key('Start'),
-            title: Center(
-                child: Text(AppLocalizations.of(context).startParkingLabel)),
-            onTap: () {
-              vm.startParking();
-            },
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Center(
+                  child: Text(AppLocalizations.of(context).startParkingLabel)),
+            ),
           ),
+          onTap: () {
+            vm.startParking();
+          },
         );
     }
     return Container();

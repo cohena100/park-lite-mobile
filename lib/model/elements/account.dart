@@ -1,10 +1,10 @@
 import 'package:pango_lite/model/elements/car.dart';
 
 class Account {
-  static const _userKey = 'user';
-  static const _carsKey = 'cars';
-  static const _phoneKey = 'phone';
-  static const _companyKey = 'pango';
+  static final _userKey = 'user';
+  static final _carsKey = 'cars';
+  static final _phoneKey = 'phone';
+  static final _companyKey = 'pango';
   Map data;
 
   Account(this.data);

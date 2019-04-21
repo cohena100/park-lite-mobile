@@ -5,6 +5,8 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:location/location.dart';
@@ -162,16 +164,16 @@ void main() {
   group('park', () {
     testWidgets('reaching areas', (WidgetTester tester) async {
       final account = {
-        "user": {
-          "phone": "1",
-          "cars": [
+        'user': {
+          'phone': '1',
+          'cars': [
             {
-              "car": {"number": "2"},
-              "nickname": "a"
+              'car': {'number': '2'},
+              'nickname': 'a'
             }
           ]
         },
-        "pango": {}
+        'pango': {}
       };
       final location1 = LocationData.fromMap({
         'latitude': 1,
@@ -197,14 +199,25 @@ void main() {
       String phone = '1';
       String number = '2';
       Map company = {};
+      Map areas = {
+        'areas': {
+          'Cities': [
+            {'CityId': 1, 'CityName': 'a'},
+            {'CityId': 2, 'CityName': 'b'},
+            {'CityId': 3, 'CityName': 'c'},
+          ]
+        }
+      };
       when(model.networkProxy.sendAreas(
               phone,
               number,
               location1.latitude.toString(),
               location1.longitude.toString(),
               company))
-          .thenAnswer((_) async =>
-              {NetworkProxyKeys.code: 200, NetworkProxyKeys.body: '{}'});
+          .thenAnswer((_) async => {
+                NetworkProxyKeys.code: 200,
+                NetworkProxyKeys.body: jsonEncode(areas)
+              });
       await tester.tap(find.byKey(Key('2')));
       await tester.pumpAndSettle();
       expect(find.byKey(Key('SelectCityPage')), findsOneWidget);

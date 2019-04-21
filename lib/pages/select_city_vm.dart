@@ -1,3 +1,4 @@
+import 'package:pango_lite/model/model.dart';
 import 'package:rxdart/rxdart.dart';
 
 class SelectCityPageVM {
@@ -19,9 +20,18 @@ class SelectCityPageVM {
       SelectCityPageVMItem(type: SelectCityPageVMItemType.orange),
       SelectCityPageVMItem(type: SelectCityPageVMItemType.blue),
     ];
+    final items = model.parkBloc.lastAreas.cities.map((city) {
+      final data = {
+        SelectCityPageVMItemDataKey.name: city.name,
+        SelectCityPageVMItemDataKey.id: city.id,
+        SelectCityPageVMItemDataKey.city: city,
+      };
+      return SelectCityPageVMItem(
+          data: data, type: SelectCityPageVMItemType.city);
+    }).toList();
     _actionSubject.add(SelectCityPageVMAction(data: {
       SelectCityPageVMActionDataKey.items:
-          [decorateItems, decorateItems].expand((x) => x).toList()
+          [decorateItems, items, decorateItems].expand((x) => x).toList()
     }, state: SelectCityPageVMActionState.cities));
   }
 }
@@ -45,8 +55,8 @@ class SelectCityPageVMItem {
       {this.data = const {}, this.type = SelectCityPageVMItemType.none});
 }
 
-enum SelectCityPageVMItemDataKey { none, number, nickname, car }
-enum SelectCityPageVMItemType { none, blue, orange }
+enum SelectCityPageVMItemDataKey { none, name, id, city }
+enum SelectCityPageVMItemType { none, blue, orange, city }
 
 class SelectCityPageVMOtherAction {
   final Map data;

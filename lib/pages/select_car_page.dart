@@ -59,36 +59,36 @@ class SelectCarPageState extends State<SelectCarPage> {
   }
 
   Widget _buildItem(SelectCarPageVMItem item) {
-    final number = item.data[SelectCarPageVMItemDataKey.number];
-    final nickname = item.data[SelectCarPageVMItemDataKey.nickname];
-    final car = item.data[SelectCarPageVMItemDataKey.car];
     switch (item.type) {
       case SelectCarPageVMItemType.none:
         return Container();
-      case SelectCarPageVMItemType.car:
-        return Container(
-          color: Colors.white,
-          child: ListTile(
-            key: Key(number),
-            title: Center(child: Text('$nickname ($number)')),
-            onTap: () {
-              vm.selectCar(car);
-            },
-          ),
-        );
       case SelectCarPageVMItemType.blue:
-        return Container(
+        return Card(
+          key: Key('Blue'),
           color: Colors.blue,
-          child: ListTile(
-            key: Key('Blue'),
-          ),
+          child: Padding(padding: const EdgeInsets.all(24), child: Container()),
         );
       case SelectCarPageVMItemType.orange:
-        return Container(
+        return Card(
+          key: Key('Orange'),
           color: Colors.orange,
-          child: ListTile(
-            key: Key('White'),
+          child: Padding(padding: const EdgeInsets.all(24), child: Container()),
+        );
+      case SelectCarPageVMItemType.car:
+        final number = item.data[SelectCarPageVMItemDataKey.number];
+        final nickname = item.data[SelectCarPageVMItemDataKey.nickname];
+        final car = item.data[SelectCarPageVMItemDataKey.car];
+        return InkWell(
+          child: Card(
+            key: Key(number),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Center(child: Text('$nickname ($number)')),
+            ),
           ),
+          onTap: () {
+            vm.selectCar(car);
+          },
         );
     }
     return Container();

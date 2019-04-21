@@ -57,18 +57,29 @@ class SelectCityPageState extends State<SelectCityPage> {
       case SelectCityPageVMItemType.none:
         return Container();
       case SelectCityPageVMItemType.blue:
-        return Container(
+        return Card(
+          key: Key('Blue'),
           color: Colors.blue,
-          child: ListTile(
-            key: Key('Blue'),
-          ),
+          child: Padding(padding: const EdgeInsets.all(24), child: Container()),
         );
       case SelectCityPageVMItemType.orange:
-        return Container(
+        return Card(
+          key: Key('Orange'),
           color: Colors.orange,
-          child: ListTile(
-            key: Key('White'),
+          child: Padding(padding: const EdgeInsets.all(24), child: Container()),
+        );
+      case SelectCityPageVMItemType.city:
+        final name = item.data[SelectCityPageVMItemDataKey.name];
+        final id = item.data[SelectCityPageVMItemDataKey.id];
+        return InkWell(
+          child: Card(
+            key: Key(id.toString()),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Center(child: Text('$name')),
+            ),
           ),
+          onTap: () {},
         );
     }
     return Container();

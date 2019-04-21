@@ -1,7 +1,7 @@
 class Car {
-  static const _carKey = 'car';
-  static const _numberKey = 'number';
-  static const _nicknameKey = 'nickname';
+  static final _carKey = 'car';
+  static final _numberKey = 'number';
+  static final _nicknameKey = 'nickname';
   final Map data;
 
   Car(this.data);
