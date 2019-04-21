@@ -45,7 +45,7 @@ class SelectRatePageState extends State<SelectRatePage> {
           }
           return Scaffold(
             appBar: AppBar(
-              title: Text(AppLocalizations.of(context).selectCityTitle),
+              title: Text(AppLocalizations.of(context).selectRateTitle),
             ),
             body: body,
           );

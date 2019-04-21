@@ -71,5 +71,11 @@
     "description": "Title for city selection page",
     "type": "text",
     "placeholders": {}
+  },
+  "selectRateTitle": "Rate selection",
+  "@selectRateTitle": {
+    "description": "Title for city rate selection page",
+    "type": "text",
+    "placeholders": {}
   }
 }

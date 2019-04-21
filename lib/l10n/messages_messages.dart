@@ -28,6 +28,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "phoneNumberTitle" : MessageLookupByLibrary.simpleMessage("Fill phone number"),
     "selectCarTitle" : MessageLookupByLibrary.simpleMessage("Car selection"),
     "selectCityTitle" : MessageLookupByLibrary.simpleMessage("City selection"),
+    "selectRateTitle" : MessageLookupByLibrary.simpleMessage("Rate selection"),
     "startParkingLabel" : MessageLookupByLibrary.simpleMessage("Start parking"),
     "title" : MessageLookupByLibrary.simpleMessage("Pango Lite"),
     "validateHint" : MessageLookupByLibrary.simpleMessage("Please enter validation code"),

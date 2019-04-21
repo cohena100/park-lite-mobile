@@ -114,6 +114,14 @@ class AppLocalizations {
       desc: 'Title for city selection page',
     );
   }
+
+  String get selectRateTitle {
+    return Intl.message(
+      'Rate selection',
+      name: 'selectRateTitle',
+      desc: 'Title for city rate selection page',
+    );
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

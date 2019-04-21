@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2019-04-21T09:38:02.791937",
+  "@@last_modified": "2019-04-21T15:17:24.314813",
   "title": "Pango Lite",
   "@title": {
     "description": "Title for the Weather Application",
@@ -69,6 +69,12 @@
   "selectCityTitle": "City selection",
   "@selectCityTitle": {
     "description": "Title for city selection page",
+    "type": "text",
+    "placeholders": {}
+  },
+  "selectRateTitle": "Rate selection",
+  "@selectRateTitle": {
+    "description": "Title for city rate selection page",
     "type": "text",
     "placeholders": {}
   }
