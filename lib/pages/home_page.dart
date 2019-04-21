@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pango_lite/locale/locale.dart';
 import 'package:pango_lite/pages/home_page_vm.dart';
+import 'package:pango_lite/pages/routes.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: Key('HomePage'));
@@ -21,7 +22,7 @@ class HomePageState extends State<HomePage> {
         case HomePageVMOtherActionState.none:
           break;
         case HomePageVMOtherActionState.selectCarPage:
-          Navigator.pushNamed(context, '/selectCar');
+          Navigator.pushNamed(context, Routes.selectCarPage);
           break;
       }
     });

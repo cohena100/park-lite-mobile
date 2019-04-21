@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pango_lite/locale/locale.dart';
 import 'package:pango_lite/pages/nickname_page_vm.dart';
+import 'package:pango_lite/pages/routes.dart';
 
 class NicknamePage extends StatefulWidget {
   NicknamePage({Key key}) : super(key: Key('NicknamePage'));
@@ -23,10 +24,10 @@ class NicknamePageState extends State<NicknamePage> {
         case NicknamePageVMOtherActionState.none:
           break;
         case NicknamePageVMOtherActionState.homePage:
-          Navigator.of(context).popUntil(ModalRoute.withName('/'));
+          Navigator.of(context).popUntil(ModalRoute.withName(Routes.rootPage));
           break;
         case NicknamePageVMOtherActionState.validatePage:
-          Navigator.pushNamed(context, '/validate');
+          Navigator.pushNamed(context, Routes.validatePage);
           break;
       }
     });

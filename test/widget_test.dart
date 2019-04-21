@@ -24,10 +24,73 @@ class MockLocalDBProxy extends Mock implements LocalDBProxy {}
 class MockLocationProxy extends Mock implements LocationProxy {}
 
 void main() {
+  final account1 = {
+    'user': {
+      'phone': '1',
+      'cars': [
+        {
+          'car': {'number': '2'},
+          'nickname': 'a'
+        }
+      ]
+    },
+    'pango': {}
+  };
+  final location1 = LocationData.fromMap({
+    'latitude': 1,
+    'longitude': 2,
+    'accuracy': 0,
+    'altitude': 0,
+    'speed': 0,
+    'speed_accuracy': 0,
+    'heading': 0,
+    'time': 0,
+  });
+  Map areas1 = {
+    'areas': {
+      'Cities': [
+        {'CityId': 1, 'CityName': 'a'},
+        {'CityId': 2, 'CityName': 'b'},
+        {'CityId': 3, 'CityName': 'c'},
+      ]
+    }
+  };
+  final String phone1 = '1';
+  final String number1 = '2';
+  final String nickname1 = 'a';
+  final String code1 = '3';
+  final Map company1 = {};
   group('login', () {
+    testWidgets('Login success', (WidgetTester tester) async {
+      model =
+          Model(MockNetworkProxy(), MockLocalDBProxy(), MockLocationProxy());
+      when(model.networkProxy.sendLogin(phone1, number1, nickname1)).thenAnswer(
+          (_) async => {
+                NetworkProxyKeys.code: 200,
+                NetworkProxyKeys.body: jsonEncode(account1)
+              });
+      when(model.localDBProxy.loadAccount()).thenAnswer((_) async => null);
+      await tester.pumpWidget(MyApp());
+      await tester.pumpAndSettle();
+      when(model.localDBProxy.loadAccount()).thenAnswer((_) async => account1);
+      await tester.enterText(find.byKey(Key('PhoneTextField')), phone1);
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      await tester.pumpAndSettle();
+      expect(find.byKey(Key('CarPage')), findsOneWidget);
+      await tester.enterText(find.byKey(Key('CarTextField')), number1);
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      await tester.pumpAndSettle();
+      expect(find.byKey(Key('NicknamePage')), findsOneWidget);
+      await tester.enterText(find.byKey(Key('NicknameTextField')), nickname1);
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      await tester.pumpAndSettle();
+      expect(find.byKey(Key('HomePage')), findsOneWidget);
+    });
+
     testWidgets('Not logged in', (WidgetTester tester) async {
       model =
           Model(MockNetworkProxy(), MockLocalDBProxy(), MockLocationProxy());
+      when(model.localDBProxy.loadAccount()).thenAnswer((_) async => null);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
       expect(find.byKey(Key('PhonePage')), findsOneWidget);
@@ -36,33 +99,8 @@ void main() {
     testWidgets('Already logged in', (WidgetTester tester) async {
       model =
           Model(MockNetworkProxy(), MockLocalDBProxy(), MockLocationProxy());
-      when(model.localDBProxy.loadAccount()).thenAnswer((_) async => {});
+      when(model.localDBProxy.loadAccount()).thenAnswer((_) async => account1);
       await tester.pumpWidget(MyApp());
-      await tester.pumpAndSettle();
-      expect(find.byKey(Key('HomePage')), findsOneWidget);
-    });
-
-    testWidgets('Login success', (WidgetTester tester) async {
-      model =
-          Model(MockNetworkProxy(), MockLocalDBProxy(), MockLocationProxy());
-      String phone = '1';
-      String number = '2';
-      String nickname = 'a';
-      when(model.networkProxy.sendLogin(phone, number, nickname)).thenAnswer(
-          (_) async => {NetworkProxyKeys.code: 200, NetworkProxyKeys.body: ''});
-      await tester.pumpWidget(MyApp());
-      await tester.pumpAndSettle();
-      when(model.localDBProxy.loadAccount()).thenAnswer((_) async => {});
-      await tester.enterText(find.byKey(Key('PhoneTextField')), phone);
-      await tester.testTextInput.receiveAction(TextInputAction.done);
-      await tester.pumpAndSettle();
-      expect(find.byKey(Key('CarPage')), findsOneWidget);
-      await tester.enterText(find.byKey(Key('CarTextField')), number);
-      await tester.testTextInput.receiveAction(TextInputAction.done);
-      await tester.pumpAndSettle();
-      expect(find.byKey(Key('NicknamePage')), findsOneWidget);
-      await tester.enterText(find.byKey(Key('NicknameTextField')), nickname);
-      await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
       expect(find.byKey(Key('HomePage')), findsOneWidget);
     });
@@ -70,22 +108,19 @@ void main() {
     testWidgets('Login failed', (WidgetTester tester) async {
       model =
           Model(MockNetworkProxy(), MockLocalDBProxy(), MockLocationProxy());
-      String phone = '1';
-      String number = '2';
-      String nickname = 'a';
-      when(model.networkProxy.sendLogin(phone, number, nickname)).thenAnswer(
+      when(model.networkProxy.sendLogin(phone1, number1, nickname1)).thenAnswer(
           (_) async => {NetworkProxyKeys.code: 400, NetworkProxyKeys.body: ''});
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
-      await tester.enterText(find.byKey(Key('PhoneTextField')), phone);
+      await tester.enterText(find.byKey(Key('PhoneTextField')), phone1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
       expect(find.byKey(Key('CarPage')), findsOneWidget);
-      await tester.enterText(find.byKey(Key('CarTextField')), number);
+      await tester.enterText(find.byKey(Key('CarTextField')), number1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
       expect(find.byKey(Key('NicknamePage')), findsOneWidget);
-      await tester.enterText(find.byKey(Key('NicknameTextField')), nickname);
+      await tester.enterText(find.byKey(Key('NicknameTextField')), nickname1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pump();
       expect(find.byKey(Key('NicknamePage')), findsOneWidget);
@@ -94,18 +129,15 @@ void main() {
     testWidgets('Pop and push between pages', (WidgetTester tester) async {
       model =
           Model(MockNetworkProxy(), MockLocalDBProxy(), MockLocationProxy());
-      String phone = '1';
-      String number = '2';
-      String nickname = 'a';
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
-      await tester.enterText(find.byKey(Key('PhoneTextField')), phone);
+      await tester.enterText(find.byKey(Key('PhoneTextField')), phone1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
-      await tester.enterText(find.byKey(Key('CarTextField')), number);
+      await tester.enterText(find.byKey(Key('CarTextField')), number1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
-      await tester.enterText(find.byKey(Key('NicknameTextField')), nickname);
+      await tester.enterText(find.byKey(Key('NicknameTextField')), nickname1);
       final NavigatorState navigator =
           tester.state<NavigatorState>(find.byType(Navigator));
       navigator.pop();
@@ -114,47 +146,43 @@ void main() {
       await tester.pumpAndSettle();
       TextField textField =
           find.byKey(Key('PhoneTextField')).evaluate().toList().first.widget;
-      expect(textField.controller.value.text, phone);
-      await tester.enterText(find.byKey(Key('PhoneTextField')), phone);
+      expect(textField.controller.value.text, phone1);
+      await tester.enterText(find.byKey(Key('PhoneTextField')), phone1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
       textField =
           find.byKey(Key('CarTextField')).evaluate().toList().first.widget;
-      expect(textField.controller.value.text, number);
-      await tester.enterText(find.byKey(Key('CarTextField')), number);
+      expect(textField.controller.value.text, number1);
+      await tester.enterText(find.byKey(Key('CarTextField')), number1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
       textField =
           find.byKey(Key('NicknameTextField')).evaluate().toList().first.widget;
-      expect(textField.controller.value.text, nickname);
+      expect(textField.controller.value.text, nickname1);
     });
     testWidgets('Validate success', (WidgetTester tester) async {
       model =
           Model(MockNetworkProxy(), MockLocalDBProxy(), MockLocationProxy());
-      String phone = '1';
-      String number = '2';
-      String nickname = 'a';
-      String code = '3';
-      when(model.networkProxy.sendLogin(phone, number, nickname)).thenAnswer(
+      when(model.networkProxy.sendLogin(phone1, number1, nickname1)).thenAnswer(
           (_) async => {NetworkProxyKeys.code: 401, NetworkProxyKeys.body: ''});
-      when(model.networkProxy.sendValidate(phone, number, code)).thenAnswer(
+      when(model.networkProxy.sendValidate(phone1, number1, code1)).thenAnswer(
           (_) async => {NetworkProxyKeys.code: 200, NetworkProxyKeys.body: ''});
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
       when(model.localDBProxy.loadAccount()).thenAnswer((_) async => {});
-      await tester.enterText(find.byKey(Key('PhoneTextField')), phone);
+      await tester.enterText(find.byKey(Key('PhoneTextField')), phone1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
       expect(find.byKey(Key('CarPage')), findsOneWidget);
-      await tester.enterText(find.byKey(Key('CarTextField')), number);
+      await tester.enterText(find.byKey(Key('CarTextField')), number1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
       expect(find.byKey(Key('NicknamePage')), findsOneWidget);
-      await tester.enterText(find.byKey(Key('NicknameTextField')), nickname);
+      await tester.enterText(find.byKey(Key('NicknameTextField')), nickname1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
       expect(find.byKey(Key('ValidatePage')), findsOneWidget);
-      await tester.enterText(find.byKey(Key('ValidateTextField')), code);
+      await tester.enterText(find.byKey(Key('ValidateTextField')), code1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
       expect(find.byKey(Key('HomePage')), findsOneWidget);
@@ -163,31 +191,9 @@ void main() {
 
   group('park', () {
     testWidgets('reaching areas', (WidgetTester tester) async {
-      final account = {
-        'user': {
-          'phone': '1',
-          'cars': [
-            {
-              'car': {'number': '2'},
-              'nickname': 'a'
-            }
-          ]
-        },
-        'pango': {}
-      };
-      final location1 = LocationData.fromMap({
-        'latitude': 1,
-        'longitude': 2,
-        'accuracy': 0,
-        'altitude': 0,
-        'speed': 0,
-        'speed_accuracy': 0,
-        'heading': 0,
-        'time': 0,
-      });
       model =
           Model(MockNetworkProxy(), MockLocalDBProxy(), MockLocationProxy());
-      when(model.localDBProxy.loadAccount()).thenAnswer((_) async => account);
+      when(model.localDBProxy.loadAccount()).thenAnswer((_) async => account1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
       expect(find.byKey(Key('HomePage')), findsOneWidget);
@@ -196,27 +202,15 @@ void main() {
       expect(find.byKey(Key('SelectCarPage')), findsOneWidget);
       when(model.locationProxy.currentLocation)
           .thenAnswer((_) async => location1);
-      String phone = '1';
-      String number = '2';
-      Map company = {};
-      Map areas = {
-        'areas': {
-          'Cities': [
-            {'CityId': 1, 'CityName': 'a'},
-            {'CityId': 2, 'CityName': 'b'},
-            {'CityId': 3, 'CityName': 'c'},
-          ]
-        }
-      };
       when(model.networkProxy.sendAreas(
-              phone,
-              number,
+              phone1,
+              number1,
               location1.latitude.toString(),
               location1.longitude.toString(),
-              company))
+              company1))
           .thenAnswer((_) async => {
                 NetworkProxyKeys.code: 200,
-                NetworkProxyKeys.body: jsonEncode(areas)
+                NetworkProxyKeys.body: jsonEncode(areas1)
               });
       await tester.tap(find.byKey(Key('2')));
       await tester.pumpAndSettle();

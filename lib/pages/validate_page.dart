@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pango_lite/locale/locale.dart';
+import 'package:pango_lite/pages/routes.dart';
 import 'package:pango_lite/pages/validate_page_vm.dart';
 
 class ValidatePage extends StatefulWidget {
@@ -23,7 +24,7 @@ class ValidatePageState extends State<ValidatePage> {
         case ValidatePageVMOtherActionState.none:
           break;
         case ValidatePageVMOtherActionState.homePage:
-          Navigator.of(context).popUntil(ModalRoute.withName('/'));
+          Navigator.of(context).popUntil(ModalRoute.withName(Routes.rootPage));
           break;
       }
     });

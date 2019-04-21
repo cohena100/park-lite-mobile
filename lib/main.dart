@@ -5,6 +5,7 @@ import 'package:pango_lite/model/model.dart';
 import 'package:pango_lite/pages/car_page.dart';
 import 'package:pango_lite/pages/main_page.dart';
 import 'package:pango_lite/pages/nickname_page.dart';
+import 'package:pango_lite/pages/routes.dart';
 import 'package:pango_lite/pages/select_city.dart';
 import 'package:pango_lite/pages/select_car_page.dart';
 import 'package:pango_lite/pages/validate_page.dart';
@@ -18,14 +19,14 @@ class MyApp extends StatelessWidget {
     model.setup(isIOS);
     return MaterialApp(
       key: Key('MyApp'),
-      initialRoute: '/',
+      initialRoute: Routes.rootPage,
       routes: <String, WidgetBuilder>{
-        '/': (context) => MainPage(),
-        '/car': (context) => CarPage(),
-        '/nickname': (context) => NicknamePage(),
-        '/validate': (context) => ValidatePage(),
-        '/selectCar': (context) => SelectCarPage(),
-        '/selectCity': (context) => SelectCityPage(),
+        Routes.rootPage: (context) => MainPage(),
+        Routes.carPage: (context) => CarPage(),
+        Routes.nicknamePage: (context) => NicknamePage(),
+        Routes.validatePage: (context) => ValidatePage(),
+        Routes.selectCarPage: (context) => SelectCarPage(),
+        Routes.selectCityPage: (context) => SelectCityPage(),
       },
       localizationsDelegates: [
         AppLocalizationsDelegate(),

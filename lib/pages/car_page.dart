@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pango_lite/locale/locale.dart';
 import 'package:pango_lite/pages/car_page_vm.dart';
+import 'package:pango_lite/pages/routes.dart';
 
 class CarPage extends StatefulWidget {
   CarPage({Key key}) : super(key: Key('CarPage'));
@@ -23,7 +24,7 @@ class CarPageState extends State<CarPage> {
         case CarPageVMOtherActionState.none:
           break;
         case CarPageVMOtherActionState.nicknamePage:
-          Navigator.pushNamed(context, '/nickname');
+          Navigator.pushNamed(context, Routes.nicknamePage);
           break;
       }
     });
