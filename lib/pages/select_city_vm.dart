@@ -1,3 +1,4 @@
+import 'package:pango_lite/model/elements/city.dart';
 import 'package:pango_lite/model/model.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -17,8 +18,6 @@ class SelectCityPageVM {
       SelectCityPageVMItem(type: SelectCityPageVMItemType.blue),
       SelectCityPageVMItem(type: SelectCityPageVMItemType.orange),
       SelectCityPageVMItem(type: SelectCityPageVMItemType.blue),
-      SelectCityPageVMItem(type: SelectCityPageVMItemType.orange),
-      SelectCityPageVMItem(type: SelectCityPageVMItemType.blue),
     ];
     final items = model.parkBloc.lastAreas.cities.map((city) {
       final data = {
@@ -33,6 +32,12 @@ class SelectCityPageVM {
       SelectCityPageVMActionDataKey.items:
           [decorateItems, items, decorateItems].expand((x) => x).toList()
     }, state: SelectCityPageVMActionState.cities));
+  }
+
+  void selectCity(City city) {
+    model.parkBloc.currentCity = city;
+    _otherActionSubject.add(SelectCityPageVMOtherAction(
+        state: SelectCityPageVMOtherActionState.rate));
   }
 }
 
@@ -68,4 +73,4 @@ class SelectCityPageVMOtherAction {
 
 enum SelectCityPageVMOtherActionDataKey { none }
 
-enum SelectCityPageVMOtherActionState { none }
+enum SelectCityPageVMOtherActionState { none, rate }

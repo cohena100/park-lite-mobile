@@ -1,48 +1,44 @@
 import 'package:flutter/material.dart';
-import 'package:pango_lite/pages/routes.dart';
-import 'package:pango_lite/pages/select_city_vm.dart';
 import 'package:pango_lite/locale/locale.dart';
+import 'package:pango_lite/pages/select_rate_page_vm.dart';
 
-class SelectCityPage extends StatefulWidget {
-  SelectCityPage({Key key}) : super(key: Key('SelectCityPage'));
+class SelectRatePage extends StatefulWidget {
+  SelectRatePage({Key key}) : super(key: Key('SelectRatePage'));
 
   @override
-  SelectCityPageState createState() => SelectCityPageState();
+  SelectRatePageState createState() => SelectRatePageState();
 }
 
-class SelectCityPageState extends State<SelectCityPage> {
-  SelectCityPageVM vm;
+class SelectRatePageState extends State<SelectRatePage> {
+  SelectRatePageVM vm;
 
   @override
   Widget build(BuildContext context) {
-    vm = SelectCityPageVM();
+    vm = SelectRatePageVM();
     vm.init().then((_) {});
     vm.otherActionStream.listen((action) {
       switch (action.state) {
-        case SelectCityPageVMOtherActionState.none:
-          break;
-        case SelectCityPageVMOtherActionState.rate:
-          Navigator.pushNamed(context, Routes.selectRatePage);
+        case SelectRatePageVMOtherActionState.none:
           break;
       }
     });
     return StreamBuilder(
         stream: vm.actionStream,
-        initialData: SelectCityPageVMAction(),
+        initialData: SelectRatePageVMAction(),
         builder: (context, snapshot) {
           final action = snapshot.data;
           Widget body;
           switch (action.state) {
-            case SelectCityPageVMActionState.none:
+            case SelectRatePageVMActionState.none:
               body = Container();
               break;
-            case SelectCityPageVMActionState.cities:
-              final List<SelectCityPageVMItem> items =
-                  action.data[SelectCityPageVMActionDataKey.items];
+            case SelectRatePageVMActionState.rates:
+              final List<SelectRatePageVMItem> items =
+              action.data[SelectRatePageVMActionDataKey.items];
               body = Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListView(
-                    key: Key('SelectCityPageListView'),
+                    key: Key('SelectRatePageListView'),
                     children: items.map(_buildItem).toList()),
               );
               break;
@@ -56,26 +52,25 @@ class SelectCityPageState extends State<SelectCityPage> {
         });
   }
 
-  Widget _buildItem(SelectCityPageVMItem item) {
+  Widget _buildItem(SelectRatePageVMItem item) {
     switch (item.type) {
-      case SelectCityPageVMItemType.none:
+      case SelectRatePageVMItemType.none:
         return Container();
-      case SelectCityPageVMItemType.blue:
+      case SelectRatePageVMItemType.blue:
         return Card(
           key: Key('Blue'),
           color: Colors.blue,
           child: Padding(padding: const EdgeInsets.all(24), child: Container()),
         );
-      case SelectCityPageVMItemType.orange:
+      case SelectRatePageVMItemType.orange:
         return Card(
           key: Key('Orange'),
           color: Colors.orange,
           child: Padding(padding: const EdgeInsets.all(24), child: Container()),
         );
-      case SelectCityPageVMItemType.city:
-        final name = item.data[SelectCityPageVMItemDataKey.name];
-        final id = item.data[SelectCityPageVMItemDataKey.id];
-        final city = item.data[SelectCityPageVMItemDataKey.city];
+      case SelectRatePageVMItemType.rate:
+        final name = item.data[SelectRatePageVMItemDataKey.name];
+        final id = item.data[SelectRatePageVMItemDataKey.id];
         return InkWell(
           child: Card(
             key: Key(id.toString()),
@@ -84,9 +79,7 @@ class SelectCityPageState extends State<SelectCityPage> {
               child: Center(child: Text('$name')),
             ),
           ),
-          onTap: () {
-            vm.selectCity(city);
-          },
+          onTap: () {},
         );
     }
     return Container();

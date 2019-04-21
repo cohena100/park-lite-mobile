@@ -4,6 +4,7 @@ import 'package:location/location.dart';
 import 'package:pango_lite/model/elements/account.dart';
 import 'package:pango_lite/model/elements/areas.dart';
 import 'package:pango_lite/model/elements/car.dart';
+import 'package:pango_lite/model/elements/city.dart';
 import 'package:pango_lite/model/proxies/local_db_proxy.dart';
 import 'package:pango_lite/model/proxies/location_proxy.dart';
 import 'package:pango_lite/model/proxies/network_proxy.dart';
@@ -15,6 +16,8 @@ class ParkBloc {
   Areas lastAreas;
   LocationData _lastLocation;
   Car car;
+  City currentCity;
+
   ParkBloc(this._localDBProxy, this._networkProxy, this._locationProxy);
 
   Future get currentLocation async {

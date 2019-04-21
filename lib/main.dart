@@ -8,6 +8,7 @@ import 'package:pango_lite/pages/nickname_page.dart';
 import 'package:pango_lite/pages/routes.dart';
 import 'package:pango_lite/pages/select_city.dart';
 import 'package:pango_lite/pages/select_car_page.dart';
+import 'package:pango_lite/pages/select_rate_page.dart';
 import 'package:pango_lite/pages/validate_page.dart';
 
 void main() => runApp(MyApp());
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
         Routes.validatePage: (context) => ValidatePage(),
         Routes.selectCarPage: (context) => SelectCarPage(),
         Routes.selectCityPage: (context) => SelectCityPage(),
+        Routes.selectRatePage: (context) => SelectRatePage(),
       },
       localizationsDelegates: [
         AppLocalizationsDelegate(),

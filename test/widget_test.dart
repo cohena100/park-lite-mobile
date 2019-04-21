@@ -49,9 +49,64 @@ void main() {
   Map areas1 = {
     'areas': {
       'Cities': [
-        {'CityId': 1, 'CityName': 'a'},
-        {'CityId': 2, 'CityName': 'b'},
-        {'CityId': 3, 'CityName': 'c'},
+        {
+          'CityId': 1,
+          'CityName': 'a',
+          'GeoZones': [
+            {
+              'ParkingZones': [
+                {'CityId': 1, 'id': 1, 'name': 'a'},
+                {'CityId': 1, 'id': 2, 'name': 'b'},
+                {'CityId': 1, 'id': 3, 'name': 'c'},
+              ]
+            },
+            {
+              'ParkingZones': [
+                {'CityId': 1, 'id': 4, 'name': 'd'},
+                {'CityId': 1, 'id': 5, 'name': 'e'},
+              ]
+            },
+          ]
+        },
+        {
+          'CityId': 2,
+          'CityName': 'b',
+          'GeoZones': [
+            {
+              'ParkingZones': [
+                {'CityId': 2, 'id': 6, 'name': 'f'},
+                {'CityId': 2, 'id': 7, 'name': 'g'},
+                {'CityId': 2, 'id': 8, 'name': 'h'},
+              ]
+            },
+            {
+              'ParkingZones': [
+                {'CityId': 2, 'id': 9, 'name': 'i'},
+                {'CityId': 2, 'id': 10, 'name': 'j'},
+              ]
+            },
+          ]
+        },
+        {
+          'CityId': 3,
+          'CityName': 'c',
+          'GeoZones': [
+            {
+              'ParkingZones': [
+                {'CityId': 3, 'id': 11, 'name': 'k'},
+                {'CityId': 3, 'id': 12, 'name': 'l'},
+                {'CityId': 3, 'id': 13, 'name': 'm'},
+              ]
+            },
+            {
+              'ParkingZones': [
+                {'CityId': 3, 'id': 14, 'name': 'n'},
+                {'CityId': 3, 'id': 15, 'name': 'o'},
+                {'CityId': 3, 'id': 16, 'name': 'p'},
+              ]
+            },
+          ]
+        },
       ]
     }
   };
@@ -77,10 +132,10 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byKey(Key('NicknamePage')), findsOneWidget);
       when(model.networkProxy.sendLogin(phone1, number1, nickname1)).thenAnswer(
-              (_) async => {
-            NetworkProxyKeys.code: 200,
-            NetworkProxyKeys.body: jsonEncode(account1)
-          });
+          (_) async => {
+                NetworkProxyKeys.code: 200,
+                NetworkProxyKeys.body: jsonEncode(account1)
+              });
       await tester.enterText(find.byKey(Key('NicknameTextField')), nickname1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
@@ -119,7 +174,8 @@ void main() {
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
       when(model.networkProxy.sendLogin(phone1, number1, nickname1)).thenAnswer(
-              (_) async => {NetworkProxyKeys.code: 400, NetworkProxyKeys.body: null});
+          (_) async =>
+              {NetworkProxyKeys.code: 400, NetworkProxyKeys.body: null});
       expect(find.byKey(Key('NicknamePage')), findsOneWidget);
       await tester.enterText(find.byKey(Key('NicknameTextField')), nickname1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
@@ -175,17 +231,17 @@ void main() {
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
       when(model.networkProxy.sendLogin(phone1, number1, nickname1)).thenAnswer(
-              (_) async =>
-          {NetworkProxyKeys.code: 401, NetworkProxyKeys.body: null});
+          (_) async =>
+              {NetworkProxyKeys.code: 401, NetworkProxyKeys.body: null});
       expect(find.byKey(Key('NicknamePage')), findsOneWidget);
       await tester.enterText(find.byKey(Key('NicknameTextField')), nickname1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
       when(model.networkProxy.sendValidate(phone1, number1, code1)).thenAnswer(
-              (_) async => {
-            NetworkProxyKeys.code: 200,
-            NetworkProxyKeys.body: jsonEncode(account1)
-          });
+          (_) async => {
+                NetworkProxyKeys.code: 200,
+                NetworkProxyKeys.body: jsonEncode(account1)
+              });
       expect(find.byKey(Key('ValidatePage')), findsOneWidget);
       await tester.enterText(find.byKey(Key('ValidateTextField')), code1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
@@ -195,7 +251,7 @@ void main() {
   });
 
   group('park', () {
-    testWidgets('reaching areas', (WidgetTester tester) async {
+    testWidgets('reaching rates', (WidgetTester tester) async {
       model =
           Model(MockNetworkProxy(), MockLocalDBProxy(), MockLocationProxy());
       when(model.localDBProxy.loadAccount()).thenAnswer((_) async => account1);
@@ -220,6 +276,15 @@ void main() {
       await tester.tap(find.byKey(Key('2')));
       await tester.pumpAndSettle();
       expect(find.byKey(Key('SelectCityPage')), findsOneWidget);
+      await tester.tap(find.byKey(Key('3')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(Key('SelectRatePage')), findsOneWidget);
+      expect(find.byKey(Key('11')), findsOneWidget);
+      expect(find.byKey(Key('13')), findsOneWidget);
+      expect(find.byKey(Key('14')), findsOneWidget);
+      expect(find.byKey(Key('16')), findsOneWidget);
+      expect(find.byKey(Key('1')), findsNothing);
+      expect(find.byKey(Key('10')), findsNothing);
     });
   });
 }

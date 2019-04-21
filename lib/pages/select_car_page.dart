@@ -87,8 +87,8 @@ class SelectCarPageState extends State<SelectCarPage> {
               child: Center(child: Text('$nickname ($number)')),
             ),
           ),
-          onTap: () {
-            vm.selectCar(car);
+          onTap: () async {
+            await vm.selectCar(car);
           },
         );
     }

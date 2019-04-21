@@ -6,9 +6,9 @@ class Areas {
   Map data;
 
   Areas(this.data);
-  
+
   List<City> get cities {
-    List allCities = data[_areasKey][_citiesKey];
-    return allCities.map((data) => City(data)).toList();
+    final List allCities = data[_areasKey][_citiesKey];
+    return allCities.map((city) => City(city)).toList();
   }
 }
