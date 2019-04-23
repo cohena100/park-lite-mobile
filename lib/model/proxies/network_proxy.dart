@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 class NetworkProxy {
   static const uuid = '6518BCEC-D521-40C2-8CB4-A780CDA382EF';
-  static const headers = {
+  static const Map<String, String> headers = {
     'Content-type': 'application/json',
     'Accept': 'application/json',
   };
@@ -13,16 +13,16 @@ class NetworkProxy {
   static const error = 400;
   String _baseUrl;
 
-  Future<Map> sendAreas(
-      String phone, String lat, String lon, Map company) async {
-    var url = _baseUrl + '/park/areas';
-    var body = json.encode({
-      "phone": phone,
-      "lat": lat,
-      "lon": lon,
-      "pango": company
-    });
-    var response = await http.post(url, body: body, headers: headers);
+  Future<Map> sendAreas(String id, String lat, String lon,
+      Map company, String token) async {
+    var url = _baseUrl + '/parkings/areas';
+    var body =
+        json.encode({"id": id, "lat": lat, "lon": lon, "pango": company});
+    final Map<String, String> extraHeaders = {'Authorization': token};
+    final Map<String, String> allHeaders = {};
+    allHeaders.addAll(headers);
+    allHeaders.addAll(extraHeaders);
+    var response = await http.post(url, body: body, headers: allHeaders);
     return {
       NetworkProxyKeys.code: response.statusCode,
       NetworkProxyKeys.body: response.body
@@ -31,8 +31,14 @@ class NetworkProxy {
 
   Future<Map> sendLogin(String phone, String number, String nickname) async {
     var url = _baseUrl + '/users/login';
-    var body = json.encode(
-        {"phone": phone, "number": number, "nickname": nickname, "udid": uuid});
+    var body = json.encode({
+      'phone': phone,
+      'number': number,
+      'nickname': nickname,
+      'pango': {
+        'account': {'udid': uuid}
+      }
+    });
     var response = await http.post(url, body: body, headers: headers);
     return {
       NetworkProxyKeys.code: response.statusCode,
@@ -42,8 +48,14 @@ class NetworkProxy {
 
   Future<Map> sendValidate(String phone, String number, String code) async {
     var url = _baseUrl + '/users/validate';
-    var body = json
-        .encode({"phone": phone, "number": number, "code": code, "udid": uuid});
+    var body = json.encode({
+      "phone": phone,
+      "number": number,
+      "code": code,
+      'pango': {
+        'account': {'udid': uuid}
+      }
+    });
     var response = await http.post(url, body: body, headers: headers);
     return {
       NetworkProxyKeys.code: response.statusCode,

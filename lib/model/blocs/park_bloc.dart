@@ -36,10 +36,13 @@ class ParkBloc {
   Future<ParkBlocState> areas() async {
     final account = await _account;
     final data = await _networkProxy.sendAreas(
-        account.phone,
+        account.id,
         _lastLocation.latitude.toString(),
         _lastLocation.longitude.toString(),
-        account.company);
+
+
+        account.company,
+        account.token);
     switch (data[NetworkProxyKeys.code]) {
       case NetworkProxy.success:
         lastAreas = Areas(jsonDecode(data[NetworkProxyKeys.body]));
