@@ -14,17 +14,25 @@ class HomePageVM {
   }
 
   Future init() async {
-    switch (model.parkBloc.state) {
+    final decorateItems = [
+      HomePageVMItem(type: HomePageVMItemType.blue),
+      HomePageVMItem(type: HomePageVMItemType.orange),
+      HomePageVMItem(type: HomePageVMItemType.blue),
+      HomePageVMItem(type: HomePageVMItemType.orange),
+      HomePageVMItem(type: HomePageVMItemType.blue),
+    ];
+    final parkingState = await model.parkBloc.state;
+    switch (parkingState) {
       case ParkBlocState.parking:
+        final items = [
+          HomePageVMItem(type: HomePageVMItemType.stop),
+        ];
+        _actionSubject.add(HomePageVMAction(data: {
+          HomePageVMActionDataKey.items:
+              [decorateItems, items, decorateItems].expand((x) => x).toList()
+        }, state: HomePageVMActionState.home));
         break;
       case ParkBlocState.notParking:
-        final decorateItems = [
-          HomePageVMItem(type: HomePageVMItemType.blue),
-          HomePageVMItem(type: HomePageVMItemType.orange),
-          HomePageVMItem(type: HomePageVMItemType.blue),
-          HomePageVMItem(type: HomePageVMItemType.orange),
-          HomePageVMItem(type: HomePageVMItemType.blue),
-        ];
         final items = [
           HomePageVMItem(type: HomePageVMItemType.start),
         ];
@@ -64,7 +72,7 @@ class HomePageVMItem {
 
 enum HomePageVMItemDataKey { none }
 
-enum HomePageVMItemType { none, blue, orange, start }
+enum HomePageVMItemType { none, blue, orange, start, stop }
 
 class HomePageVMOtherAction {
   final Map data;

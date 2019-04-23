@@ -84,6 +84,18 @@ class HomePageState extends State<HomePage> {
             vm.startParking();
           },
         );
+      case HomePageVMItemType.stop:
+        return InkWell(
+          child: Card(
+            key: Key('Stop'),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Center(
+                  child: Text(AppLocalizations.of(context).stopParkingLabel)),
+            ),
+          ),
+          onTap: () {},
+        );
     }
     return Container();
   }

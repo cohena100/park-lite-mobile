@@ -1,4 +1,4 @@
-import 'package:pango_lite/model/blocs/account_bloc.dart';
+import 'package:pango_lite/model/blocs/user_bloc.dart';
 import 'package:pango_lite/model/model.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -29,13 +29,13 @@ class NicknamePageVM {
   Future nicknameSubmitted() async {
     _actionSubject
         .add(NicknamePageVMAction(state: NicknamePageVMActionState.busy));
-    final state = await model.accountBloc.login();
+    final state = await model.accountBloc.userLogin();
     switch (state) {
-      case AccountBlocState.loggedIn:
+      case UserBlocState.loggedIn:
         _otherActionSubject.add(NicknamePageVMOtherAction(
             state: NicknamePageVMOtherActionState.homePage));
         break;
-      case AccountBlocState.validate:
+      case UserBlocState.validate:
         _otherActionSubject.add(NicknamePageVMOtherAction(
             state: NicknamePageVMOtherActionState.validatePage));
         break;

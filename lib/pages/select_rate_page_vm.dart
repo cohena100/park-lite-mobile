@@ -1,3 +1,5 @@
+import 'package:pango_lite/model/blocs/park_bloc.dart';
+import 'package:pango_lite/model/elements/Rate.dart';
 import 'package:pango_lite/model/model.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -13,12 +15,16 @@ class SelectRatePageVM {
   }
 
   Future init() async {
+    _addRatesState();
+  }
+
+  void _addRatesState() {
     final decorateItems = [
       SelectRatePageVMItem(type: SelectRatePageVMItemType.blue),
       SelectRatePageVMItem(type: SelectRatePageVMItemType.orange),
       SelectRatePageVMItem(type: SelectRatePageVMItemType.blue),
     ];
-    final items = model.parkBloc.currentCity.rates.map((rate) {
+    final items = model.parkBloc.city.rates.map((rate) {
       final data = {
         SelectRatePageVMItemDataKey.rate: rate,
         SelectRatePageVMItemDataKey.name: rate.name,
@@ -30,8 +36,24 @@ class SelectRatePageVM {
     }).toList();
     _actionSubject.add(SelectRatePageVMAction(data: {
       SelectRatePageVMActionDataKey.items:
-          [decorateItems, items, decorateItems].expand((x) => x).toList()
+      [decorateItems, items, decorateItems].expand((x) => x).toList()
     }, state: SelectRatePageVMActionState.rates));
+  }
+
+  Future selectRate(Rate rate) async {
+    _actionSubject
+        .add(SelectRatePageVMAction(state: SelectRatePageVMActionState.busy));
+    model.parkBloc.rate = rate;
+    final state = await model.parkBloc.parkingStart();
+    switch (state) {
+      case ParkBlocState.started:
+        _otherActionSubject.add(SelectRatePageVMOtherAction(
+            state: SelectRatePageVMOtherActionState.home));
+        break;
+      default:
+        _addRatesState();
+        break;
+    }
   }
 }
 
@@ -44,7 +66,7 @@ class SelectRatePageVMAction {
 
 enum SelectRatePageVMActionDataKey { none, items }
 
-enum SelectRatePageVMActionState { none, rates }
+enum SelectRatePageVMActionState { none, busy, rates }
 
 class SelectRatePageVMItem {
   final Map data;
@@ -67,4 +89,4 @@ class SelectRatePageVMOtherAction {
 
 enum SelectRatePageVMOtherActionDataKey { none }
 
-enum SelectRatePageVMOtherActionState { none }
+enum SelectRatePageVMOtherActionState { none, home }

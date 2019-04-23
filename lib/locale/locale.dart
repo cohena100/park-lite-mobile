@@ -122,6 +122,15 @@ class AppLocalizations {
       desc: 'Title for city rate selection page',
     );
   }
+
+  String get stopParkingLabel {
+    return Intl.message(
+      'Stop parking',
+      name: 'stopParkingLabel',
+      desc: 'Stop parking button label',
+    );
+  }
+
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

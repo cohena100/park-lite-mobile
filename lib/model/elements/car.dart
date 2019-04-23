@@ -1,4 +1,5 @@
 class Car {
+  static final _idKey = '_id';
   static final _carKey = 'car';
   static final _numberKey = 'number';
   static final _nicknameKey = 'nickname';
@@ -8,6 +9,10 @@ class Car {
 
   String get nickname {
     return data[_nicknameKey];
+  }
+
+  String get id {
+    return data[_carKey][_idKey];
   }
 
   String get number {

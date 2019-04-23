@@ -77,5 +77,11 @@
     "description": "Title for city rate selection page",
     "type": "text",
     "placeholders": {}
+  },
+  "stopParkingLabel": "סיום חניה",
+  "@stopParkingLabel": {
+    "description": "Stop parking button label",
+    "type": "text",
+    "placeholders": {}
   }
 }

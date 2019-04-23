@@ -1,5 +1,5 @@
 import 'package:pango_lite/model/blocs/park_bloc.dart';
-import 'package:pango_lite/model/elements/account.dart';
+import 'package:pango_lite/model/elements/user.dart';
 import 'package:pango_lite/model/elements/car.dart';
 import 'package:pango_lite/model/model.dart';
 import 'package:rxdart/rxdart.dart';
@@ -16,7 +16,7 @@ class SelectCarPageVM {
   }
 
   Future init() async {
-    final Account account = await model.accountBloc.account;
+    final User account = await model.accountBloc.user;
     final decorateItems = [
       SelectCarPageVMItem(type: SelectCarPageVMItemType.blue),
       SelectCarPageVMItem(type: SelectCarPageVMItemType.orange),
@@ -42,7 +42,7 @@ class SelectCarPageVM {
     _actionSubject
         .add(SelectCarPageVMAction(state: SelectCarPageVMActionState.busy));
     await model.parkBloc.currentLocation;
-    final state = await model.parkBloc.areas();
+    final state = await model.parkBloc.parkingAreas();
     switch (state) {
       case ParkBlocState.areas:
         model.parkBloc.car = car;

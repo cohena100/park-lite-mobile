@@ -30,6 +30,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "selectCityTitle" : MessageLookupByLibrary.simpleMessage("בחירת עיר"),
     "selectRateTitle" : MessageLookupByLibrary.simpleMessage("בחירת תעריף"),
     "startParkingLabel" : MessageLookupByLibrary.simpleMessage("הפעלת חניה"),
+    "stopParkingLabel" : MessageLookupByLibrary.simpleMessage("סיום חניה"),
     "title" : MessageLookupByLibrary.simpleMessage("פנגו לייט"),
     "validateHint" : MessageLookupByLibrary.simpleMessage("הזן קוד אימות"),
     "validateTitle" : MessageLookupByLibrary.simpleMessage("הזנת קוד אימות")

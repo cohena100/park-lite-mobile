@@ -13,8 +13,8 @@ class NetworkProxy {
   static const error = 400;
   String _baseUrl;
 
-  Future<Map> sendAreas(String id, String lat, String lon,
-      Map company, String token) async {
+  Future<Map> sendAreas(
+      String id, String lat, String lon, Map company, String token) async {
     var url = _baseUrl + '/parkings/areas';
     var body =
         json.encode({"id": id, "lat": lat, "lon": lon, "pango": company});
@@ -57,6 +57,43 @@ class NetworkProxy {
       }
     });
     var response = await http.post(url, body: body, headers: headers);
+    return {
+      NetworkProxyKeys.code: response.statusCode,
+      NetworkProxyKeys.body: response.body
+    };
+  }
+
+  Future<Map> sendStart(
+      String id,
+      String carId,
+      String lat,
+      String lon,
+      String cityId,
+      String cityName,
+      String rateId,
+      String rateName,
+      String carNumber,
+      Map company,
+      String token) async {
+    var url = _baseUrl + '/parkings/start';
+    company['parkingNumber'] = carNumber;
+    var body = json.encode({
+      'id': id,
+      'carId': carId,
+      'lat': lat,
+      'lon': lon,
+      'cityId': cityId,
+      'cityName': cityName,
+      'rateId': rateId,
+      'rateName': rateName,
+      'pango': company
+    });
+    final Map<String, String> extraHeaders = {'Authorization': token};
+    final Map<String, String> allHeaders = {};
+    allHeaders.addAll(headers);
+    allHeaders.addAll(extraHeaders);
+    var response = await http.post(url, body: body, headers: allHeaders);
+    print(response.statusCode);
     return {
       NetworkProxyKeys.code: response.statusCode,
       NetworkProxyKeys.body: response.body

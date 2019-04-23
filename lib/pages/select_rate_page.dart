@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pango_lite/locale/locale.dart';
+import 'package:pango_lite/pages/routes.dart';
 import 'package:pango_lite/pages/select_rate_page_vm.dart';
 
 class SelectRatePage extends StatefulWidget {
@@ -20,6 +21,8 @@ class SelectRatePageState extends State<SelectRatePage> {
       switch (action.state) {
         case SelectRatePageVMOtherActionState.none:
           break;
+        case SelectRatePageVMOtherActionState.home:
+          Navigator.of(context).popUntil(ModalRoute.withName(Routes.rootPage));
       }
     });
     return StreamBuilder(
@@ -34,13 +37,16 @@ class SelectRatePageState extends State<SelectRatePage> {
               break;
             case SelectRatePageVMActionState.rates:
               final List<SelectRatePageVMItem> items =
-              action.data[SelectRatePageVMActionDataKey.items];
+                  action.data[SelectRatePageVMActionDataKey.items];
               body = Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListView(
                     key: Key('SelectRatePageListView'),
                     children: items.map(_buildItem).toList()),
               );
+              break;
+            case SelectRatePageVMActionState.busy:
+              body = Center(child: body = CircularProgressIndicator());
               break;
           }
           return Scaffold(
@@ -79,7 +85,10 @@ class SelectRatePageState extends State<SelectRatePage> {
               child: Center(child: Text('$name')),
             ),
           ),
-          onTap: () {},
+          onTap: () async {
+            final rate = item.data[SelectRatePageVMItemDataKey.rate];
+            await vm.selectRate(rate);
+          },
         );
     }
     return Container();

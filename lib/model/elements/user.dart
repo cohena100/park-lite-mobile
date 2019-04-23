@@ -1,6 +1,6 @@
 import 'package:pango_lite/model/elements/car.dart';
 
-class Account {
+class User {
   static final _userKey = 'user';
   static final _idKey = '_id';
   static final _tokenKey = 'token';
@@ -9,7 +9,7 @@ class Account {
   static final _companyKey = 'pango';
   Map data;
 
-  Account(this.data);
+  User(this.data);
 
   List<Car> get cars {
     List allCars = data[_userKey][_carsKey];

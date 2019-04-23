@@ -1,4 +1,4 @@
-import 'package:pango_lite/model/blocs/account_bloc.dart';
+import 'package:pango_lite/model/blocs/user_bloc.dart';
 import 'package:pango_lite/model/model.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -28,9 +28,9 @@ class ValidatePageVM {
   Future validateSubmitted() async {
     _actionSubject
         .add(ValidatePageVMAction(state: ValidatePageVMActionState.busy));
-    final state = await model.accountBloc.validate();
+    final state = await model.accountBloc.userValidate();
     switch (state) {
-      case AccountBlocState.loggedIn:
+      case UserBlocState.loggedIn:
         _otherActionSubject.add(ValidatePageVMOtherAction(
             state: ValidatePageVMOtherActionState.homePage));
         break;

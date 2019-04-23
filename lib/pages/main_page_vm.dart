@@ -1,4 +1,4 @@
-import 'package:pango_lite/model/blocs/account_bloc.dart';
+import 'package:pango_lite/model/blocs/user_bloc.dart';
 import 'package:pango_lite/model/model.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -13,7 +13,7 @@ class MainPageVM {
   Future init() async {
     final state = await model.accountBloc.handshake();
     switch (state) {
-      case AccountBlocState.loggedIn:
+      case UserBlocState.loggedIn:
         _actionSubject.add(MainPageVMAction(state: MainPageVMActionState.home));
         break;
       default:

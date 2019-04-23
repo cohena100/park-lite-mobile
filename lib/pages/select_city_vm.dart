@@ -19,7 +19,7 @@ class SelectCityPageVM {
       SelectCityPageVMItem(type: SelectCityPageVMItemType.orange),
       SelectCityPageVMItem(type: SelectCityPageVMItemType.blue),
     ];
-    final items = model.parkBloc.lastAreas.cities.map((city) {
+    final items = model.parkBloc.areas.cities.map((city) {
       final data = {
         SelectCityPageVMItemDataKey.name: city.name,
         SelectCityPageVMItemDataKey.id: city.id,
@@ -35,7 +35,7 @@ class SelectCityPageVM {
   }
 
   void selectCity(City city) {
-    model.parkBloc.currentCity = city;
+    model.parkBloc.city = city;
     _otherActionSubject.add(SelectCityPageVMOtherAction(
         state: SelectCityPageVMOtherActionState.rate));
   }
