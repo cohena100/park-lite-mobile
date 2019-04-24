@@ -12,33 +12,9 @@ class LocalDBProxy {
     return directory.path;
   }
 
-  Future<File> get _parkingFile async {
-    final path = await _localPath;
-    return File('$path/parking.json');
-  }
-
   Future<File> get _userFile async {
     final path = await _localPath;
     return File('$path/user.json');
-  }
-
-  Future<Map> loadParking() async {
-    var cache = _db[LocalDBProxyKeys.parking];
-    if (cache != null) {
-      return cache;
-    }
-    try {
-      final file = await _parkingFile;
-      if (file.existsSync() == false) {
-        return null;
-      }
-      final json = await file.readAsString();
-      cache = jsonDecode(json);
-      _db[LocalDBProxyKeys.parking] = cache;
-      return cache;
-    } catch (e) {
-      return null;
-    }
   }
 
   Future<Map> loadUser() async {
@@ -60,23 +36,11 @@ class LocalDBProxy {
     }
   }
 
-  Future saveParking(String json) async {
-    try {
-      await _writeParking(json);
-      _db[LocalDBProxyKeys.parking] = jsonDecode(json);
-    } catch (e) {}
-  }
-
   Future saveUser(String json) async {
     try {
       await _writeUser(json);
       _db[LocalDBProxyKeys.user] = jsonDecode(json);
     } catch (e) {}
-  }
-
-  Future<File> _writeParking(String json) async {
-    final file = await _parkingFile;
-    return file.writeAsString(json);
   }
 
   Future<File> _writeUser(String json) async {
@@ -87,5 +51,4 @@ class LocalDBProxy {
 
 enum LocalDBProxyKeys {
   user,
-  parking,
 }

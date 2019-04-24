@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:pango_lite/model/elements/car.dart';
 
 class User {
@@ -7,6 +9,7 @@ class User {
   static final _carsKey = 'cars';
   static final _phoneKey = 'phone';
   static final _companyKey = 'pango';
+  static final _parkingKey = 'parking';
   Map data;
 
   User(this.data);
@@ -21,14 +24,30 @@ class User {
   }
 
   String get id {
-    return data[_userKey][_idKey];
+    return _innerUser[_idKey];
+  }
+
+  Map get parking {
+    return _innerUser[_parkingKey];
   }
 
   String get phone {
-    return data[_userKey][_phoneKey];
+    return _innerUser[_phoneKey];
   }
 
   String get token {
-    return data[_userKey][_tokenKey];
+    return _innerUser[_tokenKey];
+  }
+
+  Map get _innerUser {
+    return data[_userKey];
+  }
+
+  String toJson() {
+    return jsonEncode(_innerUser);
+  }
+
+  void updateParking(Map parking) {
+    _innerUser[_parkingKey] = parking[_parkingKey];
   }
 }

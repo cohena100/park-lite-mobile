@@ -1,10 +1,11 @@
 import 'dart:async';
 
+import 'package:pango_lite/model/blocs/base_bloc.dart';
 import 'package:pango_lite/model/elements/user.dart';
 import 'package:pango_lite/model/proxies/local_db_proxy.dart';
 import 'package:pango_lite/model/proxies/network_proxy.dart';
 
-class UserBloc {
+class UserBloc with BaseBloc {
   final NetworkProxy _networkProxy;
   final LocalDBProxy _localDBProxy;
 
@@ -16,11 +17,7 @@ class UserBloc {
   UserBloc(this._networkProxy, this._localDBProxy);
 
   Future<User> get user async {
-    final data = await _localDBProxy.loadUser();
-    if (data == null) {
-      return null;
-    }
-    return User(data);
+    return await getUser(_localDBProxy);
   }
 
   Future<UserBlocState> handshake() async {

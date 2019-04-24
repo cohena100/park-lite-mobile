@@ -16,7 +16,7 @@ class SelectCarPageVM {
   }
 
   Future init() async {
-    final User account = await model.accountBloc.user;
+    final User user = await model.accountBloc.user;
     final decorateItems = [
       SelectCarPageVMItem(type: SelectCarPageVMItemType.blue),
       SelectCarPageVMItem(type: SelectCarPageVMItemType.orange),
@@ -24,7 +24,7 @@ class SelectCarPageVM {
       SelectCarPageVMItem(type: SelectCarPageVMItemType.orange),
       SelectCarPageVMItem(type: SelectCarPageVMItemType.blue),
     ];
-    final items = account.cars.map((car) {
+    final items = user.cars.map((car) {
       final data = {
         SelectCarPageVMItemDataKey.number: car.number,
         SelectCarPageVMItemDataKey.nickname: car.nickname,

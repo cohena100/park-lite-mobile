@@ -6,12 +6,12 @@ import 'package:pango_lite/model/elements/areas.dart';
 import 'package:pango_lite/model/elements/car.dart';
 import 'package:pango_lite/model/elements/city.dart';
 import 'package:pango_lite/model/elements/parking.dart';
-import 'package:pango_lite/model/elements/user.dart';
 import 'package:pango_lite/model/proxies/local_db_proxy.dart';
 import 'package:pango_lite/model/proxies/location_proxy.dart';
 import 'package:pango_lite/model/proxies/network_proxy.dart';
+import 'package:pango_lite/model/blocs/base_bloc.dart';
 
-class ParkBloc {
+class ParkBloc with BaseBloc {
   final LocalDBProxy _localDBProxy;
   final NetworkProxy _networkProxy;
   final LocationProxy _locationProxy;
@@ -28,11 +28,11 @@ class ParkBloc {
   }
 
   Future<Parking> get parking async {
-    final data = await _localDBProxy.loadParking();
-    if (data == null) {
+    final user = await getUser(_localDBProxy);
+    if (user.parking == null) {
       return null;
     }
-    return Parking(data);
+    return Parking(user.parking);
   }
 
   Future<ParkBlocState> get state async {
@@ -43,19 +43,14 @@ class ParkBloc {
     return ParkBlocState.notParking;
   }
 
-  Future<User> get _account async {
-    final data = await _localDBProxy.loadUser();
-    return User(data);
-  }
-
   Future<ParkBlocState> parkingAreas() async {
-    final account = await _account;
+    final user = await getUser(_localDBProxy);
     final data = await _networkProxy.sendAreas(
-        account.id,
+        user.id,
         location.latitude.toString(),
         location.longitude.toString(),
-        account.company,
-        account.token);
+        user.company,
+        user.token);
     switch (data[NetworkProxyKeys.code]) {
       case NetworkProxy.success:
         areas = Areas(jsonDecode(data[NetworkProxyKeys.body]));
@@ -66,9 +61,9 @@ class ParkBloc {
   }
 
   Future<ParkBlocState> parkingStart() async {
-    final account = await _account;
+    final user = await getUser(_localDBProxy);
     final data = await _networkProxy.sendStart(
-        account.id,
+        user.id,
         car.id,
         location.latitude.toString(),
         location.longitude.toString(),
@@ -77,11 +72,13 @@ class ParkBloc {
         rate.id.toString(),
         rate.name,
         car.number,
-        account.company,
-        account.token);
+        user.company,
+        user.token);
     switch (data[NetworkProxyKeys.code]) {
       case NetworkProxy.success:
-        await _localDBProxy.saveParking(data[NetworkProxyKeys.body]);
+        final user = await getUser(_localDBProxy);
+        user.updateParking(data[NetworkProxyKeys.body]);
+        _localDBProxy.saveUser(user.toJson());
         return ParkBlocState.started;
       default:
         return ParkBlocState.none;
