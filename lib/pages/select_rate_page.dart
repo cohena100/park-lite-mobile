@@ -46,7 +46,7 @@ class SelectRatePageState extends State<SelectRatePage> {
               );
               break;
             case SelectRatePageVMActionState.busy:
-              body = Center(child: body = CircularProgressIndicator());
+              body = Center(child: CircularProgressIndicator());
               break;
           }
           return Scaffold(

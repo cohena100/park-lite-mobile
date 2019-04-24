@@ -37,7 +37,7 @@ class SelectCarPageState extends State<SelectCarPage> {
               body = Container();
               break;
             case SelectCarPageVMActionState.busy:
-              body = Center(child: body = CircularProgressIndicator());
+              body = Center(child: CircularProgressIndicator());
               break;
             case SelectCarPageVMActionState.cars:
               final List<SelectCarPageVMItem> items =

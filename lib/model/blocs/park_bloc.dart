@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:location/location.dart';
-import 'package:pango_lite/model/elements/Rate.dart';
+import 'package:pango_lite/model/elements/rate.dart';
 import 'package:pango_lite/model/elements/areas.dart';
 import 'package:pango_lite/model/elements/car.dart';
 import 'package:pango_lite/model/elements/city.dart';
@@ -32,7 +32,7 @@ class ParkBloc with BaseBloc {
     if (user.parking == null) {
       return null;
     }
-    return Parking(user.parking);
+    return user.parking;
   }
 
   Future<ParkBlocState> get state async {
@@ -60,7 +60,7 @@ class ParkBloc with BaseBloc {
     }
   }
 
-  Future<ParkBlocState> parkingStart() async {
+  Future<ParkBlocState> startParking() async {
     final user = await getUser(_localDBProxy);
     final data = await _networkProxy.sendStart(
         user.id,
@@ -77,13 +77,38 @@ class ParkBloc with BaseBloc {
     switch (data[NetworkProxyKeys.code]) {
       case NetworkProxy.success:
         final user = await getUser(_localDBProxy);
-        user.updateParking(data[NetworkProxyKeys.body]);
+        user.updateParking(Parking(data[NetworkProxyKeys.body]));
         _localDBProxy.saveUser(user.toJson());
-        return ParkBlocState.started;
+        return ParkBlocState.success;
+      default:
+        return ParkBlocState.none;
+    }
+  }
+
+  Future<ParkBlocState> stopParking() async {
+    final user = await getUser(_localDBProxy);
+    final parking = user.parking;
+    final data = await _networkProxy.sendStop(
+        user.id,
+        parking.carId,
+        parking.id,
+        parking.lat,
+        parking.lon,
+        parking.cityId,
+        parking.rateId,
+        user.findCar(parking.carId).number,
+        user.company,
+        user.token);
+    switch (data[NetworkProxyKeys.code]) {
+      case NetworkProxy.success:
+        final user = await getUser(_localDBProxy);
+        user.deleteParking();
+        _localDBProxy.saveUser(jsonEncode(user));
+        return ParkBlocState.success;
       default:
         return ParkBlocState.none;
     }
   }
 }
 
-enum ParkBlocState { none, parking, notParking, areas, started }
+enum ParkBlocState { none, parking, notParking, areas, success }

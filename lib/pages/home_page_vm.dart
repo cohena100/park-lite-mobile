@@ -50,6 +50,12 @@ class HomePageVM {
     _otherActionSubject.add(
         HomePageVMOtherAction(state: HomePageVMOtherActionState.selectCarPage));
   }
+
+  Future stopParking() async {
+    _actionSubject.add(HomePageVMAction(state: HomePageVMActionState.busy));
+    await model.parkBloc.stopParking();
+    await init();
+  }
 }
 
 class HomePageVMAction {
@@ -61,7 +67,7 @@ class HomePageVMAction {
 
 enum HomePageVMActionDataKey { none, items }
 
-enum HomePageVMActionState { none, home }
+enum HomePageVMActionState { none, busy, home }
 
 class HomePageVMItem {
   final Map data;

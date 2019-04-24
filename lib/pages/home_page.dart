@@ -34,6 +34,9 @@ class HomePageState extends State<HomePage> {
           switch (action.state) {
             case HomePageVMActionState.none:
               return Container();
+            case HomePageVMActionState.busy:
+              return Center(child: CircularProgressIndicator());
+              break;
             case HomePageVMActionState.home:
               final List<HomePageVMItem> items =
                   action.data[HomePageVMActionDataKey.items];
@@ -57,7 +60,6 @@ class HomePageState extends State<HomePage> {
     switch (item.type) {
       case HomePageVMItemType.none:
         return Container();
-
       case HomePageVMItemType.blue:
         return Card(
           key: Key('Blue'),
@@ -94,7 +96,9 @@ class HomePageState extends State<HomePage> {
                   child: Text(AppLocalizations.of(context).stopParkingLabel)),
             ),
           ),
-          onTap: () {},
+          onTap: () async {
+            await vm.stopParking();
+          },
         );
     }
     return Container();

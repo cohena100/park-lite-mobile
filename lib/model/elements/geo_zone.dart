@@ -1,4 +1,4 @@
-import 'package:pango_lite/model/elements/Rate.dart';
+import 'package:pango_lite/model/elements/rate.dart';
 
 class GeoZone {
   static final _rates = 'ParkingZones';

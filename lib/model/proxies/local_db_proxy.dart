@@ -18,7 +18,7 @@ class LocalDBProxy {
   }
 
   Future<Map> loadUser() async {
-    var cache = _db[LocalDBProxyKeys.user];
+    final cache = _db[LocalDBProxyKeys.user];
     if (cache != null) {
       return cache;
     }
@@ -27,10 +27,9 @@ class LocalDBProxy {
       if (file.existsSync() == false) {
         return null;
       }
-      final json = await file.readAsString();
-      cache = jsonDecode(json);
-      _db[LocalDBProxyKeys.user] = cache;
-      return cache;
+      final jsonString = await file.readAsString();
+      _db[LocalDBProxyKeys.user] = jsonDecode(jsonDecode(jsonString));
+      return _db[LocalDBProxyKeys.user];
     } catch (e) {
       return null;
     }

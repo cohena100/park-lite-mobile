@@ -93,7 +93,40 @@ class NetworkProxy {
     allHeaders.addAll(headers);
     allHeaders.addAll(extraHeaders);
     var response = await http.post(url, body: body, headers: allHeaders);
-    print(response.statusCode);
+    return {
+      NetworkProxyKeys.code: response.statusCode,
+      NetworkProxyKeys.body: response.body
+    };
+  }
+
+  Future<Map> sendStop(
+      String id,
+      String carId,
+      String parkingId,
+      String lat,
+      String lon,
+      String cityId,
+      String rateId,
+      String carNumber,
+      Map company,
+      String token) async {
+    var url = _baseUrl + '/parkings/stop';
+    company['parkingNumber'] = carNumber;
+    var body = json.encode({
+      'id': id,
+      'carId': carId,
+      'parkingId': parkingId,
+      'lat': lat,
+      'lon': lon,
+      'cityId': cityId,
+      'rateId': rateId,
+      'pango': company
+    });
+    final Map<String, String> extraHeaders = {'Authorization': token};
+    final Map<String, String> allHeaders = {};
+    allHeaders.addAll(headers);
+    allHeaders.addAll(extraHeaders);
+    var response = await http.post(url, body: body, headers: allHeaders);
     return {
       NetworkProxyKeys.code: response.statusCode,
       NetworkProxyKeys.body: response.body

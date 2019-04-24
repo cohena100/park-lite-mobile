@@ -1,5 +1,5 @@
 import 'package:pango_lite/model/blocs/park_bloc.dart';
-import 'package:pango_lite/model/elements/Rate.dart';
+import 'package:pango_lite/model/elements/rate.dart';
 import 'package:pango_lite/model/model.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -44,9 +44,9 @@ class SelectRatePageVM {
     _actionSubject
         .add(SelectRatePageVMAction(state: SelectRatePageVMActionState.busy));
     model.parkBloc.rate = rate;
-    final state = await model.parkBloc.parkingStart();
+    final state = await model.parkBloc.startParking();
     switch (state) {
-      case ParkBlocState.started:
+      case ParkBlocState.success:
         _otherActionSubject.add(SelectRatePageVMOtherAction(
             state: SelectRatePageVMOtherActionState.home));
         break;

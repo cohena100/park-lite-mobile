@@ -1,4 +1,4 @@
-import 'package:pango_lite/model/elements/Rate.dart';
+import 'package:pango_lite/model/elements/rate.dart';
 import 'package:pango_lite/model/elements/geo_zone.dart';
 
 class City {
