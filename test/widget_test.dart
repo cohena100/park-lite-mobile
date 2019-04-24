@@ -24,21 +24,34 @@ class MockLocalDBProxy extends Mock implements LocalDBProxy {}
 class MockLocationProxy extends Mock implements LocationProxy {}
 
 void main() {
-  final String id1 = '1';
-  final String token1 = '1';
-  final String phone1 = '1';
-  final String number1 = '2';
-  final String nickname1 = 'a';
-  final String code1 = '3';
-  final Map company1 = {};
+  final userKey = 'user';
+  final parkingKey = 'parking';
+  final id1 = '1';
+  final token1 = '1';
+  final phone1 = '1';
+  final number1 = '2';
+  final carId1 = '2';
+  final parkingId1 = '3';
+  final nickname1 = 'a';
+  final code1 = '3';
+  final company1 = {};
+  final cityId1 = 5;
+  final cityName1 = 'b';
+  final rateId1 = 7;
+  final rateName1 = 'c';
+  final lat1 = 1.0;
+  final lon1 = 2.0;
   final user1 = {
-    'user': {
+    userKey: {
       '_id': id1,
       'phone': phone1,
       'token': token1,
       'cars': [
         {
-          'car': {'number': number1},
+          'car': {
+            'number': number1,
+            '_id': carId1,
+          },
           'nickname': nickname1
         }
       ]
@@ -46,8 +59,8 @@ void main() {
     'pango': {}
   };
   final location1 = LocationData.fromMap({
-    'latitude': 1,
-    'longitude': 2,
+    'latitude': lat1,
+    'longitude': lon1,
     'accuracy': 0,
     'altitude': 0,
     'speed': 0,
@@ -55,24 +68,24 @@ void main() {
     'heading': 0,
     'time': 0,
   });
-  Map areas1 = {
+  final areas1 = {
     'pango': {
       'Cities': [
         {
-          'CityId': 1,
-          'CityName': 'a',
+          'CityId': cityId1,
+          'CityName': cityName1,
           'GeoZones': [
             {
               'ParkingZones': [
-                {'CityId': 1, 'id': 1, 'name': 'a'},
-                {'CityId': 1, 'id': 2, 'name': 'b'},
-                {'CityId': 1, 'id': 3, 'name': 'c'},
+                {'CityId': cityId1, 'id': rateId1, 'name': rateName1},
+                {'CityId': cityId1, 'id': 2, 'name': 'b'},
+                {'CityId': cityId1, 'id': 3, 'name': 'c'},
               ]
             },
             {
               'ParkingZones': [
-                {'CityId': 1, 'id': 4, 'name': 'd'},
-                {'CityId': 1, 'id': 5, 'name': 'e'},
+                {'CityId': cityId1, 'id': 4, 'name': 'd'},
+                {'CityId': cityId1, 'id': 5, 'name': 'e'},
               ]
             },
           ]
@@ -119,6 +132,20 @@ void main() {
       ]
     }
   };
+  final parking1 = {
+    'parking': {
+      '_id': parkingId1,
+      'cityId': cityId1.toString(),
+      'cityName': cityName1,
+      'rateId': rateId1.toString(),
+      'rateName': rateName1,
+      'lat': lat1.toString(),
+      'lon': lon1.toString(),
+      'user': id1,
+      'car': carId1,
+    }
+  };
+
   group('login', () {
     testWidgets('Login success', (WidgetTester tester) async {
       model =
@@ -221,6 +248,7 @@ void main() {
           find.byKey(Key('NicknameTextField')).evaluate().toList().first.widget;
       expect(textField.controller.value.text, nickname1);
     });
+
     testWidgets('Validate success', (WidgetTester tester) async {
       model =
           Model(MockNetworkProxy(), MockLocalDBProxy(), MockLocationProxy());
@@ -273,7 +301,7 @@ void main() {
                 NetworkProxyKeys.code: 200,
                 NetworkProxyKeys.body: jsonEncode(areas1)
               });
-      await tester.tap(find.byKey(Key('2')));
+      await tester.tap(find.byKey(Key(number1)));
       await tester.pumpAndSettle();
       expect(find.byKey(Key('SelectCityPage')), findsOneWidget);
       await tester.tap(find.byKey(Key('3')));
@@ -285,6 +313,76 @@ void main() {
       expect(find.byKey(Key('16')), findsOneWidget);
       expect(find.byKey(Key('1')), findsNothing);
       expect(find.byKey(Key('10')), findsNothing);
+    });
+
+    testWidgets('start parking success', (WidgetTester tester) async {
+      model =
+          Model(MockNetworkProxy(), MockLocalDBProxy(), MockLocationProxy());
+      when(model.localDBProxy.loadUser()).thenAnswer((_) async => user1);
+      await tester.pumpWidget(MyApp());
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(Key('Start')));
+      await tester.pumpAndSettle();
+      when(model.locationProxy.currentLocation)
+          .thenAnswer((_) async => location1);
+      when(model.networkProxy.sendAreas(id1, location1.latitude.toString(),
+              location1.longitude.toString(), company1, token1))
+          .thenAnswer((_) async => {
+                NetworkProxyKeys.code: 200,
+                NetworkProxyKeys.body: jsonEncode(areas1),
+              });
+      when(model.networkProxy.sendStart(
+              id1,
+              carId1,
+              lat1.toString(),
+              lon1.toString(),
+              cityId1.toString(),
+              cityName1,
+              rateId1.toString(),
+              rateName1,
+              number1,
+              company1,
+              token1))
+          .thenAnswer((_) async => {
+                NetworkProxyKeys.code: 200,
+                NetworkProxyKeys.body: jsonEncode(parking1),
+              });
+      await tester.tap(find.byKey(Key(number1)));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(Key(cityId1.toString())));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(Key(rateId1.toString())));
+      await tester.pumpAndSettle();
+      expect(find.byKey(Key('HomePage')), findsOneWidget);
+      expect(find.byKey(Key('Stop')), findsOneWidget);
+    });
+
+    testWidgets('stop parking success', (WidgetTester tester) async {
+      model =
+          Model(MockNetworkProxy(), MockLocalDBProxy(), MockLocationProxy());
+      user1[userKey][parkingKey] = parking1[parkingKey];
+      when(model.localDBProxy.loadUser()).thenAnswer((_) async => user1);
+      await tester.pumpWidget(MyApp());
+      await tester.pumpAndSettle();
+      when(model.networkProxy.sendStop(
+              id1,
+              carId1,
+              parkingId1,
+              lat1.toString(),
+              lon1.toString(),
+              cityId1.toString(),
+              rateId1.toString(),
+              number1,
+              company1,
+              token1))
+          .thenAnswer((_) async => {
+                NetworkProxyKeys.code: 200,
+                NetworkProxyKeys.body: jsonEncode(parking1),
+              });
+      await tester.tap(find.byKey(Key('Stop')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(Key('HomePage')), findsOneWidget);
+      expect(find.byKey(Key('Start')), findsOneWidget);
     });
   });
 }
