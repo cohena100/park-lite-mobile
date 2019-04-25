@@ -140,5 +140,32 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byKey(Key('SelectCarPage')), findsOneWidget);
     });
+
+    testWidgets('stop parking success', (WidgetTester tester) async {
+      model =
+          Model(MockNetworkProxy(), MockLocalDBProxy(), MockLocationProxy());
+      user1[userKey][parkingKey] = parking1[parkingKey];
+      when(model.localDBProxy.loadUser()).thenAnswer((_) async => user1);
+      await tester.pumpWidget(MyApp());
+      await tester.pumpAndSettle();
+      when(model.networkProxy.sendStop(
+              id1,
+              carId1,
+              parkingId1,
+              lat1.toString(),
+              lon1.toString(),
+              cityId1.toString(),
+              rateId1.toString(),
+              number1,
+              token1))
+          .thenAnswer((_) async => {
+                NetworkProxyKeys.code: 200,
+                NetworkProxyKeys.body: jsonEncode(parking1),
+              });
+      await tester.tap(find.byKey(Key('Stop')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(Key('HomePage')), findsOneWidget);
+      expect(find.byKey(Key('Start')), findsOneWidget);
+    });
   });
 }

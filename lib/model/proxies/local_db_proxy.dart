@@ -28,7 +28,7 @@ class LocalDBProxy {
         return null;
       }
       final jsonString = await file.readAsString();
-      _db[LocalDBProxyKeys.user] = jsonDecode(jsonDecode(jsonString));
+      _db[LocalDBProxyKeys.user] = jsonDecode(jsonString);
       return _db[LocalDBProxyKeys.user];
     } catch (e) {
       return null;
