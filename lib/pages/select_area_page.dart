@@ -1,82 +1,81 @@
 import 'package:flutter/material.dart';
-import 'package:pango_lite/locale/locale.dart';
 import 'package:pango_lite/pages/routes.dart';
-import 'package:pango_lite/pages/select_rate_page_vm.dart';
+import 'package:pango_lite/locale/locale.dart';
+import 'package:pango_lite/pages/select_area_page_vm.dart';
 
-class SelectRatePage extends StatefulWidget {
-  SelectRatePage({Key key}) : super(key: Key('SelectRatePage'));
+class SelectAreaPage extends StatefulWidget {
+  SelectAreaPage({Key key}) : super(key: Key('SelectAreaPage'));
 
   @override
-  SelectRatePageState createState() => SelectRatePageState();
+  SelectAreaPageState createState() => SelectAreaPageState();
 }
 
-class SelectRatePageState extends State<SelectRatePage> {
-  SelectRatePageVM vm;
+class SelectAreaPageState extends State<SelectAreaPage> {
+  SelectAreaPageVM vm;
 
   @override
   Widget build(BuildContext context) {
-    vm = SelectRatePageVM();
+    vm = SelectAreaPageVM();
     vm.init().then((_) {});
     vm.otherActionStream.listen((action) {
       switch (action.state) {
-        case SelectRatePageVMOtherActionState.none:
+        case SelectAreaPageVMOtherActionState.none:
           break;
-        case SelectRatePageVMOtherActionState.home:
-          Navigator.of(context).popUntil(ModalRoute.withName(Routes.rootPage));
+        case SelectAreaPageVMOtherActionState.selectRatePage:
+          Navigator.pushNamed(context, Routes.selectRatePage);
+          break;
       }
     });
     return StreamBuilder(
         stream: vm.actionStream,
-        initialData: SelectRatePageVMAction(),
+        initialData: SelectAreaPageVMAction(),
         builder: (context, snapshot) {
           final action = snapshot.data;
           Widget body;
           switch (action.state) {
-            case SelectRatePageVMActionState.none:
+            case SelectAreaPageVMActionState.none:
               body = Container();
               break;
-            case SelectRatePageVMActionState.rates:
-              final List<SelectRatePageVMItem> items =
-                  action.data[SelectRatePageVMActionDataKey.items];
+            case SelectAreaPageVMActionState.areas:
+              final List<SelectAreaPageVMItem> items =
+                  action.data[SelectAreaPageVMActionDataKey.items];
               body = Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListView(
-                    key: Key('SelectRatePageListView'),
+                    key: Key('SelectAreaPageListView'),
                     children: items.map(_buildItem).toList()),
               );
-              break;
-            case SelectRatePageVMActionState.busy:
-              body = Center(child: CircularProgressIndicator());
               break;
           }
           return Scaffold(
             appBar: AppBar(
-              title: Text(AppLocalizations.of(context).selectRateTitle),
+              title: Text(AppLocalizations.of(context).selectAreaTitle),
             ),
             body: body,
           );
         });
   }
 
-  Widget _buildItem(SelectRatePageVMItem item) {
+  Widget _buildItem(SelectAreaPageVMItem item) {
     switch (item.type) {
-      case SelectRatePageVMItemType.none:
+      case SelectAreaPageVMItemType.none:
         return Container();
-      case SelectRatePageVMItemType.blue:
+      case SelectAreaPageVMItemType.blue:
         return Card(
           key: Key('Blue'),
           color: Colors.blue,
           child: Padding(padding: const EdgeInsets.all(24), child: Container()),
         );
-      case SelectRatePageVMItemType.orange:
+      case SelectAreaPageVMItemType.orange:
         return Card(
           key: Key('Orange'),
           color: Colors.orange,
           child: Padding(padding: const EdgeInsets.all(24), child: Container()),
         );
-      case SelectRatePageVMItemType.rate:
-        final name = item.data[SelectRatePageVMItemDataKey.name];
-        final id = item.data[SelectRatePageVMItemDataKey.id];
+      case SelectAreaPageVMItemType.area:
+        final name = item.data[SelectAreaPageVMItemDataKey.name];
+        final id = item.data[SelectAreaPageVMItemDataKey.id];
+        final area = item.data[SelectAreaPageVMItemDataKey.area];
         return InkWell(
           child: Card(
             key: Key(id),
@@ -85,9 +84,8 @@ class SelectRatePageState extends State<SelectRatePage> {
               child: Center(child: Text('$name')),
             ),
           ),
-          onTap: () async {
-            final rate = item.data[SelectRatePageVMItemDataKey.rate];
-            await vm.selectRate(rate);
+          onTap: () {
+            vm.selectArea(area);
           },
         );
     }

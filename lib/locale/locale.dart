@@ -115,6 +115,14 @@ class AppLocalizations {
     );
   }
 
+  String get selectAreaTitle {
+    return Intl.message(
+      'Area selection',
+      name: 'selectAreaTitle',
+      desc: 'Title for area selection page',
+    );
+  }
+
   String get selectRateTitle {
     return Intl.message(
       'Rate selection',

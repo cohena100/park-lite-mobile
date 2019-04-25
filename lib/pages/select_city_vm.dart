@@ -37,7 +37,7 @@ class SelectCityPageVM {
   void selectCity(City city) {
     model.parkBloc.city = city;
     _otherActionSubject.add(SelectCityPageVMOtherAction(
-        state: SelectCityPageVMOtherActionState.rate));
+        state: SelectCityPageVMOtherActionState.selectAreaPage));
   }
 }
 
@@ -73,4 +73,4 @@ class SelectCityPageVMOtherAction {
 
 enum SelectCityPageVMOtherActionDataKey { none }
 
-enum SelectCityPageVMOtherActionState { none, rate }
+enum SelectCityPageVMOtherActionState { none, selectAreaPage }

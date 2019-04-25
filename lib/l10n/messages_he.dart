@@ -26,6 +26,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "carNumberTitle" : MessageLookupByLibrary.simpleMessage("הזנת מספר רכב"),
     "phoneNumberHint" : MessageLookupByLibrary.simpleMessage("הזן מספר נייד"),
     "phoneNumberTitle" : MessageLookupByLibrary.simpleMessage("הזנת מספר נייד"),
+    "selectAreaTitle" : MessageLookupByLibrary.simpleMessage("בחירת אזור"),
     "selectCarTitle" : MessageLookupByLibrary.simpleMessage("בחירת רכב"),
     "selectCityTitle" : MessageLookupByLibrary.simpleMessage("בחירת עיר"),
     "selectRateTitle" : MessageLookupByLibrary.simpleMessage("בחירת תעריף"),

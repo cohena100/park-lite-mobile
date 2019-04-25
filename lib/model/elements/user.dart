@@ -10,38 +10,36 @@ class User {
   static final _carsKey = 'cars';
   static final _phoneKey = 'phone';
   static final _parkingKey = 'parking';
-  Map _data;
+  final Map _data;
 
   User(this._data);
 
+  User.fromJson(Map<String, dynamic> json) : _data = json[_userKey];
+
   List<Car> get cars {
-    final List allCars = _data[_userKey][_carsKey];
+    final List allCars = _data[_carsKey];
     return allCars.map((data) => Car(data)).toList();
   }
 
   String get id {
-    return _innerUser[_idKey];
+    return _data[_idKey];
   }
 
   Parking get parking {
-    final parkingData = _innerUser[_parkingKey];
+    final parkingData = _data[_parkingKey];
     return parkingData == null ? null : Parking(parkingData);
   }
 
   String get phone {
-    return _innerUser[_phoneKey];
+    return _data[_phoneKey];
   }
 
   String get token {
-    return _innerUser[_tokenKey];
-  }
-
-  Map get _innerUser {
-    return _data[_userKey];
+    return _data[_tokenKey];
   }
 
   void deleteParking() {
-    _innerUser.remove(_parkingKey);
+    _data.remove(_parkingKey);
   }
 
   Car findCar(String carId) {
@@ -53,6 +51,6 @@ class User {
   }
 
   void updateParking(Parking parking) {
-    _innerUser[_parkingKey] = parking.data;
+    _data[_parkingKey] = parking.data;
   }
 }

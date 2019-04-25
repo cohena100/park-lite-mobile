@@ -5,5 +5,6 @@ class Routes {
   static final validatePage = '/validatePage';
   static final selectCarPage = '/selectCarPage';
   static final selectCityPage = '/selectCityPage';
+  static final selectAreaPage = '/selectAreaPage';
   static final selectRatePage = '/selectRatePage';
 }

@@ -72,6 +72,12 @@
     "type": "text",
     "placeholders": {}
   },
+  "selectAreaTitle": "בחירת אזור",
+  "@selectAreaTitle": {
+    "description": "Title for area selection page",
+    "type": "text",
+    "placeholders": {}
+  },
   "selectRateTitle": "בחירת תעריף",
   "@selectRateTitle": {
     "description": "Title for city rate selection page",

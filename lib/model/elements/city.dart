@@ -1,15 +1,14 @@
-import 'package:pango_lite/model/elements/rate.dart';
-import 'package:pango_lite/model/elements/geo_zone.dart';
+import 'package:pango_lite/model/elements/area.dart';
 
 class City {
-  static final _nameKey = 'CityName';
-  static final _idKey = 'CityId';
-  static final _geoZones = 'GeoZones';
+  static final _idKey = 'id';
+  static final _nameKey = 'name';
+  static final _areasKey = 'areas';
   final Map data;
 
   City(this.data);
 
-  int get id {
+  String get id {
     return data[_idKey];
   }
 
@@ -17,15 +16,8 @@ class City {
     return data[_nameKey];
   }
 
-  List<Rate> get rates {
-    return _allGeoZones
-        .map((geoZone) => geoZone.rates)
-        .expand((rates) => rates)
-        .toList();
-  }
-
-  List<GeoZone> get _allGeoZones {
-    final List allGeoZones = data[_geoZones];
-    return allGeoZones.map((geoZone) => GeoZone(geoZone)).toList();
+  List<Area> get areas {
+    final List allAreas = data[_areasKey];
+    return allAreas.map((data) => Area(data)).toList();
   }
 }

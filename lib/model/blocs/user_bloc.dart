@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:pango_lite/model/blocs/base_bloc.dart';
 import 'package:pango_lite/model/elements/user.dart';
@@ -32,7 +33,8 @@ class UserBloc with BaseBloc {
     final data = await _networkProxy.sendLogin(phone, number, nickname);
     switch (data[NetworkProxyKeys.code]) {
       case NetworkProxy.success:
-        await _localDBProxy.saveUser(data[NetworkProxyKeys.body]);
+        final user = User.fromJson(jsonDecode(data[NetworkProxyKeys.body]));
+        await _localDBProxy.saveUser(user.toJson());
         return UserBlocState.loggedIn;
       default:
         return UserBlocState.notLoggedIn;

@@ -21,8 +21,8 @@ class SelectCityPageState extends State<SelectCityPage> {
       switch (action.state) {
         case SelectCityPageVMOtherActionState.none:
           break;
-        case SelectCityPageVMOtherActionState.rate:
-          Navigator.pushNamed(context, Routes.selectRatePage);
+        case SelectCityPageVMOtherActionState.selectAreaPage:
+          Navigator.pushNamed(context, Routes.selectAreaPage);
           break;
       }
     });
@@ -78,7 +78,7 @@ class SelectCityPageState extends State<SelectCityPage> {
         final city = item.data[SelectCityPageVMItemDataKey.city];
         return InkWell(
           child: Card(
-            key: Key(id.toString()),
+            key: Key(id),
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Center(child: Text('$name')),

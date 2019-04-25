@@ -24,19 +24,18 @@ class SelectRatePageVM {
       SelectRatePageVMItem(type: SelectRatePageVMItemType.orange),
       SelectRatePageVMItem(type: SelectRatePageVMItemType.blue),
     ];
-    final items = model.parkBloc.city.rates.map((rate) {
+    final items = model.parkBloc.area.rates.map((rate) {
       final data = {
         SelectRatePageVMItemDataKey.rate: rate,
         SelectRatePageVMItemDataKey.name: rate.name,
         SelectRatePageVMItemDataKey.id: rate.id,
-        SelectRatePageVMItemDataKey.cityId: rate.cityId,
       };
       return SelectRatePageVMItem(
           data: data, type: SelectRatePageVMItemType.rate);
     }).toList();
     _actionSubject.add(SelectRatePageVMAction(data: {
       SelectRatePageVMActionDataKey.items:
-      [decorateItems, items, decorateItems].expand((x) => x).toList()
+          [decorateItems, items, decorateItems].expand((x) => x).toList()
     }, state: SelectRatePageVMActionState.rates));
   }
 

@@ -34,18 +34,22 @@ class NetworkProxy {
       String lon,
       String cityId,
       String cityName,
+      String areaId,
+      String areaName,
       String rateId,
       String rateName,
       String carNumber,
       String token) async {
     var url = _baseUrl + '/parkings/start';
     var body = json.encode({
-      'id': userId,
+      'userId': userId,
       'carId': carId,
       'lat': lat,
       'lon': lon,
       'cityId': cityId,
       'cityName': cityName,
+      'areaId': cityId,
+      'areaName': cityName,
       'rateId': rateId,
       'rateName': rateName,
     });
@@ -60,31 +64,18 @@ class NetworkProxy {
     };
   }
 
-  Future<Map> sendStop(
-      String userId,
-      String carId,
-      String parkingId,
-      String lat,
-      String lon,
-      String cityId,
-      String rateId,
-      String carNumber,
-      String token) async {
+  Future<Map> sendStop(String userId, String parkingId, String token) async {
     var url = _baseUrl + '/parkings/stop';
     var body = json.encode({
-      'id': userId,
-      'carId': carId,
+      'userId': userId,
       'parkingId': parkingId,
-      'lat': lat,
-      'lon': lon,
-      'cityId': cityId,
-      'rateId': rateId,
     });
     final Map<String, String> extraHeaders = {'Authorization': token};
     final Map<String, String> allHeaders = {};
     allHeaders.addAll(headers);
     allHeaders.addAll(extraHeaders);
     var response = await http.post(url, body: body, headers: allHeaders);
+    print('avi ${response.statusCode}');
     return {
       NetworkProxyKeys.code: response.statusCode,
       NetworkProxyKeys.body: response.body
