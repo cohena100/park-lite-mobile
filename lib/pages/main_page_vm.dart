@@ -11,7 +11,7 @@ class MainPageVM {
   }
 
   Future init() async {
-    final state = await model.accountBloc.handshake();
+    final state = await model.userBloc.handshake();
     switch (state) {
       case UserBlocState.loggedIn:
         _actionSubject.add(MainPageVMAction(state: MainPageVMActionState.home));

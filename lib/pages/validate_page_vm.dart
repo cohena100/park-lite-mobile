@@ -15,20 +15,20 @@ class ValidatePageVM {
   }
 
   Future init() async {
-    String code = model.accountBloc.code;
+    String code = model.userBloc.code;
     _actionSubject.add(ValidatePageVMAction(
         data: {ValidatePageVMActionDataKey.validate: code},
         state: ValidatePageVMActionState.validate));
   }
 
   void validateChanged(String s) {
-    model.accountBloc.code = s;
+    model.userBloc.code = s;
   }
 
   Future validateSubmitted() async {
     _actionSubject
         .add(ValidatePageVMAction(state: ValidatePageVMActionState.busy));
-    final state = await model.accountBloc.userValidate();
+    final state = await model.userBloc.userValidate();
     switch (state) {
       case UserBlocState.loggedIn:
         _otherActionSubject.add(ValidatePageVMOtherAction(

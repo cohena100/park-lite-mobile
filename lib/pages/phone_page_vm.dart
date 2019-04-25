@@ -14,14 +14,14 @@ class PhonePageVM {
   }
 
   Future init() async {
-    String phone = model.accountBloc.phone;
+    String phone = model.userBloc.phone;
     _actionSubject.add(PhonePageVMAction(
         data: {PhonePageVMActionDataKey.phone: phone},
         state: PhonePageVMActionState.phone));
   }
 
   void phoneChanged(String phone) {
-    model.accountBloc.phone = phone;
+    model.userBloc.phone = phone;
   }
 
   void phoneSubmitted() {

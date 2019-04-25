@@ -44,20 +44,7 @@ class ParkBloc with BaseBloc {
   }
 
   Future<ParkBlocState> parkingAreas() async {
-    final user = await getUser(_localDBProxy);
-    final data = await _networkProxy.sendAreas(
-        user.id,
-        location.latitude.toString(),
-        location.longitude.toString(),
-        user.company,
-        user.token);
-    switch (data[NetworkProxyKeys.code]) {
-      case NetworkProxy.success:
-        areas = Areas(jsonDecode(data[NetworkProxyKeys.body]));
-        return ParkBlocState.areas;
-      default:
-        return ParkBlocState.none;
-    }
+    return ParkBlocState.none;
   }
 
   Future<ParkBlocState> startParking() async {
@@ -72,7 +59,6 @@ class ParkBloc with BaseBloc {
         rate.id.toString(),
         rate.name,
         car.number,
-        user.company,
         user.token);
     switch (data[NetworkProxyKeys.code]) {
       case NetworkProxy.success:
@@ -97,7 +83,6 @@ class ParkBloc with BaseBloc {
         parking.cityId,
         parking.rateId,
         user.findCar(parking.carId).number,
-        user.company,
         user.token);
     switch (data[NetworkProxyKeys.code]) {
       case NetworkProxy.success:

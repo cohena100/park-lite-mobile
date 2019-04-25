@@ -10,11 +10,11 @@ class Model {
   final NetworkProxy networkProxy;
   final LocalDBProxy localDBProxy;
   final LocationProxy locationProxy;
-  final UserBloc accountBloc;
+  final UserBloc userBloc;
   final ParkBloc parkBloc;
 
   Model(this.networkProxy, this.localDBProxy, this.locationProxy)
-      : accountBloc = UserBloc(networkProxy, localDBProxy),
+      : userBloc = UserBloc(networkProxy, localDBProxy),
         parkBloc = ParkBloc(localDBProxy, networkProxy, locationProxy);
 
   void setup(bool isIOS) {

@@ -9,7 +9,6 @@ class User {
   static final _tokenKey = 'token';
   static final _carsKey = 'cars';
   static final _phoneKey = 'phone';
-  static final _companyKey = 'pango';
   static final _parkingKey = 'parking';
   Map _data;
 
@@ -18,10 +17,6 @@ class User {
   List<Car> get cars {
     final List allCars = _data[_userKey][_carsKey];
     return allCars.map((data) => Car(data)).toList();
-  }
-
-  Map get company {
-    return _data[_companyKey];
   }
 
   String get id {

@@ -15,14 +15,14 @@ class CarPageVM {
   }
 
   Future init() async {
-    String number = model.accountBloc.number;
+    String number = model.userBloc.number;
     _actionSubject.add(CarPageVMAction(
         data: {CarPageVMActionDataKey.number: number},
         state: CarPageVMActionState.number));
   }
 
   void numberChanged(String number) {
-    model.accountBloc.number = number;
+    model.userBloc.number = number;
   }
 
   Future numberSubmitted() async {

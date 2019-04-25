@@ -16,20 +16,20 @@ class NicknamePageVM {
   }
 
   Future init() async {
-    String nickname = model.accountBloc.nickname;
+    String nickname = model.userBloc.nickname;
     _actionSubject.add(NicknamePageVMAction(
         data: {NicknamePageVMActionDataKey.nickname: nickname},
         state: NicknamePageVMActionState.nickname));
   }
 
   void nicknameChanged(String s) {
-    model.accountBloc.nickname = s;
+    model.userBloc.nickname = s;
   }
 
   Future nicknameSubmitted() async {
     _actionSubject
         .add(NicknamePageVMAction(state: NicknamePageVMActionState.busy));
-    final state = await model.accountBloc.userLogin();
+    final state = await model.userBloc.userLogin();
     switch (state) {
       case UserBlocState.loggedIn:
         _otherActionSubject.add(NicknamePageVMOtherAction(

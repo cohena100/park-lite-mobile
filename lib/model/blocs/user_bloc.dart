@@ -34,22 +34,13 @@ class UserBloc with BaseBloc {
       case NetworkProxy.success:
         await _localDBProxy.saveUser(data[NetworkProxyKeys.body]);
         return UserBlocState.loggedIn;
-      case NetworkProxy.validate:
-        return UserBlocState.validate;
       default:
         return UserBlocState.notLoggedIn;
     }
   }
 
   Future<UserBlocState> userValidate() async {
-    final data = await _networkProxy.sendValidate(phone, number, code);
-    switch (data[NetworkProxyKeys.code]) {
-      case NetworkProxy.success:
-        await _localDBProxy.saveUser(data[NetworkProxyKeys.body]);
-        return UserBlocState.loggedIn;
-      default:
-        return UserBlocState.notLoggedIn;
-    }
+    return UserBlocState.loggedIn;
   }
 }
 

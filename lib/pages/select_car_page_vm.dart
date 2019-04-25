@@ -16,7 +16,7 @@ class SelectCarPageVM {
   }
 
   Future init() async {
-    final User user = await model.accountBloc.user;
+    final User user = await model.userBloc.user;
     final decorateItems = [
       SelectCarPageVMItem(type: SelectCarPageVMItemType.blue),
       SelectCarPageVMItem(type: SelectCarPageVMItemType.orange),
