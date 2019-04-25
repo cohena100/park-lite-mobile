@@ -2,7 +2,7 @@ import 'package:location/location.dart';
 
 final userKey = 'user';
 final parkingKey = 'parking';
-final id1 = '1';
+final userId1 = '1';
 final token1 = '1';
 final phone1 = '1';
 final number1 = '2';
@@ -11,14 +11,16 @@ final parkingId1 = '3';
 final nickname1 = 'a';
 final code1 = '3';
 final company1 = {};
-final cityId1 = 5;
-final cityName1 = 'b';
-final rateId1 = 7;
+final cityId1 = '8';
+final cityName1 = 'a';
+final areaId1 = '9';
+final areaName1 = 'b';
+final rateId1 = '11';
 final rateName1 = 'c';
 final lat1 = 1.0;
 final lon1 = 2.0;
 final user1 = {
-  '_id': id1,
+  '_id': userId1,
   'phone': phone1,
   'token': token1,
   'cars': [
@@ -44,12 +46,35 @@ final location1 = LocationData.fromMap({
 
 final parking1 = {
   '_id': parkingId1,
-  'cityId': cityId1.toString(),
+  'cityId': cityId1,
   'cityName': cityName1,
-  'rateId': rateId1.toString(),
+  'areaId': areaId1,
+  'areaName': areaName1,
+  'rateId': rateId1,
   'rateName': rateName1,
   'lat': lat1.toString(),
   'lon': lon1.toString(),
-  'user': id1,
+  'user': userId1,
   'car': carId1,
+};
+
+final geoPark1 = {
+  'cities': [
+    {
+      'id': cityId1,
+      'name': cityName1,
+      'areas': [
+        {
+          'id': areaId1,
+          'name': areaName1,
+          'rates': [
+            {
+              'id': rateId1,
+              'name': rateName1,
+            },
+          ],
+        }
+      ],
+    },
+  ],
 };

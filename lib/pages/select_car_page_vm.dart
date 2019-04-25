@@ -26,8 +26,6 @@ class SelectCarPageVM {
     ];
     final items = user.cars.map((car) {
       final data = {
-        SelectCarPageVMItemDataKey.number: car.number,
-        SelectCarPageVMItemDataKey.nickname: car.nickname,
         SelectCarPageVMItemDataKey.car: car
       };
       return SelectCarPageVMItem(data: data, type: SelectCarPageVMItemType.car);
@@ -74,7 +72,7 @@ class SelectCarPageVMItem {
       {this.data = const {}, this.type = SelectCarPageVMItemType.none});
 }
 
-enum SelectCarPageVMItemDataKey { none, number, nickname, car }
+enum SelectCarPageVMItemDataKey { none, car }
 enum SelectCarPageVMItemType { none, blue, orange, car }
 
 class SelectCarPageVMOtherAction {

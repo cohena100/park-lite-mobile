@@ -46,7 +46,7 @@ class ParkBloc with BaseBloc {
   }
 
   Future<ParkBlocState> parkingAreas() async {
-    areas = GeoPark();
+    areas = GeoPark(_localDBProxy.loadGeoPark());
     return ParkBlocState.areas;
   }
 
@@ -63,7 +63,6 @@ class ParkBloc with BaseBloc {
         area.name,
         rate.id,
         rate.name,
-        car.number,
         user.token);
     switch (data[NetworkProxyKeys.code]) {
       case NetworkProxy.success:

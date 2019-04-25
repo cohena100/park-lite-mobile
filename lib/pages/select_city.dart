@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pango_lite/model/elements/city.dart';
 import 'package:pango_lite/pages/routes.dart';
 import 'package:pango_lite/pages/select_city_vm.dart';
 import 'package:pango_lite/locale/locale.dart';
@@ -73,15 +74,13 @@ class SelectCityPageState extends State<SelectCityPage> {
           child: Padding(padding: const EdgeInsets.all(24), child: Container()),
         );
       case SelectCityPageVMItemType.city:
-        final name = item.data[SelectCityPageVMItemDataKey.name];
-        final id = item.data[SelectCityPageVMItemDataKey.id];
-        final city = item.data[SelectCityPageVMItemDataKey.city];
+        final City city = item.data[SelectCityPageVMItemDataKey.city];
         return InkWell(
           child: Card(
-            key: Key(id),
+            key: Key(city.id),
             child: Padding(
               padding: const EdgeInsets.all(16),
-              child: Center(child: Text('$name')),
+              child: Center(child: Text('${city.name}')),
             ),
           ),
           onTap: () {

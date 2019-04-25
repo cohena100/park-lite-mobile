@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pango_lite/model/elements/car.dart';
 import 'package:pango_lite/pages/routes.dart';
 import 'package:pango_lite/pages/select_car_page_vm.dart';
 import 'package:pango_lite/locale/locale.dart';
@@ -76,15 +77,13 @@ class SelectCarPageState extends State<SelectCarPage> {
           child: Padding(padding: const EdgeInsets.all(24), child: Container()),
         );
       case SelectCarPageVMItemType.car:
-        final number = item.data[SelectCarPageVMItemDataKey.number];
-        final nickname = item.data[SelectCarPageVMItemDataKey.nickname];
-        final car = item.data[SelectCarPageVMItemDataKey.car];
+        final Car car = item.data[SelectCarPageVMItemDataKey.car];
         return InkWell(
           child: Card(
-            key: Key(number),
+            key: Key(car.id),
             child: Padding(
               padding: const EdgeInsets.all(16),
-              child: Center(child: Text('$nickname ($number)')),
+              child: Center(child: Text('${car.nickname} (${car.number})')),
             ),
           ),
           onTap: () async {

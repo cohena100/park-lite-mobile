@@ -38,7 +38,6 @@ class NetworkProxy {
       String areaName,
       String rateId,
       String rateName,
-      String carNumber,
       String token) async {
     var url = _baseUrl + '/parkings/start';
     var body = json.encode({
@@ -75,7 +74,6 @@ class NetworkProxy {
     allHeaders.addAll(headers);
     allHeaders.addAll(extraHeaders);
     var response = await http.post(url, body: body, headers: allHeaders);
-    print('avi ${response.statusCode}');
     return {
       NetworkProxyKeys.code: response.statusCode,
       NetworkProxyKeys.body: response.body

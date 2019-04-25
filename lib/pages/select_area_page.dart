@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pango_lite/model/elements/area.dart';
 import 'package:pango_lite/pages/routes.dart';
 import 'package:pango_lite/locale/locale.dart';
 import 'package:pango_lite/pages/select_area_page_vm.dart';
@@ -73,15 +74,13 @@ class SelectAreaPageState extends State<SelectAreaPage> {
           child: Padding(padding: const EdgeInsets.all(24), child: Container()),
         );
       case SelectAreaPageVMItemType.area:
-        final name = item.data[SelectAreaPageVMItemDataKey.name];
-        final id = item.data[SelectAreaPageVMItemDataKey.id];
-        final area = item.data[SelectAreaPageVMItemDataKey.area];
+        final Area area = item.data[SelectAreaPageVMItemDataKey.area];
         return InkWell(
           child: Card(
-            key: Key(id),
+            key: Key(area.id),
             child: Padding(
               padding: const EdgeInsets.all(16),
-              child: Center(child: Text('$name')),
+              child: Center(child: Text('${area.name}')),
             ),
           ),
           onTap: () {

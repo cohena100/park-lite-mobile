@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pango_lite/locale/locale.dart';
+import 'package:pango_lite/model/elements/rate.dart';
 import 'package:pango_lite/pages/routes.dart';
 import 'package:pango_lite/pages/select_rate_page_vm.dart';
 
@@ -75,14 +76,13 @@ class SelectRatePageState extends State<SelectRatePage> {
           child: Padding(padding: const EdgeInsets.all(24), child: Container()),
         );
       case SelectRatePageVMItemType.rate:
-        final name = item.data[SelectRatePageVMItemDataKey.name];
-        final id = item.data[SelectRatePageVMItemDataKey.id];
+        final Rate rate = item.data[SelectRatePageVMItemDataKey.rate];
         return InkWell(
           child: Card(
-            key: Key(id),
+            key: Key(rate.id),
             child: Padding(
               padding: const EdgeInsets.all(16),
-              child: Center(child: Text('$name')),
+              child: Center(child: Text('${rate.name}')),
             ),
           ),
           onTap: () async {

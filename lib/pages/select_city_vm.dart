@@ -21,8 +21,6 @@ class SelectCityPageVM {
     ];
     final items = model.parkBloc.areas.cities.map((city) {
       final data = {
-        SelectCityPageVMItemDataKey.name: city.name,
-        SelectCityPageVMItemDataKey.id: city.id,
         SelectCityPageVMItemDataKey.city: city,
       };
       return SelectCityPageVMItem(
@@ -60,7 +58,7 @@ class SelectCityPageVMItem {
       {this.data = const {}, this.type = SelectCityPageVMItemType.none});
 }
 
-enum SelectCityPageVMItemDataKey { none, name, id, city }
+enum SelectCityPageVMItemDataKey { none, city }
 enum SelectCityPageVMItemType { none, blue, orange, city }
 
 class SelectCityPageVMOtherAction {

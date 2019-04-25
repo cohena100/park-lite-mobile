@@ -27,8 +27,6 @@ class SelectRatePageVM {
     final items = model.parkBloc.area.rates.map((rate) {
       final data = {
         SelectRatePageVMItemDataKey.rate: rate,
-        SelectRatePageVMItemDataKey.name: rate.name,
-        SelectRatePageVMItemDataKey.id: rate.id,
       };
       return SelectRatePageVMItem(
           data: data, type: SelectRatePageVMItemType.rate);
@@ -75,7 +73,7 @@ class SelectRatePageVMItem {
       {this.data = const {}, this.type = SelectRatePageVMItemType.none});
 }
 
-enum SelectRatePageVMItemDataKey { none, name, id, cityId, rate }
+enum SelectRatePageVMItemDataKey { none, rate }
 enum SelectRatePageVMItemType { none, blue, orange, rate }
 
 class SelectRatePageVMOtherAction {
