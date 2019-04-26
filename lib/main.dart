@@ -21,9 +21,8 @@ class MyApp extends StatelessWidget {
     model.setup(isIOS);
     return MaterialApp(
       key: Key('MyApp'),
-      initialRoute: Routes.rootPage,
+      home: MainPage(),
       routes: <String, WidgetBuilder>{
-        Routes.rootPage: (context) => MainPage(),
         Routes.carPage: (context) => CarPage(),
         Routes.nicknamePage: (context) => NicknamePage(),
         Routes.validatePage: (context) => ValidatePage(),

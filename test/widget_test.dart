@@ -7,11 +7,11 @@
 
 import 'dart:convert';
 
+import 'package:pango_lite/main.dart';
 import 'package:pango_lite/playground/defs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:pango_lite/main.dart';
 import 'package:pango_lite/model/model.dart';
 import 'package:pango_lite/model/proxies/local_db_proxy.dart';
 import 'package:pango_lite/model/proxies/location_proxy.dart';

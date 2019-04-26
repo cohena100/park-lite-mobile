@@ -30,12 +30,30 @@ class MainPageState extends State<MainPage> {
             child = Container();
             break;
           case MainPageVMActionState.phone:
-            child = PhonePage();
             title = Text(AppLocalizations.of(context).phoneNumberTitle);
+            child = PhonePage();
             break;
           case MainPageVMActionState.home:
-            child = HomePage();
-            break;
+            return DefaultTabController(
+              length: 2,
+              child: Scaffold(
+                appBar: AppBar(
+                  bottom: TabBar(
+                    tabs: [
+                      Tab(icon: Icon(Icons.directions_car)),
+                      Tab(icon: Icon(Icons.account_circle)),
+                    ],
+                  ),
+                  title: title,
+                ),
+                body: TabBarView(
+                  children: [
+                    HomePage(),
+                    Icon(Icons.directions_bike),
+                  ],
+                ),
+              ),
+            );
         }
         return Scaffold(
           appBar: AppBar(
