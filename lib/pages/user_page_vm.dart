@@ -40,7 +40,12 @@ class UserPageVM {
     }, state: UserPageVMActionState.user));
   }
 
-  void removeCar() {}
+  void removeCar() {
+    model.userBloc.context =
+        UserBlocContext(data: {}, state: UserBlocContextState.removeCar);
+    _otherActionSubject.add(
+        UserPageVMOtherAction(state: UserPageVMOtherActionState.selectCarPage));
+  }
 }
 
 class UserPageVMAction {
@@ -76,4 +81,8 @@ class UserPageVMOtherAction {
 
 enum UserPageVMOtherActionDataKey { none }
 
-enum UserPageVMOtherActionState { none, carPage }
+enum UserPageVMOtherActionState {
+  none,
+  carPage,
+  selectCarPage,
+}

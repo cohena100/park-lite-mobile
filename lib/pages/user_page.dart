@@ -24,6 +24,8 @@ class UserPageState extends State<UserPage> {
         case UserPageVMOtherActionState.carPage:
           Navigator.pushNamed(context, Routes.carPage);
           break;
+        case UserPageVMOtherActionState.selectCarPage:
+          Navigator.pushNamed(context, Routes.selectCarPage);
       }
     });
     return StreamBuilder(

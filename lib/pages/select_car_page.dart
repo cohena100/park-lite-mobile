@@ -25,6 +25,9 @@ class SelectCarPageState extends State<SelectCarPage> {
         case SelectCarPageVMOtherActionState.selectCityPage:
           Navigator.pushNamed(context, Routes.selectCityPage);
           break;
+        case SelectCarPageVMOtherActionState.rootPage:
+          Navigator.pushNamed(context, Routes.rootPage);
+          break;
       }
     });
     return StreamBuilder(

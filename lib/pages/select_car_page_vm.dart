@@ -3,6 +3,7 @@ import 'package:pango_lite/model/elements/user.dart';
 import 'package:pango_lite/model/elements/car.dart';
 import 'package:pango_lite/model/model.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:pango_lite/model/blocs/user_bloc.dart';
 
 class SelectCarPageVM {
   BehaviorSubject _actionSubject = BehaviorSubject<SelectCarPageVMAction>();
@@ -25,9 +26,7 @@ class SelectCarPageVM {
       SelectCarPageVMItem(type: SelectCarPageVMItemType.blue),
     ];
     final items = user.cars.map((car) {
-      final data = {
-        SelectCarPageVMItemDataKey.car: car
-      };
+      final data = {SelectCarPageVMItemDataKey.car: car};
       return SelectCarPageVMItem(data: data, type: SelectCarPageVMItemType.car);
     }).toList();
     _actionSubject.add(SelectCarPageVMAction(data: {
@@ -39,15 +38,34 @@ class SelectCarPageVM {
   Future selectCar(Car car) async {
     _actionSubject
         .add(SelectCarPageVMAction(state: SelectCarPageVMActionState.busy));
-    await model.parkBloc.currentLocation;
-    final state = await model.parkBloc.parkingAreas();
-    switch (state) {
-      case ParkBlocState.areas:
-        model.parkBloc.car = car;
-        _otherActionSubject.add(SelectCarPageVMOtherAction(
-            state: SelectCarPageVMOtherActionState.selectCityPage));
+    final context = model.userBloc.context;
+    switch (context.state) {
+      case UserBlocContextState.removeCar:
+        _actionSubject
+            .add(SelectCarPageVMAction(state: SelectCarPageVMActionState.busy));
+        model.userBloc.context.data[UserBlocContextDataKey.car] = car;
+        final state = await model.userBloc.removeCar();
+        switch (state) {
+          case UserBlocState.success:
+            _otherActionSubject.add(SelectCarPageVMOtherAction(
+                state: SelectCarPageVMOtherActionState.rootPage));
+            break;
+          default:
+            break;
+        }
         break;
       default:
+        await model.parkBloc.currentLocation;
+        final state = await model.parkBloc.parkingAreas();
+        switch (state) {
+          case ParkBlocState.areas:
+            model.parkBloc.car = car;
+            _otherActionSubject.add(SelectCarPageVMOtherAction(
+                state: SelectCarPageVMOtherActionState.selectCityPage));
+            break;
+          default:
+            break;
+        }
         break;
     }
   }
@@ -85,4 +103,8 @@ class SelectCarPageVMOtherAction {
 
 enum SelectCarPageVMOtherActionDataKey { none }
 
-enum SelectCarPageVMOtherActionState { none, selectCityPage }
+enum SelectCarPageVMOtherActionState {
+  none,
+  selectCityPage,
+  rootPage,
+}

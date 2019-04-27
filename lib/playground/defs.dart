@@ -3,7 +3,14 @@ import 'package:location/location.dart';
 final areaId1 = '9';
 final areaName1 = 'b';
 final carId1 = '2';
-final carId2 = '4';
+final carId2 = '41';
+final car1 = {
+  'car': {
+    'number': number1,
+    '_id': carId1,
+  },
+  'nickname': nickname1,
+};
 final car2 = {
   'car': {
     'number': number2,
@@ -12,6 +19,7 @@ final car2 = {
   'nickname': nickname2,
 };
 final carKey = 'car';
+final carsKey = 'cars';
 final cityId1 = '8';
 final cityName1 = 'a';
 final code1 = '3';

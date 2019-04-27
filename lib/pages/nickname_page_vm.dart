@@ -27,6 +27,8 @@ class NicknamePageVM {
             data: {NicknamePageVMActionDataKey.nickname: nickname},
             state: NicknamePageVMActionState.nickname));
         break;
+      default:
+        break;
     }
   }
 
@@ -37,7 +39,9 @@ class NicknamePageVM {
         break;
       case UserBlocContextState.addCar:
       case UserBlocContextState.login:
-      model.userBloc.context.data[UserBlocContextDataKey.nickname] = s;
+        model.userBloc.context.data[UserBlocContextDataKey.nickname] = s;
+        break;
+      default:
         break;
     }
   }
@@ -76,6 +80,8 @@ class NicknamePageVM {
                 state: NicknamePageVMOtherActionState.none));
             break;
         }
+        break;
+      default:
         break;
     }
   }

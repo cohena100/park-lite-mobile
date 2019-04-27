@@ -27,6 +27,8 @@ class PhonePageVM {
             data: {PhonePageVMActionDataKey.phone: phone},
             state: PhonePageVMActionState.phone));
         break;
+      default:
+        break;
     }
   }
 
@@ -38,6 +40,8 @@ class PhonePageVM {
       case UserBlocContextState.addCar:
       case UserBlocContextState.login:
         model.userBloc.context.data[UserBlocContextDataKey.phone] = s;
+        break;
+      default:
         break;
     }
   }
@@ -51,6 +55,8 @@ class PhonePageVM {
       case UserBlocContextState.login:
         _otherActionSubject.add(
             PhonePageVMOtherAction(state: PhonePageVMOtherActionState.carPage));
+        break;
+      default:
         break;
     }
   }

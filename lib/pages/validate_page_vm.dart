@@ -26,6 +26,8 @@ class ValidatePageVM {
             data: {ValidatePageVMActionDataKey.validate: code},
             state: ValidatePageVMActionState.validate));
         break;
+      default:
+        break;
     }
   }
 
@@ -38,6 +40,8 @@ class ValidatePageVM {
       case UserBlocContextState.login:
         model.userBloc.context.data[UserBlocContextDataKey.code] = s;
         break;
+      default:
+        break;
     }
   }
 
@@ -49,17 +53,19 @@ class ValidatePageVM {
       case UserBlocContextState.addCar:
         break;
       case UserBlocContextState.login:
-      _actionSubject
-          .add(ValidatePageVMAction(state: ValidatePageVMActionState.busy));
-      final state = await model.userBloc.userValidate();
-      switch (state) {
-        case UserBlocState.loggedIn:
-          _otherActionSubject.add(ValidatePageVMOtherAction(
-              state: ValidatePageVMOtherActionState.rootPage));
-          break;
-        default:
-          break;
-      }
+        _actionSubject
+            .add(ValidatePageVMAction(state: ValidatePageVMActionState.busy));
+        final state = await model.userBloc.userValidate();
+        switch (state) {
+          case UserBlocState.loggedIn:
+            _otherActionSubject.add(ValidatePageVMOtherAction(
+                state: ValidatePageVMOtherActionState.rootPage));
+            break;
+          default:
+            break;
+        }
+        break;
+      default:
         break;
     }
   }

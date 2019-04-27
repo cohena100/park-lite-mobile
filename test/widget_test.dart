@@ -27,13 +27,7 @@ void main() {
       'phone': phone1,
       'token': token1,
       'cars': [
-        {
-          'car': {
-            'number': number1,
-            '_id': carId1,
-          },
-          'nickname': nickname1
-        }
+        car1,
       ],
     };
   });
@@ -223,6 +217,32 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byKey(Key('SelectCarPage')), findsOneWidget);
       expect(find.byKey(Key(carId2)), findsOneWidget);
+    });
+
+    testWidgets('remove car success', (WidgetTester tester) async {
+      user1[carsKey] = [car1, car2];
+      model.localDBProxy.inMemoryUser = jsonEncode(user1);
+      await tester.pumpWidget(MyApp());
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(Key('UserTab')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(Key('Remove')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(Key('SelectCarPage')), findsOneWidget);
+      expect(find.byKey(Key(carId2)), findsOneWidget);
+      when(model.networkProxy.sendRemove(userId1, carId2, token1))
+          .thenAnswer((_) async => {
+                NetworkProxyKeys.code: 200,
+                NetworkProxyKeys.body: jsonEncode({carKey: car2}),
+              });
+      await tester.tap(find.byKey(Key(carId2)));
+      await tester.pumpAndSettle();
+      expect(find.byKey(Key('HomePage')), findsOneWidget);
+      expect(find.byKey(Key('Start')), findsOneWidget);
+      await tester.tap(find.byKey(Key('Start')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(Key('SelectCarPage')), findsOneWidget);
+      expect(find.byKey(Key(carId2)), findsNothing);
     });
   });
 }

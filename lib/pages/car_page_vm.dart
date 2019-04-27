@@ -27,6 +27,8 @@ class CarPageVM {
             data: {CarPageVMActionDataKey.number: number},
             state: CarPageVMActionState.number));
         break;
+      default:
+        break;
     }
   }
 
@@ -38,6 +40,8 @@ class CarPageVM {
       case UserBlocContextState.addCar:
       case UserBlocContextState.login:
         model.userBloc.context.data[UserBlocContextDataKey.number] = s;
+        break;
+      default:
         break;
     }
   }
@@ -51,6 +55,8 @@ class CarPageVM {
       case UserBlocContextState.login:
         _otherActionSubject.add(CarPageVMOtherAction(
             state: CarPageVMOtherActionState.nicknamePage));
+        break;
+      default:
         break;
     }
   }

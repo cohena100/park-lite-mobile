@@ -22,6 +22,10 @@ class User {
     _data[_carsKey] = allCars.map((car) => car.data).toList();
   }
 
+  void removeCar(Car car) {
+    _data[_carsKey] = cars.where((aCar) => aCar.id != car.id).toList();
+  }
+
   List<Car> get cars {
     final List allCars = _data[_carsKey];
     return allCars.map((data) => Car(data)).toList();

@@ -19,29 +19,6 @@ class UserBloc with BaseBloc {
     return await getUser(_localDBProxy);
   }
 
-  Future<UserBlocState> handshake() async {
-    final isUser = await user;
-    if (isUser == null) {
-      return UserBlocState.notLoggedIn;
-    }
-    return UserBlocState.loggedIn;
-  }
-
-  Future<UserBlocState> userLogin() async {
-    final phone = context.data[UserBlocContextDataKey.phone];
-    final number = context.data[UserBlocContextDataKey.number];
-    final nickname = context.data[UserBlocContextDataKey.nickname];
-    final data = await _networkProxy.sendLogin(phone, number, nickname);
-    switch (data[NetworkProxyKeys.code]) {
-      case NetworkProxy.success:
-        final user = User.fromJson(jsonDecode(data[NetworkProxyKeys.body]));
-        await _localDBProxy.saveUser(jsonEncode(user));
-        return UserBlocState.loggedIn;
-      default:
-        return UserBlocState.notLoggedIn;
-    }
-  }
-
   Future<UserBlocState> addCar() async {
     final theUser = await user;
     final number = context.data[UserBlocContextDataKey.number];
@@ -59,6 +36,44 @@ class UserBloc with BaseBloc {
     }
   }
 
+  Future<UserBlocState> handshake() async {
+    final isUser = await user;
+    if (isUser == null) {
+      return UserBlocState.notLoggedIn;
+    }
+    return UserBlocState.loggedIn;
+  }
+
+  Future<UserBlocState> removeCar() async {
+    final theUser = await user;
+    final Car car = context.data[UserBlocContextDataKey.car];
+    final data =
+        await _networkProxy.sendRemove(theUser.id, car.id, theUser.token);
+    switch (data[NetworkProxyKeys.code]) {
+      case NetworkProxy.success:
+        theUser.removeCar(car);
+        await _localDBProxy.saveUser(jsonEncode(theUser));
+        return UserBlocState.success;
+      default:
+        return UserBlocState.fail;
+    }
+  }
+
+  Future<UserBlocState> userLogin() async {
+    final phone = context.data[UserBlocContextDataKey.phone];
+    final number = context.data[UserBlocContextDataKey.number];
+    final nickname = context.data[UserBlocContextDataKey.nickname];
+    final data = await _networkProxy.sendLogin(phone, number, nickname);
+    switch (data[NetworkProxyKeys.code]) {
+      case NetworkProxy.success:
+        final user = User.fromJson(jsonDecode(data[NetworkProxyKeys.body]));
+        await _localDBProxy.saveUser(jsonEncode(user));
+        return UserBlocState.loggedIn;
+      default:
+        return UserBlocState.notLoggedIn;
+    }
+  }
+
   Future<UserBlocState> userValidate() async {
     return UserBlocState.loggedIn;
   }
@@ -71,12 +86,19 @@ class UserBlocContext {
       {this.data = const {}, this.state = UserBlocContextState.none});
 }
 
-enum UserBlocContextDataKey { phone, number, nickname, code }
+enum UserBlocContextDataKey {
+  phone,
+  number,
+  nickname,
+  code,
+  car,
+}
 
 enum UserBlocContextState {
   none,
   login,
   addCar,
+  removeCar,
 }
 
 enum UserBlocState {
