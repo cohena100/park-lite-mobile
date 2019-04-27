@@ -75,7 +75,6 @@ void main() {
       when(model.localDBProxy.loadUser()).thenAnswer((_) async => null);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
-      when(model.localDBProxy.loadUser()).thenAnswer((_) async => user1);
       await tester.enterText(find.byKey(Key('PhoneTextField')), phone1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
