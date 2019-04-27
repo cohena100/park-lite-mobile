@@ -33,7 +33,7 @@ class NetworkProxy {
   }
 
   Future<Map> sendRemove(String userId, String carId, String token) async {
-    var url = _baseUrl + '/cars/add';
+    var url = _baseUrl + '/cars/remove';
     var body = json.encode({
       'userId': userId,
       'carId': carId,
