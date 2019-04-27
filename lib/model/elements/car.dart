@@ -7,15 +7,21 @@ class Car {
 
   Car(this.data);
 
-  String get nickname {
-    return data[_nicknameKey];
-  }
+  Car.fromJson(Map<String, dynamic> json) : data = json[_carKey];
 
   String get id {
     return data[_carKey][_idKey];
   }
 
+  String get nickname {
+    return data[_nicknameKey];
+  }
+
   String get number {
     return data[_carKey][_numberKey];
+  }
+
+  Map<String, dynamic> toJson() {
+    return data;
   }
 }

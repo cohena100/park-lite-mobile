@@ -26,3 +26,9 @@ void main() {
       pointInPolygon(32.073605, 34.852157, polyCorners, polyX, polyY);
   print('true: $inside, false: $outside');
 }
+
+
+//model.localDBProxy.inMemoryUser = null;
+//model.localDBProxy.inMemoryUser = jsonEncode(user1);
+//model.localDBProxy.geoPark = geoPark1;
+//debugDumpApp();

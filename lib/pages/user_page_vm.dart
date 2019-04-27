@@ -12,7 +12,7 @@ class UserPageVM {
 
   void addCar() {
     model.userBloc.context =
-        UserBlocContext(state: UserBlocContextState.addCar);
+        UserBlocContext(data: {}, state: UserBlocContextState.addCar);
     _otherActionSubject
         .add(UserPageVMOtherAction(state: UserPageVMOtherActionState.carPage));
   }

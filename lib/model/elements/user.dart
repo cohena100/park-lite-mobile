@@ -16,6 +16,12 @@ class User {
 
   User.fromJson(Map<String, dynamic> json) : _data = json[_userKey];
 
+  void addCar(Car car) {
+    final allCars = cars;
+    allCars.add(car);
+    _data[_carsKey] = allCars.map((car) => car.data).toList();
+  }
+
   List<Car> get cars {
     final List allCars = _data[_carsKey];
     return allCars.map((data) => Car(data)).toList();
@@ -46,8 +52,8 @@ class User {
     return cars.firstWhere((car) => car.id == carId, orElse: () => null);
   }
 
-  String toJson() {
-    return jsonEncode(_data);
+  Map<String, dynamic> toJson() {
+    return _data;
   }
 
   void updateParking(Parking parking) {

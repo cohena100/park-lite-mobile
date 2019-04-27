@@ -13,8 +13,6 @@ class MainPageVM {
   Future init() async {
     final state = await model.userBloc.handshake();
     switch (state) {
-      case UserBlocState.validate:
-        break;
       case UserBlocState.loggedIn:
         _actionSubject.add(MainPageVMAction(state: MainPageVMActionState.home));
         break;
@@ -25,6 +23,8 @@ class MainPageVM {
         }
         _actionSubject
             .add(MainPageVMAction(state: MainPageVMActionState.phone));
+        break;
+      default:
         break;
     }
   }

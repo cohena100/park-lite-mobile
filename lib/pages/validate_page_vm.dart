@@ -55,7 +55,7 @@ class ValidatePageVM {
       switch (state) {
         case UserBlocState.loggedIn:
           _otherActionSubject.add(ValidatePageVMOtherAction(
-              state: ValidatePageVMOtherActionState.homePage));
+              state: ValidatePageVMOtherActionState.rootPage));
           break;
         default:
           break;
@@ -85,4 +85,4 @@ class ValidatePageVMOtherAction {
 
 enum ValidatePageVMOtherActionDataKey { none }
 
-enum ValidatePageVMOtherActionState { none, homePage }
+enum ValidatePageVMOtherActionState { none, rootPage }

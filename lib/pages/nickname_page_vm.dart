@@ -50,14 +50,22 @@ class NicknamePageVM {
       case UserBlocContextState.none:
         break;
       case UserBlocContextState.addCar:
-        // TODO: avi
+        final state = await model.userBloc.addCar();
+        switch (state) {
+          case UserBlocState.success:
+            _otherActionSubject.add(NicknamePageVMOtherAction(
+                state: NicknamePageVMOtherActionState.rootPage));
+            break;
+          default:
+            break;
+        }
         break;
       case UserBlocContextState.login:
         final state = await model.userBloc.userLogin();
         switch (state) {
           case UserBlocState.loggedIn:
             _otherActionSubject.add(NicknamePageVMOtherAction(
-                state: NicknamePageVMOtherActionState.homePage));
+                state: NicknamePageVMOtherActionState.rootPage));
             break;
           case UserBlocState.validate:
             _otherActionSubject.add(NicknamePageVMOtherAction(
@@ -93,4 +101,4 @@ class NicknamePageVMOtherAction {
 
 enum NicknamePageVMOtherActionDataKey { none }
 
-enum NicknamePageVMOtherActionState { none, homePage, validatePage }
+enum NicknamePageVMOtherActionState { none, rootPage, validatePage }

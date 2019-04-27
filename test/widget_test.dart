@@ -19,19 +19,16 @@ import 'package:pango_lite/model/proxies/network_proxy.dart';
 
 class MockNetworkProxy extends Mock implements NetworkProxy {}
 
-class MockLocalDBProxy extends Mock implements LocalDBProxy {}
-
 class MockLocationProxy extends Mock implements LocationProxy {}
 
 void main() {
   group('login', () {
     testWidgets('Login success', (WidgetTester tester) async {
-      model =
-          Model(MockNetworkProxy(), MockLocalDBProxy(), MockLocationProxy());
-      when(model.localDBProxy.loadUser()).thenAnswer((_) async => null);
+      model = Model(MockNetworkProxy(), LocalDBProxy(inMemory: true),
+          MockLocationProxy());
+      model.localDBProxy.inMemoryUser = null;
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
-      when(model.localDBProxy.loadUser()).thenAnswer((_) async => user1);
       await tester.enterText(find.byKey(Key('PhoneTextField')), phone1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
@@ -45,6 +42,7 @@ void main() {
                 NetworkProxyKeys.code: 200,
                 NetworkProxyKeys.body: jsonEncode({userKey: user1}),
               });
+      model.localDBProxy.inMemoryUser = jsonEncode(user1);
       await tester.enterText(find.byKey(Key('NicknameTextField')), nickname1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
@@ -52,27 +50,27 @@ void main() {
     });
 
     testWidgets('Not logged in', (WidgetTester tester) async {
-      model =
-          Model(MockNetworkProxy(), MockLocalDBProxy(), MockLocationProxy());
-      when(model.localDBProxy.loadUser()).thenAnswer((_) async => null);
+      model = Model(MockNetworkProxy(), LocalDBProxy(inMemory: true),
+          MockLocationProxy());
+      model.localDBProxy.inMemoryUser = null;
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
       expect(find.byKey(Key('PhonePage')), findsOneWidget);
     });
 
     testWidgets('Already logged in', (WidgetTester tester) async {
-      model =
-          Model(MockNetworkProxy(), MockLocalDBProxy(), MockLocationProxy());
-      when(model.localDBProxy.loadUser()).thenAnswer((_) async => user1);
+      model = Model(MockNetworkProxy(), LocalDBProxy(inMemory: true),
+          MockLocationProxy());
+      model.localDBProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
       expect(find.byKey(Key('HomePage')), findsOneWidget);
     });
 
     testWidgets('Login failed', (WidgetTester tester) async {
-      model =
-          Model(MockNetworkProxy(), MockLocalDBProxy(), MockLocationProxy());
-      when(model.localDBProxy.loadUser()).thenAnswer((_) async => null);
+      model = Model(MockNetworkProxy(), LocalDBProxy(inMemory: true),
+          MockLocationProxy());
+      model.localDBProxy.inMemoryUser = null;
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
       await tester.enterText(find.byKey(Key('PhoneTextField')), phone1);
@@ -93,9 +91,9 @@ void main() {
     });
 
     testWidgets('Pop and push between pages', (WidgetTester tester) async {
-      model =
-          Model(MockNetworkProxy(), MockLocalDBProxy(), MockLocationProxy());
-      when(model.localDBProxy.loadUser()).thenAnswer((_) async => null);
+      model = Model(MockNetworkProxy(), LocalDBProxy(inMemory: true),
+          MockLocationProxy());
+      model.localDBProxy.inMemoryUser = null;
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
       await tester.enterText(find.byKey(Key('PhoneTextField')), phone1);
@@ -131,9 +129,9 @@ void main() {
 
   group('park', () {
     testWidgets('start parking success', (WidgetTester tester) async {
-      model =
-          Model(MockNetworkProxy(), MockLocalDBProxy(), MockLocationProxy());
-      when(model.localDBProxy.loadUser()).thenAnswer((_) async => user1);
+      model = Model(MockNetworkProxy(), LocalDBProxy(inMemory: true),
+          MockLocationProxy());
+      model.localDBProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
       expect(find.byKey(Key('HomePage')), findsOneWidget);
@@ -142,7 +140,7 @@ void main() {
       await tester.pumpAndSettle();
       when(model.locationProxy.currentLocation)
           .thenAnswer((_) async => location1);
-      when(model.localDBProxy.loadGeoPark()).thenReturn(geoPark1);
+      model.localDBProxy.geoPark = geoPark1;
       expect(find.byKey(Key('SelectCarPage')), findsOneWidget);
       await tester.tap(find.byKey(Key(carId1)));
       await tester.pumpAndSettle();
@@ -154,31 +152,31 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byKey(Key('SelectRatePage')), findsOneWidget);
       when(model.networkProxy.sendStart(
-          userId1,
-          carId1,
-          lat1.toString(),
-          lon1.toString(),
-          cityId1,
-          cityName1,
-          areaId1,
-          areaName1,
-          rateId1,
-          rateName1,
-          token1))
+              userId1,
+              carId1,
+              lat1.toString(),
+              lon1.toString(),
+              cityId1,
+              cityName1,
+              areaId1,
+              areaName1,
+              rateId1,
+              rateName1,
+              token1))
           .thenAnswer((_) async => {
-        NetworkProxyKeys.code: 200,
-        NetworkProxyKeys.body: jsonEncode({parkingKey: parking1}),
-      });
+                NetworkProxyKeys.code: 200,
+                NetworkProxyKeys.body: jsonEncode({parkingKey: parking1}),
+              });
       await tester.tap(find.byKey(Key(rateId1)));
       await tester.pumpAndSettle();
       expect(find.byKey(Key('Stop')), findsOneWidget);
     });
 
     testWidgets('stop parking success', (WidgetTester tester) async {
-      model =
-          Model(MockNetworkProxy(), MockLocalDBProxy(), MockLocationProxy());
+      model = Model(MockNetworkProxy(), LocalDBProxy(inMemory: true),
+          MockLocationProxy());
       user1[parkingKey] = parking1;
-      when(model.localDBProxy.loadUser()).thenAnswer((_) async => user1);
+      model.localDBProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
       when(model.networkProxy.sendStop(userId1, parkingId1, token1))
@@ -190,6 +188,45 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byKey(Key('HomePage')), findsOneWidget);
       expect(find.byKey(Key('Start')), findsOneWidget);
+    });
+  });
+
+  group('car', () {
+    testWidgets('add car success', (WidgetTester tester) async {
+      model = Model(MockNetworkProxy(), LocalDBProxy(inMemory: true),
+          MockLocationProxy());
+      model.localDBProxy.inMemoryUser = jsonEncode(user1);
+      await tester.pumpWidget(MyApp());
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(Key('UserTab')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(Key('UserPage')), findsOneWidget);
+      expect(find.byKey(Key('Add')), findsOneWidget);
+      expect(find.byKey(Key('Remove')), findsOneWidget);
+      await tester.tap(find.byKey(Key('Add')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(Key('CarPage')), findsOneWidget);
+      await tester.enterText(find.byKey(Key('CarTextField')), number2);
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      await tester.pumpAndSettle();
+      expect(find.byKey(Key('NicknamePage')), findsOneWidget);
+      when(model.networkProxy.sendAdd(userId1, number2, nickname2, token1))
+          .thenAnswer((_) async => {
+                NetworkProxyKeys.code: 200,
+                NetworkProxyKeys.body: jsonEncode({carKey: car2}),
+              });
+      await tester.enterText(find.byKey(Key('NicknameTextField')), nickname2);
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      await tester.pumpAndSettle();
+      expect(find.byKey(Key('UserPage')), findsOneWidget);
+      await tester.tap(find.byKey(Key('ParkTab')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(Key('HomePage')), findsOneWidget);
+      expect(find.byKey(Key('Start')), findsOneWidget);
+      await tester.tap(find.byKey(Key('Start')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(Key('SelectCarPage')), findsOneWidget);
+      expect(find.byKey(Key(carId2)), findsOneWidget);
     });
   });
 }

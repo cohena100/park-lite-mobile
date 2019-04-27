@@ -5,7 +5,68 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
 class LocalDBProxy {
-  final Map _db = {};
+  final bool inMemory;
+  String inMemoryUser;
+  Map geoPark = {
+    'cities': [
+      {
+        'id': '1',
+        'name': 'פתח תקווה',
+        'areas': [
+          {
+            'id': '2',
+            'name': 'מערב',
+            'rates': [
+              {
+                'id': '3',
+                'name': 'שעתי',
+              },
+              {
+                'id': '4',
+                'name': 'יומי',
+              },
+              {
+                'id': '5',
+                'name': 'חודשי',
+              },
+            ],
+          },
+          {
+            'id': '6',
+            'name': 'מזרח',
+            'rates': [
+              {
+                'id': '7',
+                'name': 'שעתי',
+              },
+            ],
+          },
+        ],
+      },
+      {
+        'id': '8',
+        'name': 'גבעת שמואל',
+        'areas': [
+          {
+            'id': '9',
+            'name': 'כל העיר',
+            'rates': [
+              {
+                'id': '10',
+                'name': 'שעתי',
+              },
+              {
+                'id': '11',
+                'name': 'יומי',
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  };
+
+  LocalDBProxy({this.inMemory = false});
 
   Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
@@ -17,98 +78,42 @@ class LocalDBProxy {
     return File('$path/user.json');
   }
 
-  Future<Map> loadUser() async {
-    final cache = _db[LocalDBProxyKeys.user];
-    if (cache != null) {
-      return cache;
-    }
-    try {
-      final file = await _userFile;
-      if (file.existsSync() == false) {
-        return null;
-      }
-      final jsonString = await file.readAsString();
-      _db[LocalDBProxyKeys.user] = jsonDecode(jsonString);
-      return _db[LocalDBProxyKeys.user];
-    } catch (e) {
-      return null;
-    }
+  Map loadGeoPark() {
+    return geoPark;
   }
 
-  Map loadGeoPark() {
-    return {
-      'cities': [
-        {
-          'id': '1',
-          'name': 'פתח תקווה',
-          'areas': [
-            {
-              'id': '2',
-              'name': 'מערב',
-              'rates': [
-                {
-                  'id': '3',
-                  'name': 'שעתי',
-                },
-                {
-                  'id': '4',
-                  'name': 'יומי',
-                },
-                {
-                  'id': '5',
-                  'name': 'חודשי',
-                },
-              ],
-            },
-            {
-              'id': '6',
-              'name': 'מזרח',
-              'rates': [
-                {
-                  'id': '7',
-                  'name': 'שעתי',
-                },
-              ],
-            },
-          ],
-        },
-        {
-          'id': '8',
-          'name': 'גבעת שמואל',
-          'areas': [
-            {
-              'id': '9',
-              'name': 'כל העיר',
-              'rates': [
-                {
-                  'id': '10',
-                  'name': 'שעתי',
-                },
-                {
-                  'id': '11',
-                  'name': 'יומי',
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    };
+  Future<Map> loadUser() async {
+    if (inMemory) {
+      if (inMemoryUser == null) {
+        return null;
+      }
+      return jsonDecode(inMemoryUser);
+    } else {
+      try {
+        final file = await _userFile;
+        if (file.existsSync() == false) {
+          return null;
+        }
+        final jsonString = await file.readAsString();
+        return jsonDecode(jsonString);
+      } catch (e) {
+        return null;
+      }
+    }
   }
 
   Future saveUser(String json) async {
-    try {
-      await _writeUser(json);
-      _db[LocalDBProxyKeys.user] = jsonDecode(json);
-    } catch (e) {}
+    if (inMemory) {
+      inMemoryUser = json;
+    } else {
+      try {
+        await _writeUser(json);
+      } catch (e) {}
+    }
   }
 
   Future<File> _writeUser(String json) async {
     final file = await _userFile;
     return file.writeAsString(json);
   }
-}
-
-enum LocalDBProxyKeys {
-  user,
 }

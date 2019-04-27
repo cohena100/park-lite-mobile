@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:pango_lite/model/blocs/base_bloc.dart';
+import 'package:pango_lite/model/elements/car.dart';
 import 'package:pango_lite/model/elements/user.dart';
 import 'package:pango_lite/model/proxies/local_db_proxy.dart';
 import 'package:pango_lite/model/proxies/network_proxy.dart';
@@ -34,10 +35,27 @@ class UserBloc with BaseBloc {
     switch (data[NetworkProxyKeys.code]) {
       case NetworkProxy.success:
         final user = User.fromJson(jsonDecode(data[NetworkProxyKeys.body]));
-        await _localDBProxy.saveUser(user.toJson());
+        await _localDBProxy.saveUser(jsonEncode(user));
         return UserBlocState.loggedIn;
       default:
         return UserBlocState.notLoggedIn;
+    }
+  }
+
+  Future<UserBlocState> addCar() async {
+    final theUser = await user;
+    final number = context.data[UserBlocContextDataKey.number];
+    final nickname = context.data[UserBlocContextDataKey.nickname];
+    final data = await _networkProxy.sendAdd(
+        theUser.id, number, nickname, theUser.token);
+    switch (data[NetworkProxyKeys.code]) {
+      case NetworkProxy.success:
+        final car = Car.fromJson(jsonDecode(data[NetworkProxyKeys.body]));
+        theUser.addCar(car);
+        await _localDBProxy.saveUser(jsonEncode(theUser));
+        return UserBlocState.success;
+      default:
+        return UserBlocState.fail;
     }
   }
 
@@ -65,4 +83,6 @@ enum UserBlocState {
   notLoggedIn,
   loggedIn,
   validate,
+  success,
+  fail,
 }

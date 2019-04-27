@@ -69,7 +69,7 @@ class ParkBloc with BaseBloc {
         final user = await getUser(_localDBProxy);
         user.updateParking(
             Parking.fromJson(jsonDecode(data[NetworkProxyKeys.body])));
-        _localDBProxy.saveUser(user.toJson());
+        _localDBProxy.saveUser(jsonEncode(user));
         return ParkBlocState.success;
       default:
         return ParkBlocState.none;

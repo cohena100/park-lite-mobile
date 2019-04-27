@@ -13,6 +13,25 @@ class NetworkProxy {
   static const error = 400;
   String _baseUrl;
 
+  Future<Map> sendAdd(
+      String userId, String number, String nickname, String token) async {
+    var url = _baseUrl + '/cars/add';
+    var body = json.encode({
+      'userId': userId,
+      'number': number,
+      'nickname': nickname,
+    });
+    final Map<String, String> extraHeaders = {'Authorization': token};
+    final Map<String, String> allHeaders = {};
+    allHeaders.addAll(headers);
+    allHeaders.addAll(extraHeaders);
+    var response = await http.post(url, body: body, headers: allHeaders);
+    return {
+      NetworkProxyKeys.code: response.statusCode,
+      NetworkProxyKeys.body: response.body
+    };
+  }
+
   Future<Map> sendLogin(String phone, String number, String nickname) async {
     var url = _baseUrl + '/users/login';
     var body = json.encode({

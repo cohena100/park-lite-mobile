@@ -41,8 +41,10 @@ class MainPageState extends State<MainPage> {
                 appBar: AppBar(
                   bottom: TabBar(
                     tabs: [
-                      Tab(icon: Icon(Icons.directions_car)),
-                      Tab(icon: Icon(Icons.account_circle)),
+                      Tab(key: Key('ParkTab'), icon: Icon(Icons.directions_car)),
+                      Tab(
+                          key: Key('UserTab'),
+                          icon: Icon(Icons.account_circle)),
                     ],
                   ),
                   title: title,
