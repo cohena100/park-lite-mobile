@@ -7,26 +7,39 @@
 
 import 'dart:convert';
 
-import 'package:pango_lite/main.dart';
-import 'package:pango_lite/playground/defs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:pango_lite/main.dart';
 import 'package:pango_lite/model/model.dart';
 import 'package:pango_lite/model/proxies/local_db_proxy.dart';
 import 'package:pango_lite/model/proxies/location_proxy.dart';
 import 'package:pango_lite/model/proxies/network_proxy.dart';
-
-class MockNetworkProxy extends Mock implements NetworkProxy {}
-
-class MockLocationProxy extends Mock implements LocationProxy {}
+import 'package:pango_lite/playground/defs.dart';
 
 void main() {
+  setUp(() {
+    model = Model(
+        MockNetworkProxy(), LocalDBProxy(inMemory: true), MockLocationProxy());
+    model.localDBProxy.inMemoryUser = null;
+    user1 = {
+      '_id': userId1,
+      'phone': phone1,
+      'token': token1,
+      'cars': [
+        {
+          'car': {
+            'number': number1,
+            '_id': carId1,
+          },
+          'nickname': nickname1
+        }
+      ],
+    };
+  });
+
   group('login', () {
     testWidgets('Login success', (WidgetTester tester) async {
-      model = Model(MockNetworkProxy(), LocalDBProxy(inMemory: true),
-          MockLocationProxy());
-      model.localDBProxy.inMemoryUser = null;
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
       await tester.enterText(find.byKey(Key('PhoneTextField')), phone1);
@@ -50,17 +63,12 @@ void main() {
     });
 
     testWidgets('Not logged in', (WidgetTester tester) async {
-      model = Model(MockNetworkProxy(), LocalDBProxy(inMemory: true),
-          MockLocationProxy());
-      model.localDBProxy.inMemoryUser = null;
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
       expect(find.byKey(Key('PhonePage')), findsOneWidget);
     });
 
     testWidgets('Already logged in', (WidgetTester tester) async {
-      model = Model(MockNetworkProxy(), LocalDBProxy(inMemory: true),
-          MockLocationProxy());
       model.localDBProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
@@ -68,9 +76,6 @@ void main() {
     });
 
     testWidgets('Login failed', (WidgetTester tester) async {
-      model = Model(MockNetworkProxy(), LocalDBProxy(inMemory: true),
-          MockLocationProxy());
-      model.localDBProxy.inMemoryUser = null;
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
       await tester.enterText(find.byKey(Key('PhoneTextField')), phone1);
@@ -91,9 +96,6 @@ void main() {
     });
 
     testWidgets('Pop and push between pages', (WidgetTester tester) async {
-      model = Model(MockNetworkProxy(), LocalDBProxy(inMemory: true),
-          MockLocationProxy());
-      model.localDBProxy.inMemoryUser = null;
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
       await tester.enterText(find.byKey(Key('PhoneTextField')), phone1);
@@ -129,8 +131,6 @@ void main() {
 
   group('park', () {
     testWidgets('start parking success', (WidgetTester tester) async {
-      model = Model(MockNetworkProxy(), LocalDBProxy(inMemory: true),
-          MockLocationProxy());
       model.localDBProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
@@ -173,8 +173,6 @@ void main() {
     });
 
     testWidgets('stop parking success', (WidgetTester tester) async {
-      model = Model(MockNetworkProxy(), LocalDBProxy(inMemory: true),
-          MockLocationProxy());
       user1[parkingKey] = parking1;
       model.localDBProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
@@ -193,8 +191,6 @@ void main() {
 
   group('car', () {
     testWidgets('add car success', (WidgetTester tester) async {
-      model = Model(MockNetworkProxy(), LocalDBProxy(inMemory: true),
-          MockLocationProxy());
       model.localDBProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
@@ -230,3 +226,7 @@ void main() {
     });
   });
 }
+
+class MockLocationProxy extends Mock implements LocationProxy {}
+
+class MockNetworkProxy extends Mock implements NetworkProxy {}

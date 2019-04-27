@@ -70,20 +70,7 @@ final phone1 = '1';
 final rateId1 = '11';
 final rateName1 = 'c';
 final token1 = '1';
-final Map<String, Object> user1 = {
-  '_id': userId1,
-  'phone': phone1,
-  'token': token1,
-  'cars': [
-    {
-      'car': {
-        'number': number1,
-        '_id': carId1,
-      },
-      'nickname': nickname1
-    }
-  ],
-};
+Map<String, Object> user1;
 
 final userId1 = '1';
 
