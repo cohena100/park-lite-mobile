@@ -21,8 +21,8 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "addCarLabel" : MessageLookupByLibrary.simpleMessage("Add car"),
-    "carNicknameHint" : MessageLookupByLibrary.simpleMessage("Please enter your car number"),
-    "carNicknameTitle" : MessageLookupByLibrary.simpleMessage("Fill car number"),
+    "carNicknameHint" : MessageLookupByLibrary.simpleMessage("Please enter your car nickname"),
+    "carNicknameTitle" : MessageLookupByLibrary.simpleMessage("Fill car nickname"),
     "carNumberHint" : MessageLookupByLibrary.simpleMessage("Please enter your car number"),
     "carNumberTitle" : MessageLookupByLibrary.simpleMessage("Fill car number"),
     "phoneNumberHint" : MessageLookupByLibrary.simpleMessage("Please enter your phone number"),

@@ -30,13 +30,13 @@
     "type": "text",
     "placeholders": {}
   },
-  "carNicknameTitle": "Fill car number",
+  "carNicknameTitle": "Fill car nickname",
   "@carNicknameTitle": {
     "description": "Title for car nickname filling",
     "type": "text",
     "placeholders": {}
   },
-  "carNicknameHint": "Please enter your car number",
+  "carNicknameHint": "Please enter your car nickname",
   "@carNicknameHint": {
     "description": "Hint text for car nickname text field",
     "type": "text",
