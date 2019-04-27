@@ -75,6 +75,7 @@ void main() {
       when(model.localDBProxy.loadUser()).thenAnswer((_) async => null);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
+      when(model.localDBProxy.loadUser()).thenAnswer((_) async => user1);
       await tester.enterText(find.byKey(Key('PhoneTextField')), phone1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
@@ -82,10 +83,10 @@ void main() {
       await tester.enterText(find.byKey(Key('CarTextField')), number1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
+      expect(find.byKey(Key('NicknamePage')), findsOneWidget);
       when(model.networkProxy.sendLogin(phone1, number1, nickname1)).thenAnswer(
           (_) async =>
               {NetworkProxyKeys.code: 400, NetworkProxyKeys.body: null});
-      expect(find.byKey(Key('NicknamePage')), findsOneWidget);
       await tester.enterText(find.byKey(Key('NicknameTextField')), nickname1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pump();
@@ -95,6 +96,7 @@ void main() {
     testWidgets('Pop and push between pages', (WidgetTester tester) async {
       model =
           Model(MockNetworkProxy(), MockLocalDBProxy(), MockLocationProxy());
+      when(model.localDBProxy.loadUser()).thenAnswer((_) async => null);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
       await tester.enterText(find.byKey(Key('PhoneTextField')), phone1);

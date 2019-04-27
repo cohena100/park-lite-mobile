@@ -139,6 +139,22 @@ class AppLocalizations {
     );
   }
 
+  String get addCarLabel {
+    return Intl.message(
+      'Add car',
+      name: 'addCarLabel',
+      desc: 'Add car button label',
+    );
+  }
+
+  String get removeCarLabel {
+    return Intl.message(
+      'Stop parking',
+      name: 'removeCarLabel',
+      desc: 'Remove car button label',
+    );
+  }
+
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

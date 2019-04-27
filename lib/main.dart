@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:pango_lite/locale/locale.dart';
 import 'package:pango_lite/model/model.dart';
 import 'package:pango_lite/pages/car_page.dart';
+import 'package:pango_lite/pages/home_page.dart';
 import 'package:pango_lite/pages/main_page.dart';
 import 'package:pango_lite/pages/nickname_page.dart';
 import 'package:pango_lite/pages/routes.dart';
@@ -21,8 +22,9 @@ class MyApp extends StatelessWidget {
     model.setup(isIOS);
     return MaterialApp(
       key: Key('MyApp'),
-      home: MainPage(),
+      initialRoute: Routes.rootPage,
       routes: <String, WidgetBuilder>{
+        Routes.rootPage: (context) => MainPage(),
         Routes.carPage: (context) => CarPage(),
         Routes.nicknamePage: (context) => NicknamePage(),
         Routes.validatePage: (context) => ValidatePage(),

@@ -16,32 +16,58 @@ class NicknamePageVM {
   }
 
   Future init() async {
-    String nickname = model.userBloc.nickname;
-    _actionSubject.add(NicknamePageVMAction(
-        data: {NicknamePageVMActionDataKey.nickname: nickname},
-        state: NicknamePageVMActionState.nickname));
+    final context = model.userBloc.context;
+    switch (context.state) {
+      case UserBlocContextState.none:
+        break;
+      case UserBlocContextState.addCar:
+      case UserBlocContextState.login:
+        String nickname = context.data[UserBlocContextDataKey.nickname];
+        _actionSubject.add(NicknamePageVMAction(
+            data: {NicknamePageVMActionDataKey.nickname: nickname},
+            state: NicknamePageVMActionState.nickname));
+        break;
+    }
   }
 
   void nicknameChanged(String s) {
-    model.userBloc.nickname = s;
+    final context = model.userBloc.context;
+    switch (context.state) {
+      case UserBlocContextState.none:
+        break;
+      case UserBlocContextState.addCar:
+      case UserBlocContextState.login:
+      model.userBloc.context.data[UserBlocContextDataKey.nickname] = s;
+        break;
+    }
   }
 
   Future nicknameSubmitted() async {
     _actionSubject
         .add(NicknamePageVMAction(state: NicknamePageVMActionState.busy));
-    final state = await model.userBloc.userLogin();
-    switch (state) {
-      case UserBlocState.loggedIn:
-        _otherActionSubject.add(NicknamePageVMOtherAction(
-            state: NicknamePageVMOtherActionState.homePage));
+    final context = model.userBloc.context;
+    switch (context.state) {
+      case UserBlocContextState.none:
         break;
-      case UserBlocState.validate:
-        _otherActionSubject.add(NicknamePageVMOtherAction(
-            state: NicknamePageVMOtherActionState.validatePage));
+      case UserBlocContextState.addCar:
+        // TODO: avi
         break;
-      default:
-        _otherActionSubject.add(NicknamePageVMOtherAction(
-            state: NicknamePageVMOtherActionState.none));
+      case UserBlocContextState.login:
+        final state = await model.userBloc.userLogin();
+        switch (state) {
+          case UserBlocState.loggedIn:
+            _otherActionSubject.add(NicknamePageVMOtherAction(
+                state: NicknamePageVMOtherActionState.homePage));
+            break;
+          case UserBlocState.validate:
+            _otherActionSubject.add(NicknamePageVMOtherAction(
+                state: NicknamePageVMOtherActionState.validatePage));
+            break;
+          default:
+            _otherActionSubject.add(NicknamePageVMOtherAction(
+                state: NicknamePageVMOtherActionState.none));
+            break;
+        }
         break;
     }
   }

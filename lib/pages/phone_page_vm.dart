@@ -1,3 +1,4 @@
+import 'package:pango_lite/model/blocs/user_bloc.dart';
 import 'package:pango_lite/model/model.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -14,19 +15,44 @@ class PhonePageVM {
   }
 
   Future init() async {
-    String phone = model.userBloc.phone;
-    _actionSubject.add(PhonePageVMAction(
-        data: {PhonePageVMActionDataKey.phone: phone},
-        state: PhonePageVMActionState.phone));
+    final context = model.userBloc.context;
+    switch (context.state) {
+      case UserBlocContextState.none:
+        break;
+      case UserBlocContextState.addCar:
+        break;
+      case UserBlocContextState.login:
+        String phone = context.data[UserBlocContextDataKey.phone];
+        _actionSubject.add(PhonePageVMAction(
+            data: {PhonePageVMActionDataKey.phone: phone},
+            state: PhonePageVMActionState.phone));
+        break;
+    }
   }
 
-  void phoneChanged(String phone) {
-    model.userBloc.phone = phone;
+  void phoneChanged(String s) {
+    final context = model.userBloc.context;
+    switch (context.state) {
+      case UserBlocContextState.none:
+        break;
+      case UserBlocContextState.addCar:
+      case UserBlocContextState.login:
+        model.userBloc.context.data[UserBlocContextDataKey.phone] = s;
+        break;
+    }
   }
 
   void phoneSubmitted() {
-    _otherActionSubject.add(
-        PhonePageVMOtherAction(state: PhonePageVMOtherActionState.carPage));
+    final context = model.userBloc.context;
+    switch (context.state) {
+      case UserBlocContextState.none:
+        break;
+      case UserBlocContextState.addCar:
+      case UserBlocContextState.login:
+        _otherActionSubject.add(
+            PhonePageVMOtherAction(state: PhonePageVMOtherActionState.carPage));
+        break;
+    }
   }
 }
 

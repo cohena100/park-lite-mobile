@@ -15,26 +15,51 @@ class ValidatePageVM {
   }
 
   Future init() async {
-    String code = model.userBloc.code;
-    _actionSubject.add(ValidatePageVMAction(
-        data: {ValidatePageVMActionDataKey.validate: code},
-        state: ValidatePageVMActionState.validate));
+    final context = model.userBloc.context;
+    switch (context.state) {
+      case UserBlocContextState.none:
+        break;
+      case UserBlocContextState.addCar:
+      case UserBlocContextState.login:
+        String code = context.data[UserBlocContextDataKey.code];
+        _actionSubject.add(ValidatePageVMAction(
+            data: {ValidatePageVMActionDataKey.validate: code},
+            state: ValidatePageVMActionState.validate));
+        break;
+    }
   }
 
   void validateChanged(String s) {
-    model.userBloc.code = s;
+    final context = model.userBloc.context;
+    switch (context.state) {
+      case UserBlocContextState.none:
+        break;
+      case UserBlocContextState.addCar:
+      case UserBlocContextState.login:
+        model.userBloc.context.data[UserBlocContextDataKey.code] = s;
+        break;
+    }
   }
 
   Future validateSubmitted() async {
-    _actionSubject
-        .add(ValidatePageVMAction(state: ValidatePageVMActionState.busy));
-    final state = await model.userBloc.userValidate();
-    switch (state) {
-      case UserBlocState.loggedIn:
-        _otherActionSubject.add(ValidatePageVMOtherAction(
-            state: ValidatePageVMOtherActionState.homePage));
+    final context = model.userBloc.context;
+    switch (context.state) {
+      case UserBlocContextState.none:
         break;
-      default:
+      case UserBlocContextState.addCar:
+        break;
+      case UserBlocContextState.login:
+      _actionSubject
+          .add(ValidatePageVMAction(state: ValidatePageVMActionState.busy));
+      final state = await model.userBloc.userValidate();
+      switch (state) {
+        case UserBlocState.loggedIn:
+          _otherActionSubject.add(ValidatePageVMOtherAction(
+              state: ValidatePageVMOtherActionState.homePage));
+          break;
+        default:
+          break;
+      }
         break;
     }
   }

@@ -1,3 +1,4 @@
+import 'package:pango_lite/model/blocs/user_bloc.dart';
 import 'package:pango_lite/model/model.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -15,19 +16,43 @@ class CarPageVM {
   }
 
   Future init() async {
-    String number = model.userBloc.number;
-    _actionSubject.add(CarPageVMAction(
-        data: {CarPageVMActionDataKey.number: number},
-        state: CarPageVMActionState.number));
+    final context = model.userBloc.context;
+    switch (context.state) {
+      case UserBlocContextState.none:
+        break;
+      case UserBlocContextState.addCar:
+      case UserBlocContextState.login:
+        String number = context.data[UserBlocContextDataKey.number];
+        _actionSubject.add(CarPageVMAction(
+            data: {CarPageVMActionDataKey.number: number},
+            state: CarPageVMActionState.number));
+        break;
+    }
   }
 
-  void numberChanged(String number) {
-    model.userBloc.number = number;
+  void numberChanged(String s) {
+    final context = model.userBloc.context;
+    switch (context.state) {
+      case UserBlocContextState.none:
+        break;
+      case UserBlocContextState.addCar:
+      case UserBlocContextState.login:
+        model.userBloc.context.data[UserBlocContextDataKey.number] = s;
+        break;
+    }
   }
 
   Future numberSubmitted() async {
-    _otherActionSubject.add(
-        CarPageVMOtherAction(state: CarPageVMOtherActionState.nicknamePage));
+    final context = model.userBloc.context;
+    switch (context.state) {
+      case UserBlocContextState.none:
+        break;
+      case UserBlocContextState.addCar:
+      case UserBlocContextState.login:
+        _otherActionSubject.add(CarPageVMOtherAction(
+            state: CarPageVMOtherActionState.nicknamePage));
+        break;
+    }
   }
 }
 

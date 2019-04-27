@@ -89,5 +89,17 @@
     "description": "Stop parking button label",
     "type": "text",
     "placeholders": {}
+  },
+  "addCarLabel": "הוספת רכב",
+  "@addCarLabel": {
+    "description": "Add car button label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "removeCarLabel": "הסרת רכב",
+  "@removeCarLabel": {
+    "description": "Remove car button label",
+    "type": "text",
+    "placeholders": {}
   }
 }

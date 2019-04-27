@@ -10,10 +10,7 @@ class UserBloc with BaseBloc {
   final NetworkProxy _networkProxy;
   final LocalDBProxy _localDBProxy;
 
-  String phone;
-  String number;
-  String nickname;
-  String code;
+  UserBlocContext context = UserBlocContext();
 
   UserBloc(this._networkProxy, this._localDBProxy);
 
@@ -30,6 +27,9 @@ class UserBloc with BaseBloc {
   }
 
   Future<UserBlocState> userLogin() async {
+    final phone = context.data[UserBlocContextDataKey.phone];
+    final number = context.data[UserBlocContextDataKey.number];
+    final nickname = context.data[UserBlocContextDataKey.nickname];
     final data = await _networkProxy.sendLogin(phone, number, nickname);
     switch (data[NetworkProxyKeys.code]) {
       case NetworkProxy.success:
@@ -46,4 +46,23 @@ class UserBloc with BaseBloc {
   }
 }
 
-enum UserBlocState { notLoggedIn, loggedIn, validate }
+class UserBlocContext {
+  final Map data;
+  final UserBlocContextState state;
+  UserBlocContext(
+      {this.data = const {}, this.state = UserBlocContextState.none});
+}
+
+enum UserBlocContextDataKey { phone, number, nickname, code }
+
+enum UserBlocContextState {
+  none,
+  login,
+  addCar,
+}
+
+enum UserBlocState {
+  notLoggedIn,
+  loggedIn,
+  validate,
+}
