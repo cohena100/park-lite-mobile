@@ -71,7 +71,7 @@ class PhonePageVMAction {
 
 enum PhonePageVMActionDataKey { none, phone }
 
-enum PhonePageVMActionState { none, phone }
+enum PhonePageVMActionState { none, busy, phone }
 
 class PhonePageVMOtherAction {
   final Map data;

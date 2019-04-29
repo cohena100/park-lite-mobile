@@ -48,7 +48,7 @@ class SelectAreaPageVMAction {
 
 enum SelectAreaPageVMActionDataKey { none, items }
 
-enum SelectAreaPageVMActionState { none, areas }
+enum SelectAreaPageVMActionState { none, busy, areas }
 
 class SelectAreaPageVMItem {
   final Map data;

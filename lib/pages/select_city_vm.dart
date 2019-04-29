@@ -48,7 +48,7 @@ class SelectCityPageVMAction {
 
 enum SelectCityPageVMActionDataKey { none, items }
 
-enum SelectCityPageVMActionState { none, cities }
+enum SelectCityPageVMActionState { none, busy, cities }
 
 class SelectCityPageVMItem {
   final Map data;

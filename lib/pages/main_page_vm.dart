@@ -39,4 +39,4 @@ class MainPageVMAction {
 
 enum MainPageVMActionDataKey { none }
 
-enum MainPageVMActionState { none, phone, home }
+enum MainPageVMActionState { none, busy, phone, home }
