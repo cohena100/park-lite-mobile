@@ -29,6 +29,7 @@ class WidgetKeys {
   static final removeKey = Key('Remove');
   static final validatePageKey = Key('ValidatePage');
   static final validateTextFieldKey = Key('ValidateTextField');
+  static final myAppKey = Key('MyApp');
 }
 
 //       WidgetKeys

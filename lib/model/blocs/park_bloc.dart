@@ -92,4 +92,10 @@ class ParkBloc with BaseBloc {
   }
 }
 
-enum ParkBlocState { none, parking, notParking, areas, success }
+enum ParkBlocState {
+  none,
+  parking,
+  notParking,
+  areas,
+  success,
+}
