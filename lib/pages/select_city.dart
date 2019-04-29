@@ -44,7 +44,7 @@ class SelectCityPageState extends State<SelectCityPage> {
               body = Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListView(
-                    key: WidgetKeys.selectCityPageListView,
+                    key: WidgetKeys.selectCityPageListViewKey,
                     children: items.map(_buildItem).toList()),
               );
               break;

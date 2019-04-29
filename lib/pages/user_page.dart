@@ -46,7 +46,7 @@ class UserPageState extends State<UserPage> {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListView(
-                    key: WidgetKeys.userPageListView,
+                    key: WidgetKeys.userPageListViewKey,
                     children: items.map(_buildItem).toList()),
               );
           }

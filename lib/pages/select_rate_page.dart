@@ -43,7 +43,7 @@ class SelectRatePageState extends State<SelectRatePage> {
               body = Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListView(
-                    key: WidgetKeys.selectRatePageListView,
+                    key: WidgetKeys.selectRatePageListViewKey,
                     children: items.map(_buildItem).toList()),
               );
               break;

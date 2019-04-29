@@ -20,15 +20,15 @@ class WidgetKeys {
   static final selectCarPageKey = Key('SelectCarPage');
   static final selectCarPageListViewKey = Key('SelectCarPageListView');
   static final selectCityPageKey = Key('SelectCityPage');
-  static final selectCityPageListView = Key('SelectCityPageListView');
+  static final selectCityPageListViewKey = Key('SelectCityPageListView');
   static final selectRatePageKey = Key('SelectRatePage');
-  static final selectRatePageListView = Key('SelectRatePageListView');
+  static final selectRatePageListViewKey = Key('SelectRatePageListView');
   static final userPageKey = Key('UserPage');
-  static final userPageListView = Key('UserPageListView');
+  static final userPageListViewKey = Key('UserPageListView');
   static final addKey = Key('Add');
   static final removeKey = Key('Remove');
   static final validatePageKey = Key('ValidatePage');
-  static final validateTextField = Key('ValidateTextField');
+  static final validateTextFieldKey = Key('ValidateTextField');
 }
 
 //       WidgetKeys

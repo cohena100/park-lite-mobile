@@ -67,7 +67,7 @@ class ValidatePageState extends State<ValidatePage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           TextField(
-            key: WidgetKeys.validateTextField,
+            key: WidgetKeys.validateTextFieldKey,
             controller: _textEditingController,
             autofocus: true,
             maxLength: ValidatePageState.textFieldMaxLength,
