@@ -3,9 +3,10 @@ import 'package:pango_lite/model/elements/car.dart';
 import 'package:pango_lite/pages/routes.dart';
 import 'package:pango_lite/pages/select_car_page_vm.dart';
 import 'package:pango_lite/locale/locale.dart';
+import 'package:pango_lite/pages/widget_keys.dart';
 
 class SelectCarPage extends StatefulWidget {
-  SelectCarPage({Key key}) : super(key: Key('SelectCarPage'));
+  SelectCarPage({Key key}) : super(key: WidgetKeys.selectCarPageKey);
 
   @override
   SelectCarPageState createState() => SelectCarPageState();
@@ -49,7 +50,7 @@ class SelectCarPageState extends State<SelectCarPage> {
               body = Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListView(
-                    key: Key('SelectCarPageListView'),
+                    key: WidgetKeys.selectCarPageListViewKey,
                     children: items.map(_buildItem).toList()),
               );
               break;
@@ -69,13 +70,13 @@ class SelectCarPageState extends State<SelectCarPage> {
         return Container();
       case SelectCarPageVMItemType.blue:
         return Card(
-          key: Key('Blue'),
+          key: WidgetKeys.blueKey,
           color: Colors.blue,
           child: Padding(padding: const EdgeInsets.all(24), child: Container()),
         );
       case SelectCarPageVMItemType.orange:
         return Card(
-          key: Key('Orange'),
+          key: WidgetKeys.orangeKey,
           color: Colors.orange,
           child: Padding(padding: const EdgeInsets.all(24), child: Container()),
         );

@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:pango_lite/locale/locale.dart';
 import 'package:pango_lite/pages/routes.dart';
 import 'package:pango_lite/pages/validate_page_vm.dart';
+import 'package:pango_lite/pages/widget_keys.dart';
 
 class ValidatePage extends StatefulWidget {
-  ValidatePage({Key key}) : super(key: Key('ValidatePage'));
+  ValidatePage({Key key}) : super(key: WidgetKeys.validatePageKey);
 
   @override
   ValidatePageState createState() => ValidatePageState();
@@ -66,7 +67,7 @@ class ValidatePageState extends State<ValidatePage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           TextField(
-            key: Key('ValidateTextField'),
+            key: WidgetKeys.validateTextField,
             controller: _textEditingController,
             autofocus: true,
             maxLength: ValidatePageState.textFieldMaxLength,

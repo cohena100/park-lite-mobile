@@ -3,9 +3,10 @@ import 'package:pango_lite/locale/locale.dart';
 import 'package:pango_lite/model/elements/rate.dart';
 import 'package:pango_lite/pages/routes.dart';
 import 'package:pango_lite/pages/select_rate_page_vm.dart';
+import 'package:pango_lite/pages/widget_keys.dart';
 
 class SelectRatePage extends StatefulWidget {
-  SelectRatePage({Key key}) : super(key: Key('SelectRatePage'));
+  SelectRatePage({Key key}) : super(key: WidgetKeys.selectRatePageKey);
 
   @override
   SelectRatePageState createState() => SelectRatePageState();
@@ -42,7 +43,7 @@ class SelectRatePageState extends State<SelectRatePage> {
               body = Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListView(
-                    key: Key('SelectRatePageListView'),
+                    key: WidgetKeys.selectRatePageListView,
                     children: items.map(_buildItem).toList()),
               );
               break;
@@ -65,13 +66,13 @@ class SelectRatePageState extends State<SelectRatePage> {
         return Container();
       case SelectRatePageVMItemType.blue:
         return Card(
-          key: Key('Blue'),
+          key: WidgetKeys.blueKey,
           color: Colors.blue,
           child: Padding(padding: const EdgeInsets.all(24), child: Container()),
         );
       case SelectRatePageVMItemType.orange:
         return Card(
-          key: Key('Orange'),
+          key: WidgetKeys.orangeKey,
           color: Colors.orange,
           child: Padding(padding: const EdgeInsets.all(24), child: Container()),
         );

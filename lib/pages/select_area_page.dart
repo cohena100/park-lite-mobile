@@ -3,9 +3,10 @@ import 'package:pango_lite/model/elements/area.dart';
 import 'package:pango_lite/pages/routes.dart';
 import 'package:pango_lite/locale/locale.dart';
 import 'package:pango_lite/pages/select_area_page_vm.dart';
+import 'package:pango_lite/pages/widget_keys.dart';
 
 class SelectAreaPage extends StatefulWidget {
-  SelectAreaPage({Key key}) : super(key: Key('SelectAreaPage'));
+  SelectAreaPage({Key key}) : super(key: WidgetKeys.selectAreaPageKey);
 
   @override
   SelectAreaPageState createState() => SelectAreaPageState();
@@ -43,7 +44,7 @@ class SelectAreaPageState extends State<SelectAreaPage> {
               body = Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListView(
-                    key: Key('SelectAreaPageListView'),
+                    key: WidgetKeys.selectAreaPageListViewKey,
                     children: items.map(_buildItem).toList()),
               );
               break;
@@ -63,13 +64,13 @@ class SelectAreaPageState extends State<SelectAreaPage> {
         return Container();
       case SelectAreaPageVMItemType.blue:
         return Card(
-          key: Key('Blue'),
+          key: WidgetKeys.blueKey,
           color: Colors.blue,
           child: Padding(padding: const EdgeInsets.all(24), child: Container()),
         );
       case SelectAreaPageVMItemType.orange:
         return Card(
-          key: Key('Orange'),
+          key: WidgetKeys.orangeKey,
           color: Colors.orange,
           child: Padding(padding: const EdgeInsets.all(24), child: Container()),
         );

@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:pango_lite/locale/locale.dart';
 import 'package:pango_lite/pages/phone_page_vm.dart';
 import 'package:pango_lite/pages/routes.dart';
+import 'package:pango_lite/pages/widget_keys.dart';
 
 class PhonePage extends StatefulWidget {
-  PhonePage({Key key}) : super(key: Key('PhonePage'));
+  PhonePage({Key key}) : super(key: WidgetKeys.phonePageKey);
 
   @override
   PhonePageState createState() => PhonePageState();
@@ -58,7 +59,7 @@ class PhonePageState extends State<PhonePage> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         TextField(
-          key: Key('PhoneTextField'),
+          key: WidgetKeys.phoneTextFieldKey,
           controller: _textEditingController,
           autofocus: true,
           keyboardType: isIOS ? TextInputType.text : TextInputType.number,

@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:pango_lite/locale/locale.dart';
 import 'package:pango_lite/pages/nickname_page_vm.dart';
 import 'package:pango_lite/pages/routes.dart';
+import 'package:pango_lite/pages/widget_keys.dart';
 
 class NicknamePage extends StatefulWidget {
-  NicknamePage({Key key}) : super(key: Key('NicknamePage'));
+  NicknamePage({Key key}) : super(key: WidgetKeys.nicknamePageKey);
 
   @override
   NicknamePageState createState() => NicknamePageState();
@@ -68,7 +69,7 @@ class NicknamePageState extends State<NicknamePage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           TextField(
-            key: Key('NicknameTextField'),
+            key: WidgetKeys.nicknameTextFieldKey,
             controller: _textEditingController,
             autofocus: true,
             maxLength: NicknamePageState.textFieldMaxLength,

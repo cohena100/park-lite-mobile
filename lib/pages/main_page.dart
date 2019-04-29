@@ -4,6 +4,7 @@ import 'package:pango_lite/pages/home_page.dart';
 import 'package:pango_lite/pages/main_page_vm.dart';
 import 'package:pango_lite/pages/phone_page.dart';
 import 'package:pango_lite/pages/user_page.dart';
+import 'package:pango_lite/pages/widget_keys.dart';
 
 class MainPage extends StatefulWidget {
   MainPage({Key key}) : super(key: key);
@@ -41,9 +42,9 @@ class MainPageState extends State<MainPage> {
                 appBar: AppBar(
                   bottom: TabBar(
                     tabs: [
-                      Tab(key: Key('ParkTab'), icon: Icon(Icons.directions_car)),
+                      Tab(key: WidgetKeys.parkTabKey, icon: Icon(Icons.directions_car)),
                       Tab(
-                          key: Key('UserTab'),
+                          key: WidgetKeys.userTabKey,
                           icon: Icon(Icons.account_circle)),
                     ],
                   ),

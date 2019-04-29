@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:pango_lite/locale/locale.dart';
 import 'package:pango_lite/pages/home_page_vm.dart';
 import 'package:pango_lite/pages/routes.dart';
+import 'package:pango_lite/pages/widget_keys.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key key}) : super(key: Key('HomePage'));
+  HomePage({Key key}) : super(key: WidgetKeys.homePageKey);
 
   @override
   HomePageState createState() => HomePageState();
@@ -43,7 +44,7 @@ class HomePageState extends State<HomePage> {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListView(
-                    key: Key('HomePageListView'),
+                    key: WidgetKeys.homePageListViewKey,
                     children: items.map(_buildItem).toList()),
               );
           }
@@ -62,20 +63,20 @@ class HomePageState extends State<HomePage> {
         return Container();
       case HomePageVMItemType.blue:
         return Card(
-          key: Key('Blue'),
+          key: WidgetKeys.blueKey,
           color: Colors.blue,
           child: Padding(padding: const EdgeInsets.all(24), child: Container()),
         );
       case HomePageVMItemType.orange:
         return Card(
-          key: Key('Orange'),
+          key: WidgetKeys.orangeKey,
           color: Colors.orange,
           child: Padding(padding: const EdgeInsets.all(24), child: Container()),
         );
       case HomePageVMItemType.start:
         return InkWell(
           child: Card(
-            key: Key('Start'),
+            key: WidgetKeys.startKey,
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Center(
@@ -89,7 +90,7 @@ class HomePageState extends State<HomePage> {
       case HomePageVMItemType.stop:
         return InkWell(
           child: Card(
-            key: Key('Stop'),
+            key: WidgetKeys.stopKey,
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Center(

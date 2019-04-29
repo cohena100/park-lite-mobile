@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:pango_lite/locale/locale.dart';
 import 'package:pango_lite/pages/car_page_vm.dart';
 import 'package:pango_lite/pages/routes.dart';
+import 'package:pango_lite/pages/widget_keys.dart';
 
 class CarPage extends StatefulWidget {
-  CarPage({Key key}) : super(key: Key('CarPage'));
+  CarPage({Key key}) : super(key: WidgetKeys.carPageKey);
 
   @override
   CarPageState createState() => CarPageState();
@@ -59,7 +60,7 @@ class CarPageState extends State<CarPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           TextField(
-            key: Key('CarTextField'),
+            key: WidgetKeys.carTextFieldKey,
             controller: _textEditingController,
             autofocus: true,
             keyboardType: isIOS ? TextInputType.text : TextInputType.number,
