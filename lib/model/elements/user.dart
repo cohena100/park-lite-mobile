@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:pango_lite/model/elements/car.dart';
 import 'package:pango_lite/model/elements/parking.dart';
 
@@ -15,16 +13,6 @@ class User {
   User(this._data);
 
   User.fromJson(Map<String, dynamic> json) : _data = json[_userKey];
-
-  void addCar(Car car) {
-    final allCars = cars;
-    allCars.add(car);
-    _data[_carsKey] = allCars.map((car) => car.data).toList();
-  }
-
-  void removeCar(Car car) {
-    _data[_carsKey] = cars.where((aCar) => aCar.id != car.id).toList();
-  }
 
   List<Car> get cars {
     final List allCars = _data[_carsKey];
@@ -48,12 +36,22 @@ class User {
     return _data[_tokenKey];
   }
 
+  void addCar(Car car) {
+    final allCars = cars;
+    allCars.add(car);
+    _data[_carsKey] = allCars.map((car) => car.data).toList();
+  }
+
   void deleteParking() {
     _data.remove(_parkingKey);
   }
 
   Car findCar(String carId) {
     return cars.firstWhere((car) => car.id == carId, orElse: () => null);
+  }
+
+  void removeCar(Car car) {
+    _data[_carsKey] = cars.where((aCar) => aCar.id != car.id).toList();
   }
 
   Map<String, dynamic> toJson() {

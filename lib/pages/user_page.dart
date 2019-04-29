@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pango_lite/locale/locale.dart';
-import 'package:pango_lite/pages/user_page_vm.dart';
 import 'package:pango_lite/pages/routes.dart';
+import 'package:pango_lite/pages/user_page_vm.dart';
 import 'package:pango_lite/pages/widget_keys.dart';
 
 class UserPage extends StatefulWidget {

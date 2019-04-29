@@ -60,6 +60,12 @@ class SelectRatePageState extends State<SelectRatePage> {
         });
   }
 
+  @override
+  void dispose() {
+    vm?.close();
+    super.dispose();
+  }
+
   Widget _buildItem(SelectRatePageVMItem item) {
     switch (item.type) {
       case SelectRatePageVMItemType.none:
@@ -93,11 +99,5 @@ class SelectRatePageState extends State<SelectRatePage> {
         );
     }
     return Container();
-  }
-
-  @override
-  void dispose() {
-    vm?.close();
-    super.dispose();
   }
 }

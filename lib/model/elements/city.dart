@@ -8,16 +8,16 @@ class City {
 
   City(this.data);
 
+  List<Area> get areas {
+    final List allAreas = data[_areasKey];
+    return allAreas.map((data) => Area(data)).toList();
+  }
+
   String get id {
     return data[_idKey];
   }
 
   String get name {
     return data[_nameKey];
-  }
-
-  List<Area> get areas {
-    final List allAreas = data[_areasKey];
-    return allAreas.map((data) => Area(data)).toList();
   }
 }

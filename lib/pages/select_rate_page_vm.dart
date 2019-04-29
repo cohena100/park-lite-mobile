@@ -18,6 +18,22 @@ class SelectRatePageVM {
     _addRatesState();
   }
 
+  Future selectRate(Rate rate) async {
+    _actionSubject
+        .add(SelectRatePageVMAction(state: SelectRatePageVMActionState.busy));
+    model.parkBloc.rate = rate;
+    final state = await model.parkBloc.startParking();
+    switch (state) {
+      case ParkBlocState.success:
+        _otherActionSubject.add(SelectRatePageVMOtherAction(
+            state: SelectRatePageVMOtherActionState.home));
+        break;
+      default:
+        _addRatesState();
+        break;
+    }
+  }
+
   void _addRatesState() {
     final decorateItems = [
       SelectRatePageVMItem(type: SelectRatePageVMItemType.blue),
@@ -35,22 +51,6 @@ class SelectRatePageVM {
       SelectRatePageVMActionDataKey.items:
           [decorateItems, items, decorateItems].expand((x) => x).toList()
     }, state: SelectRatePageVMActionState.rates));
-  }
-
-  Future selectRate(Rate rate) async {
-    _actionSubject
-        .add(SelectRatePageVMAction(state: SelectRatePageVMActionState.busy));
-    model.parkBloc.rate = rate;
-    final state = await model.parkBloc.startParking();
-    switch (state) {
-      case ParkBlocState.success:
-        _otherActionSubject.add(SelectRatePageVMOtherAction(
-            state: SelectRatePageVMOtherActionState.home));
-        break;
-      default:
-        _addRatesState();
-        break;
-    }
   }
 }
 

@@ -8,12 +8,12 @@ class Area {
 
   Area(this.data);
 
-  String get name {
-    return data[_nameKey];
-  }
-
   String get id {
     return data[_idKey];
+  }
+
+  String get name {
+    return data[_nameKey];
   }
 
   List<Rate> get rates {

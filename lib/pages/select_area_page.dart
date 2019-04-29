@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pango_lite/locale/locale.dart';
 import 'package:pango_lite/model/elements/area.dart';
 import 'package:pango_lite/pages/routes.dart';
-import 'package:pango_lite/locale/locale.dart';
 import 'package:pango_lite/pages/select_area_page_vm.dart';
 import 'package:pango_lite/pages/widget_keys.dart';
 
@@ -58,6 +58,12 @@ class SelectAreaPageState extends State<SelectAreaPage> {
         });
   }
 
+  @override
+  void dispose() {
+    vm?.close();
+    super.dispose();
+  }
+
   Widget _buildItem(SelectAreaPageVMItem item) {
     switch (item.type) {
       case SelectAreaPageVMItemType.none:
@@ -90,11 +96,5 @@ class SelectAreaPageState extends State<SelectAreaPage> {
         );
     }
     return Container();
-  }
-
-  @override
-  void dispose() {
-    vm?.close();
-    super.dispose();
   }
 }

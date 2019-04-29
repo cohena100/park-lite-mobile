@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:pango_lite/locale/locale.dart';
 import 'package:pango_lite/model/elements/car.dart';
 import 'package:pango_lite/pages/routes.dart';
 import 'package:pango_lite/pages/select_car_page_vm.dart';
-import 'package:pango_lite/locale/locale.dart';
 import 'package:pango_lite/pages/widget_keys.dart';
 
 class SelectCarPage extends StatefulWidget {
@@ -64,6 +64,12 @@ class SelectCarPageState extends State<SelectCarPage> {
         });
   }
 
+  @override
+  void dispose() {
+    vm?.close();
+    super.dispose();
+  }
+
   Widget _buildItem(SelectCarPageVMItem item) {
     switch (item.type) {
       case SelectCarPageVMItemType.none:
@@ -96,11 +102,5 @@ class SelectCarPageState extends State<SelectCarPage> {
         );
     }
     return Container();
-  }
-
-  @override
-  void dispose() {
-    vm?.close();
-    super.dispose();
   }
 }

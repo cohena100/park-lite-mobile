@@ -1,5 +1,5 @@
-import 'package:pango_lite/model/blocs/user_bloc.dart';
 import 'package:pango_lite/model/blocs/park_bloc.dart';
+import 'package:pango_lite/model/blocs/user_bloc.dart';
 import 'package:pango_lite/model/proxies/local_db_proxy.dart';
 import 'package:pango_lite/model/proxies/location_proxy.dart';
 import 'package:pango_lite/model/proxies/network_proxy.dart';

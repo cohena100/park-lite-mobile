@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:pango_lite/locale/locale.dart';
 import 'package:pango_lite/model/elements/city.dart';
 import 'package:pango_lite/pages/routes.dart';
 import 'package:pango_lite/pages/select_city_vm.dart';
-import 'package:pango_lite/locale/locale.dart';
 import 'package:pango_lite/pages/widget_keys.dart';
 
 class SelectCityPage extends StatefulWidget {
@@ -58,6 +58,12 @@ class SelectCityPageState extends State<SelectCityPage> {
         });
   }
 
+  @override
+  void dispose() {
+    vm?.close();
+    super.dispose();
+  }
+
   Widget _buildItem(SelectCityPageVMItem item) {
     switch (item.type) {
       case SelectCityPageVMItemType.none:
@@ -90,11 +96,5 @@ class SelectCityPageState extends State<SelectCityPage> {
         );
     }
     return Container();
-  }
-
-  @override
-  void dispose() {
-    vm?.close();
-    super.dispose();
   }
 }
