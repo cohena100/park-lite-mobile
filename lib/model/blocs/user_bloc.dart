@@ -33,6 +33,11 @@ class UserBloc with BaseBloc {
     }
   }
 
+  Future<bool> get hasCars async {
+    final theUser = await user;
+    return theUser.cars.length > 0;
+  }
+
   Future<UserBlocState> addCarValidate() async {
     final theUser = await user;
     final number = context.data[UserBlocContextDataKey.number];

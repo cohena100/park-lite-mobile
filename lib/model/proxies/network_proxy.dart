@@ -31,7 +31,7 @@ class NetworkProxy {
 
   Future<Map> sendAddValidate(String userId, String number, String nickname,
       String validateId, String code, String token) async {
-    var url = _baseUrl + '/users/addValidate';
+    var url = _baseUrl + '/cars/addValidate';
     var body = json.encode({
       'userId': userId,
       'number': number,

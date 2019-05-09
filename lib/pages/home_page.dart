@@ -20,10 +20,13 @@ class HomePageState extends State<HomePage> {
     vm.init().then((_) {});
     vm.otherActionStream.listen((action) {
       switch (action.state) {
-        case HomePageVMOtherActionState.none:
-          break;
         case HomePageVMOtherActionState.selectCarPage:
           Navigator.pushNamed(context, Routes.selectCarPage);
+          break;
+        case HomePageVMOtherActionState.carPage:
+          Navigator.pushNamed(context, Routes.carPage);
+          break;
+        default:
           break;
       }
     });
@@ -33,8 +36,6 @@ class HomePageState extends State<HomePage> {
         builder: (context, snapshot) {
           final action = snapshot.data;
           switch (action.state) {
-            case HomePageVMActionState.none:
-              return Container();
             case HomePageVMActionState.busy:
               return Center(child: CircularProgressIndicator());
               break;
@@ -42,11 +43,13 @@ class HomePageState extends State<HomePage> {
               final List<HomePageVMItem> items =
                   action.data[HomePageVMActionDataKey.items];
               return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ListView(
-                    key: WidgetKeys.homePageListViewKey,
-                    children: items.map(_buildItem).toList()),
-              );
+                  padding: const EdgeInsets.all(8.0),
+                  child: ListView(
+                      key: WidgetKeys.homePageListViewKey,
+                      children: items.map(_buildItem).toList()));
+            default:
+              return Container();
+              break;
           }
         });
   }
@@ -63,42 +66,54 @@ class HomePageState extends State<HomePage> {
         return Container();
       case HomePageVMItemType.blue:
         return Card(
-          key: WidgetKeys.blueKey,
-          color: Colors.blue,
-          child: Padding(padding: const EdgeInsets.all(24), child: Container()),
-        );
+            key: WidgetKeys.blueKey,
+            color: Colors.blue,
+            child:
+                Padding(padding: const EdgeInsets.all(24), child: Container()));
       case HomePageVMItemType.orange:
         return Card(
-          key: WidgetKeys.orangeKey,
-          color: Colors.orange,
-          child: Padding(padding: const EdgeInsets.all(24), child: Container()),
-        );
+            key: WidgetKeys.orangeKey,
+            color: Colors.orange,
+            child:
+                Padding(padding: const EdgeInsets.all(24), child: Container()));
       case HomePageVMItemType.start:
         return InkWell(
           child: Card(
-            key: WidgetKeys.startKey,
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Center(
-                  child: Text(AppLocalizations.of(context).startParkingLabel)),
-            ),
-          ),
+              key: WidgetKeys.startKey,
+              child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Center(
+                      child: Text(
+                          AppLocalizations.of(context).startParkingLabel)))),
           onTap: () {
             vm.startParking();
           },
         );
       case HomePageVMItemType.stop:
         return InkWell(
+            child: Card(
+                key: WidgetKeys.stopKey,
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Center(
+                      child:
+                          Text(AppLocalizations.of(context).stopParkingLabel)),
+                )),
+            onTap: () async {
+              await vm.stopParking();
+            });
+      case HomePageVMItemType.add:
+        return InkWell(
           child: Card(
-            key: WidgetKeys.stopKey,
+            key: WidgetKeys.addKey,
             child: Padding(
               padding: const EdgeInsets.all(16),
-              child: Center(
-                  child: Text(AppLocalizations.of(context).stopParkingLabel)),
+              child:
+              Center(child: Text(AppLocalizations.of(context).addCarLabel)),
             ),
           ),
-          onTap: () async {
-            await vm.stopParking();
+          onTap: () {
+            vm.addCar();
           },
         );
     }

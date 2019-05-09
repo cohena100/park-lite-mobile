@@ -1,4 +1,5 @@
 import 'package:pango_lite/model/blocs/park_bloc.dart';
+import 'package:pango_lite/model/blocs/user_bloc.dart';
 import 'package:pango_lite/model/model.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -7,6 +8,13 @@ class HomePageVM {
   final _otherActionSubject = BehaviorSubject<HomePageVMOtherAction>();
   Stream get actionStream => _actionSubject.stream;
   Stream get otherActionStream => _otherActionSubject.stream;
+
+  void addCar() {
+    model.userBloc.context =
+        UserBlocContext(data: {}, state: UserBlocContextState.addCar);
+    _otherActionSubject
+        .add(HomePageVMOtherAction(state: HomePageVMOtherActionState.carPage));
+  }
 
   void close() {
     _actionSubject.close();
@@ -21,6 +29,17 @@ class HomePageVM {
       HomePageVMItem(type: HomePageVMItemType.orange),
       HomePageVMItem(type: HomePageVMItemType.blue),
     ];
+    final hasCars = await model.userBloc.hasCars;
+    if (!hasCars) {
+      final items = [
+        HomePageVMItem(type: HomePageVMItemType.add),
+      ];
+      _actionSubject.add(HomePageVMAction(data: {
+        HomePageVMActionDataKey.items:
+        [decorateItems, items, decorateItems].expand((x) => x).toList()
+      }, state: HomePageVMActionState.home));
+      return;
+    }
     final parkingState = await model.parkBloc.state;
     switch (parkingState) {
       case ParkBlocState.parking:
@@ -78,7 +97,7 @@ class HomePageVMItem {
 
 enum HomePageVMItemDataKey { none }
 
-enum HomePageVMItemType { none, blue, orange, start, stop }
+enum HomePageVMItemType { none, blue, orange, start, stop, add }
 
 class HomePageVMOtherAction {
   final Map data;
@@ -89,4 +108,4 @@ class HomePageVMOtherAction {
 
 enum HomePageVMOtherActionDataKey { none }
 
-enum HomePageVMOtherActionState { none, selectCarPage }
+enum HomePageVMOtherActionState { none, selectCarPage, carPage }

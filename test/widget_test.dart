@@ -142,6 +142,45 @@ void main() {
   });
 
   group('car', () {
+    testWidgets('Add first car after login', (WidgetTester tester) async {
+      model.localDBProxy.inMemoryUser = jsonEncode(user1);
+      await tester.pumpWidget(MyApp());
+      await tester.pumpAndSettle();
+      expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
+      expect(find.byKey(WidgetKeys.startKey), findsNothing);
+      expect(find.byKey(WidgetKeys.addKey), findsOneWidget);
+      await tester.tap(find.byKey(WidgetKeys.addKey));
+      await tester.pumpAndSettle();
+      expect(find.byKey(WidgetKeys.carPageKey), findsOneWidget);
+      await tester.enterText(find.byKey(WidgetKeys.carTextFieldKey), number1);
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      await tester.pumpAndSettle();
+      expect(find.byKey(WidgetKeys.nicknamePageKey), findsOneWidget);
+      when(model.networkProxy.sendAdd(userId1, token1))
+          .thenAnswer((_) async => {
+        NetworkProxyKeys.code: 401,
+        NetworkProxyKeys.body: jsonEncode({validateKey: validateCar1}),
+      });
+      await tester.enterText(
+          find.byKey(WidgetKeys.nicknameTextFieldKey), nickname1);
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      await tester.pumpAndSettle();
+      expect(find.byKey(WidgetKeys.validatePageKey), findsOneWidget);
+      when(model.networkProxy.sendAddValidate(
+          userId1, number1, nickname1, validateId1, code1, token1))
+          .thenAnswer((_) async => {
+        NetworkProxyKeys.code: 200,
+        NetworkProxyKeys.body: jsonEncode({carKey: car1}),
+      });
+      await tester.enterText(
+          find.byKey(WidgetKeys.validateTextFieldKey), code1);
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      await tester.pumpAndSettle();
+      expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
+      expect(find.byKey(WidgetKeys.startKey), findsOneWidget);
+      expect(find.byKey(WidgetKeys.addKey), findsNothing);
+    });
+
     testWidgets('add car success', (WidgetTester tester) async {
       model.localDBProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
