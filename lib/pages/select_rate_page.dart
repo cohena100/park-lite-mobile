@@ -21,10 +21,11 @@ class SelectRatePageState extends State<SelectRatePage> {
     vm.init().then((_) {});
     vm.otherActionStream.listen((action) {
       switch (action.state) {
-        case SelectRatePageVMOtherActionState.none:
-          break;
         case SelectRatePageVMOtherActionState.home:
           Navigator.of(context).popUntil(ModalRoute.withName(Routes.rootPage));
+          break;
+        default:
+          break;
       }
     });
     return StreamBuilder(
@@ -34,29 +35,25 @@ class SelectRatePageState extends State<SelectRatePage> {
           final action = snapshot.data;
           Widget body;
           switch (action.state) {
-            case SelectRatePageVMActionState.none:
-              body = Container();
-              break;
             case SelectRatePageVMActionState.rates:
               final List<SelectRatePageVMItem> items =
                   action.data[SelectRatePageVMActionDataKey.items];
               body = Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ListView(
-                    key: WidgetKeys.selectRatePageListViewKey,
-                    children: items.map(_buildItem).toList()),
-              );
+                  padding: const EdgeInsets.all(8.0),
+                  child: ListView(
+                      key: WidgetKeys.selectRatePageListViewKey,
+                      children: items.map(_buildItem).toList()));
               break;
             case SelectRatePageVMActionState.busy:
               body = Center(child: CircularProgressIndicator());
               break;
+            default:
+              body = Container();
           }
           return Scaffold(
-            appBar: AppBar(
-              title: Text(AppLocalizations.of(context).selectRateTitle),
-            ),
-            body: body,
-          );
+              appBar: AppBar(
+                  title: Text(AppLocalizations.of(context).selectRateTitle)),
+              body: body);
         });
   }
 
@@ -72,31 +69,28 @@ class SelectRatePageState extends State<SelectRatePage> {
         return Container();
       case SelectRatePageVMItemType.blue:
         return Card(
-          key: WidgetKeys.blueKey,
-          color: Colors.blue,
-          child: Padding(padding: const EdgeInsets.all(24), child: Container()),
-        );
+            key: WidgetKeys.blueKey,
+            color: Colors.blue,
+            child:
+                Padding(padding: const EdgeInsets.all(24), child: Container()));
       case SelectRatePageVMItemType.orange:
         return Card(
-          key: WidgetKeys.orangeKey,
-          color: Colors.orange,
-          child: Padding(padding: const EdgeInsets.all(24), child: Container()),
-        );
+            key: WidgetKeys.orangeKey,
+            color: Colors.orange,
+            child:
+                Padding(padding: const EdgeInsets.all(24), child: Container()));
       case SelectRatePageVMItemType.rate:
         final Rate rate = item.data[SelectRatePageVMItemDataKey.rate];
         return InkWell(
-          child: Card(
-            key: Key(rate.id),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Center(child: Text('${rate.name}')),
-            ),
-          ),
-          onTap: () async {
-            final rate = item.data[SelectRatePageVMItemDataKey.rate];
-            await vm.selectRate(rate);
-          },
-        );
+            child: Card(
+                key: Key(rate.id),
+                child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Center(child: Text('${rate.name}')))),
+            onTap: () async {
+              final rate = item.data[SelectRatePageVMItemDataKey.rate];
+              await vm.selectRate(rate);
+            });
     }
     return Container();
   }

@@ -20,13 +20,14 @@ class UserPageState extends State<UserPage> {
     vm.init().then((_) {});
     vm.otherActionStream.listen((action) {
       switch (action.state) {
-        case UserPageVMOtherActionState.none:
-          break;
         case UserPageVMOtherActionState.carPage:
           Navigator.pushNamed(context, Routes.carPage);
           break;
         case UserPageVMOtherActionState.selectCarPage:
           Navigator.pushNamed(context, Routes.selectCarPage);
+          break;
+        default:
+          break;
       }
     });
     return StreamBuilder(
@@ -35,8 +36,6 @@ class UserPageState extends State<UserPage> {
         builder: (context, snapshot) {
           final action = snapshot.data;
           switch (action.state) {
-            case UserPageVMActionState.none:
-              return Container();
             case UserPageVMActionState.busy:
               return Center(child: CircularProgressIndicator());
               break;
@@ -44,11 +43,12 @@ class UserPageState extends State<UserPage> {
               final List<UserPageVMItem> items =
                   action.data[UserPageVMActionDataKey.items];
               return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ListView(
-                    key: WidgetKeys.userPageListViewKey,
-                    children: items.map(_buildItem).toList()),
-              );
+                  padding: const EdgeInsets.all(8.0),
+                  child: ListView(
+                      key: WidgetKeys.userPageListViewKey,
+                      children: items.map(_buildItem).toList()));
+            default:
+              return Container();
           }
         });
   }
@@ -61,49 +61,44 @@ class UserPageState extends State<UserPage> {
 
   Widget _buildItem(UserPageVMItem item) {
     switch (item.type) {
-      case UserPageVMItemType.none:
-        return Container();
       case UserPageVMItemType.blue:
         return Card(
-          key: WidgetKeys.blueKey,
-          color: Colors.blue,
-          child: Padding(padding: const EdgeInsets.all(24), child: Container()),
-        );
+            key: WidgetKeys.blueKey,
+            color: Colors.blue,
+            child:
+                Padding(padding: const EdgeInsets.all(24), child: Container()));
       case UserPageVMItemType.orange:
         return Card(
-          key: WidgetKeys.orangeKey,
-          color: Colors.orange,
-          child: Padding(padding: const EdgeInsets.all(24), child: Container()),
-        );
+            key: WidgetKeys.orangeKey,
+            color: Colors.orange,
+            child:
+                Padding(padding: const EdgeInsets.all(24), child: Container()));
       case UserPageVMItemType.add:
         return InkWell(
-          child: Card(
-            key: WidgetKeys.addKey,
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child:
-                  Center(child: Text(AppLocalizations.of(context).addCarLabel)),
-            ),
-          ),
-          onTap: () {
-            vm.addCar();
-          },
-        );
+            child: Card(
+                key: WidgetKeys.addKey,
+                child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Center(
+                        child:
+                            Text(AppLocalizations.of(context).addCarLabel)))),
+            onTap: () {
+              vm.addCar();
+            });
       case UserPageVMItemType.remove:
         return InkWell(
-          child: Card(
-            key: WidgetKeys.removeKey,
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Center(
-                  child: Text(AppLocalizations.of(context).removeCarLabel)),
-            ),
-          ),
-          onTap: () {
-            vm.removeCar();
-          },
-        );
+            child: Card(
+                key: WidgetKeys.removeKey,
+                child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Center(
+                        child: Text(
+                            AppLocalizations.of(context).removeCarLabel)))),
+            onTap: () {
+              vm.removeCar();
+            });
+      default:
+        return Container();
     }
-    return Container();
   }
 }
