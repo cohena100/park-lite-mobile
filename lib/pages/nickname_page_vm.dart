@@ -5,9 +5,7 @@ import 'package:rxdart/rxdart.dart';
 class NicknamePageVM {
   final _actionSubject = BehaviorSubject<NicknamePageVMAction>();
   final _otherActionSubject = BehaviorSubject<NicknamePageVMOtherAction>();
-
   Stream get actionStream => _actionSubject.stream;
-
   Stream get otherActionStream => _otherActionSubject.stream;
 
   void close() {
@@ -15,17 +13,18 @@ class NicknamePageVM {
     _otherActionSubject.close();
   }
 
+  void _addNicknameAction(UserBlocContext context) {
+    String nickname = context.data[UserBlocContextDataKey.nickname];
+    _actionSubject.add(NicknamePageVMAction(
+        data: {NicknamePageVMActionDataKey.nickname: nickname},
+        state: NicknamePageVMActionState.nickname));
+  }
+
   Future init() async {
     final context = model.userBloc.context;
     switch (context.state) {
-      case UserBlocContextState.none:
-        break;
       case UserBlocContextState.addCar:
-      case UserBlocContextState.login:
-        String nickname = context.data[UserBlocContextDataKey.nickname];
-        _actionSubject.add(NicknamePageVMAction(
-            data: {NicknamePageVMActionDataKey.nickname: nickname},
-            state: NicknamePageVMActionState.nickname));
+        _addNicknameAction(context);
         break;
       default:
         break;
@@ -35,10 +34,7 @@ class NicknamePageVM {
   void nicknameChanged(String s) {
     final context = model.userBloc.context;
     switch (context.state) {
-      case UserBlocContextState.none:
-        break;
       case UserBlocContextState.addCar:
-      case UserBlocContextState.login:
         model.userBloc.context.data[UserBlocContextDataKey.nickname] = s;
         break;
       default:
@@ -51,33 +47,15 @@ class NicknamePageVM {
         .add(NicknamePageVMAction(state: NicknamePageVMActionState.busy));
     final context = model.userBloc.context;
     switch (context.state) {
-      case UserBlocContextState.none:
-        break;
       case UserBlocContextState.addCar:
         final state = await model.userBloc.addCar();
         switch (state) {
-          case UserBlocState.success:
-            _otherActionSubject.add(NicknamePageVMOtherAction(
-                state: NicknamePageVMOtherActionState.rootPage));
-            break;
-          default:
-            break;
-        }
-        break;
-      case UserBlocContextState.login:
-        final state = await model.userBloc.userLogin();
-        switch (state) {
-          case UserBlocState.loggedIn:
-            _otherActionSubject.add(NicknamePageVMOtherAction(
-                state: NicknamePageVMOtherActionState.rootPage));
-            break;
           case UserBlocState.validate:
             _otherActionSubject.add(NicknamePageVMOtherAction(
                 state: NicknamePageVMOtherActionState.validatePage));
             break;
           default:
-            _otherActionSubject.add(NicknamePageVMOtherAction(
-                state: NicknamePageVMOtherActionState.none));
+            _addNicknameAction(context);
             break;
         }
         break;
@@ -107,4 +85,4 @@ class NicknamePageVMOtherAction {
 
 enum NicknamePageVMOtherActionDataKey { none }
 
-enum NicknamePageVMOtherActionState { none, rootPage, validatePage }
+enum NicknamePageVMOtherActionState { none, validatePage }

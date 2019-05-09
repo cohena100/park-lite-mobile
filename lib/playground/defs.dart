@@ -91,4 +91,9 @@ final validate1 = {
   'code': code1,
 };
 
+final validateCar1 = {
+  'validateId': validateId1,
+  'code': code1,
+};
+
 final userKey = 'user';

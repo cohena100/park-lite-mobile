@@ -41,7 +41,18 @@ class ValidatePageVM {
     final context = model.userBloc.context;
     switch (context.state) {
       case UserBlocContextState.addCar:
-        // TODO:
+        _actionSubject
+            .add(ValidatePageVMAction(state: ValidatePageVMActionState.busy));
+        final state = await model.userBloc.addCarValidate();
+        switch (state) {
+          case UserBlocState.success:
+            _otherActionSubject.add(ValidatePageVMOtherAction(
+                state: ValidatePageVMOtherActionState.rootPage));
+            break;
+          default:
+            _addValidateAction(context);
+            break;
+        }
         break;
       case UserBlocContextState.login:
         _actionSubject

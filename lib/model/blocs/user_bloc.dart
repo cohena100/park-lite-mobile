@@ -21,10 +21,26 @@ class UserBloc with BaseBloc {
 
   Future<UserBlocState> addCar() async {
     final theUser = await user;
+    final data = await _networkProxy.sendAdd(theUser.id, theUser.token);
+    switch (data[NetworkProxyKeys.code]) {
+      case NetworkProxy.validate:
+        final validate = jsonDecode(data[NetworkProxyKeys.body]);
+        context.data[UserBlocContextDataKey.validateId] =
+            validate['validate']['validateId'];
+        return UserBlocState.validate;
+      default:
+        return UserBlocState.fail;
+    }
+  }
+
+  Future<UserBlocState> addCarValidate() async {
+    final theUser = await user;
     final number = context.data[UserBlocContextDataKey.number];
     final nickname = context.data[UserBlocContextDataKey.nickname];
-    final data = await _networkProxy.sendAdd(
-        theUser.id, number, nickname, theUser.token);
+    final validateId = context.data[UserBlocContextDataKey.validateId];
+    final code = context.data[UserBlocContextDataKey.code];
+    final data = await _networkProxy.sendAddValidate(
+        theUser.id, number, nickname, validateId, code, theUser.token);
     switch (data[NetworkProxyKeys.code]) {
       case NetworkProxy.success:
         final car = Car.fromJson(jsonDecode(data[NetworkProxyKeys.body]));
