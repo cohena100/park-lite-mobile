@@ -1,5 +1,6 @@
 import 'package:pango_lite/model/blocs/park_bloc.dart';
 import 'package:pango_lite/model/blocs/user_bloc.dart';
+import 'package:pango_lite/model/elements/car.dart';
 import 'package:pango_lite/model/model.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -36,15 +37,21 @@ class HomePageVM {
       ];
       _actionSubject.add(HomePageVMAction(data: {
         HomePageVMActionDataKey.items:
-        [decorateItems, items, decorateItems].expand((x) => x).toList()
+            [decorateItems, items, decorateItems].expand((x) => x).toList()
       }, state: HomePageVMActionState.home));
       return;
     }
     final parkingState = await model.parkBloc.state;
     switch (parkingState) {
       case ParkBlocState.parking:
+        final parking = await model.parkBloc.parking;
+        final Car car = (await model.userBloc.user).parkingCar;
+        final data = {
+          HomePageVMItemDataKey.parking: parking,
+          HomePageVMItemDataKey.car: car,
+        };
         final items = [
-          HomePageVMItem(type: HomePageVMItemType.stop),
+          HomePageVMItem(data: data, type: HomePageVMItemType.stop),
         ];
         _actionSubject.add(HomePageVMAction(data: {
           HomePageVMActionDataKey.items:
@@ -95,7 +102,7 @@ class HomePageVMItem {
   HomePageVMItem({this.data = const {}, this.type = HomePageVMItemType.none});
 }
 
-enum HomePageVMItemDataKey { none }
+enum HomePageVMItemDataKey { none, parking, car }
 
 enum HomePageVMItemType { none, blue, orange, start, stop, add }
 

@@ -306,6 +306,7 @@ void main() {
       model.localDBProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
+      expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
       when(model.networkProxy.sendStop(userId1, parkingId1, token1))
           .thenAnswer((_) async => {
                 NetworkProxyKeys.code: 200,

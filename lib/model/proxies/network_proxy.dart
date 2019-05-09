@@ -112,8 +112,8 @@ class NetworkProxy {
       'lon': lon,
       'cityId': cityId,
       'cityName': cityName,
-      'areaId': cityId,
-      'areaName': cityName,
+      'areaId': areaId,
+      'areaName': areaName,
       'rateId': rateId,
       'rateName': rateName,
     });

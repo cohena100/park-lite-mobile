@@ -13,6 +13,10 @@ class Car {
     return data[_idKey];
   }
 
+  String get innerId {
+    return data[_carKey][_idKey];
+  }
+
   String get nickname {
     return data[_nicknameKey];
   }

@@ -21,13 +21,13 @@ class SelectCarPageState extends State<SelectCarPage> {
     vm.init().then((_) {});
     vm.otherActionStream.listen((action) {
       switch (action.state) {
-        case SelectCarPageVMOtherActionState.none:
-          break;
         case SelectCarPageVMOtherActionState.selectCityPage:
           Navigator.pushNamed(context, Routes.selectCityPage);
           break;
         case SelectCarPageVMOtherActionState.rootPage:
           Navigator.pushNamed(context, Routes.rootPage);
+          break;
+        default:
           break;
       }
     });
@@ -38,9 +38,6 @@ class SelectCarPageState extends State<SelectCarPage> {
           final action = snapshot.data;
           Widget body;
           switch (action.state) {
-            case SelectCarPageVMActionState.none:
-              body = Container();
-              break;
             case SelectCarPageVMActionState.busy:
               body = Center(child: CircularProgressIndicator());
               break;
@@ -53,6 +50,9 @@ class SelectCarPageState extends State<SelectCarPage> {
                     key: WidgetKeys.selectCarPageListViewKey,
                     children: items.map(_buildItem).toList()),
               );
+              break;
+            default:
+              body = Container();
               break;
           }
           return Scaffold(

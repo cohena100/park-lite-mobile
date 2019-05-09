@@ -28,6 +28,11 @@ class User {
     return parkingData == null ? null : Parking(parkingData);
   }
 
+  Car get parkingCar {
+    final innerCarId = parking.carId;
+    return findInnerCar(innerCarId);
+  }
+
   String get phone {
     return _data[_phoneKey];
   }
@@ -50,8 +55,12 @@ class User {
     return cars.firstWhere((car) => car.id == carId, orElse: () => null);
   }
 
+  Car findInnerCar(String innerId) {
+    return cars.firstWhere((car) => car.innerId == innerId, orElse: () => null);
+  }
+
   void removeCar(Car car) {
-    _data[_carsKey] = cars.where((aCar) => aCar.id != car.id).toList();
+    return null;
   }
 
   Map<String, dynamic> toJson() {

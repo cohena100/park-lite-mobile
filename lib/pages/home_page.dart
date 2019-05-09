@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pango_lite/locale/locale.dart';
+import 'package:pango_lite/model/elements/car.dart';
+import 'package:pango_lite/model/elements/parking.dart';
 import 'package:pango_lite/pages/home_page_vm.dart';
 import 'package:pango_lite/pages/routes.dart';
 import 'package:pango_lite/pages/widget_keys.dart';
@@ -90,15 +92,21 @@ class HomePageState extends State<HomePage> {
           },
         );
       case HomePageVMItemType.stop:
+        final Parking parking = item.data[HomePageVMItemDataKey.parking];
+        final Car car = item.data[HomePageVMItemDataKey.car];
         return InkWell(
             child: Card(
                 key: WidgetKeys.stopKey,
                 child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Center(
-                      child:
-                          Text(AppLocalizations.of(context).stopParkingLabel)),
-                )),
+                    padding: const EdgeInsets.all(16),
+                    child: Center(
+                        child: Column(children: [
+                      Text(AppLocalizations.of(context).stopParkingLabel),
+                      Text('${car.nickname} (${car.number})'),
+                      Text(parking.cityName),
+                      Text(parking.areaName),
+                      Text(parking.rateName),
+                    ])))),
             onTap: () async {
               await vm.stopParking();
             });
@@ -109,7 +117,7 @@ class HomePageState extends State<HomePage> {
             child: Padding(
               padding: const EdgeInsets.all(16),
               child:
-              Center(child: Text(AppLocalizations.of(context).addCarLabel)),
+                  Center(child: Text(AppLocalizations.of(context).addCarLabel)),
             ),
           ),
           onTap: () {

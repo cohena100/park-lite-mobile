@@ -6,6 +6,9 @@ class Parking {
   static final _lonKey = 'lon';
   static final _cityIdKey = 'cityId';
   static final _rateIdKey = 'rateId';
+  static final _cityName = 'cityName';
+  static final _areaName = 'areaName';
+  static final _rateName = 'rateName';
   Map data;
 
   Parking(this.data);
@@ -34,5 +37,17 @@ class Parking {
 
   String get rateId {
     return data[_rateIdKey];
+  }
+
+  String get cityName {
+    return data[_cityName];
+  }
+
+  String get areaName {
+    return data[_areaName];
+  }
+
+  String get rateName {
+    return data[_rateName];
   }
 }
