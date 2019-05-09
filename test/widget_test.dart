@@ -50,7 +50,6 @@ void main() {
                 NetworkProxyKeys.code: 200,
                 NetworkProxyKeys.body: jsonEncode({userKey: user1}),
               });
-      model.localDBProxy.inMemoryUser = jsonEncode(user1);
       await tester.enterText(find.byKey(WidgetKeys.nicknameTextFieldKey), nickname1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
