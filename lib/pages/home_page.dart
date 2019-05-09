@@ -64,8 +64,6 @@ class HomePageState extends State<HomePage> {
 
   Widget _buildItem(HomePageVMItem item) {
     switch (item.type) {
-      case HomePageVMItemType.none:
-        return Container();
       case HomePageVMItemType.blue:
         return Card(
             key: WidgetKeys.blueKey,
@@ -80,17 +78,16 @@ class HomePageState extends State<HomePage> {
                 Padding(padding: const EdgeInsets.all(24), child: Container()));
       case HomePageVMItemType.start:
         return InkWell(
-          child: Card(
-              key: WidgetKeys.startKey,
-              child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Center(
-                      child: Text(
-                          AppLocalizations.of(context).startParkingLabel)))),
-          onTap: () {
-            vm.startParking();
-          },
-        );
+            child: Card(
+                key: WidgetKeys.startKey,
+                child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Center(
+                        child: Text(
+                            AppLocalizations.of(context).startParkingLabel)))),
+            onTap: () {
+              vm.startParking();
+            });
       case HomePageVMItemType.stop:
         final Parking parking = item.data[HomePageVMItemDataKey.parking];
         final Car car = item.data[HomePageVMItemDataKey.car];
@@ -112,19 +109,18 @@ class HomePageState extends State<HomePage> {
             });
       case HomePageVMItemType.add:
         return InkWell(
-          child: Card(
-            key: WidgetKeys.addKey,
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child:
-                  Center(child: Text(AppLocalizations.of(context).addCarLabel)),
-            ),
-          ),
-          onTap: () {
-            vm.addCar();
-          },
-        );
+            child: Card(
+                key: WidgetKeys.addKey,
+                child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Center(
+                        child:
+                            Text(AppLocalizations.of(context).addCarLabel)))),
+            onTap: () {
+              vm.addCar();
+            });
+      default:
+        return Container();
     }
-    return Container();
   }
 }

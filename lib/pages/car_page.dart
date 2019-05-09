@@ -22,10 +22,10 @@ class CarPageState extends State<CarPage> {
     vm.init().then((_) {});
     vm.otherActionStream.listen((action) {
       switch (action.state) {
-        case CarPageVMOtherActionState.none:
-          break;
         case CarPageVMOtherActionState.nicknamePage:
           Navigator.pushNamed(context, Routes.nicknamePage);
+          break;
+        default:
           break;
       }
     });
@@ -35,14 +35,14 @@ class CarPageState extends State<CarPage> {
         builder: (context, snapshot) {
           final action = snapshot.data;
           switch (action.state) {
-            case CarPageVMActionState.none:
-              return Container();
             case CarPageVMActionState.busy:
               return Center(
                 child: CircularProgressIndicator(),
               );
             case CarPageVMActionState.number:
               return car(context, action.data[CarPageVMActionDataKey.number]);
+            default:
+              return Container();
           }
         });
   }
@@ -52,33 +52,29 @@ class CarPageState extends State<CarPage> {
         number == null ? TextEditingValue() : TextEditingValue(text: number);
     bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context).carNumberTitle),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          TextField(
-            key: WidgetKeys.carTextFieldKey,
-            controller: _textEditingController,
-            autofocus: true,
-            keyboardType: isIOS ? TextInputType.text : TextInputType.number,
-            maxLength: CarPageState.textFieldMaxLength,
-            textAlign: TextAlign.center,
-            decoration: InputDecoration(
-              hintText: AppLocalizations.of(context).carNumberHint,
-            ),
-            onChanged: (String s) {
-              vm.numberChanged(s);
-            },
-            onSubmitted: (String s) async {
-              vm.numberSubmitted();
-            },
-          ),
-        ],
-      ),
-    );
+        appBar:
+            AppBar(title: Text(AppLocalizations.of(context).carNumberTitle)),
+        body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              TextField(
+                  key: WidgetKeys.carTextFieldKey,
+                  controller: _textEditingController,
+                  autofocus: true,
+                  keyboardType:
+                      isIOS ? TextInputType.text : TextInputType.number,
+                  maxLength: CarPageState.textFieldMaxLength,
+                  textAlign: TextAlign.center,
+                  decoration: InputDecoration(
+                      hintText: AppLocalizations.of(context).carNumberHint),
+                  onChanged: (String s) {
+                    vm.numberChanged(s);
+                  },
+                  onSubmitted: (String s) async {
+                    vm.numberSubmitted();
+                  })
+            ]));
   }
 
   @override

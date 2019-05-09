@@ -18,10 +18,7 @@ class CarPageVM {
   Future init() async {
     final context = model.userBloc.context;
     switch (context.state) {
-      case UserBlocContextState.none:
-        break;
       case UserBlocContextState.addCar:
-      case UserBlocContextState.login:
         String number = context.data[UserBlocContextDataKey.number];
         _actionSubject.add(CarPageVMAction(
             data: {CarPageVMActionDataKey.number: number},
@@ -35,10 +32,7 @@ class CarPageVM {
   void numberChanged(String s) {
     final context = model.userBloc.context;
     switch (context.state) {
-      case UserBlocContextState.none:
-        break;
       case UserBlocContextState.addCar:
-      case UserBlocContextState.login:
         model.userBloc.context.data[UserBlocContextDataKey.number] = s;
         break;
       default:
@@ -49,10 +43,7 @@ class CarPageVM {
   Future numberSubmitted() async {
     final context = model.userBloc.context;
     switch (context.state) {
-      case UserBlocContextState.none:
-        break;
       case UserBlocContextState.addCar:
-      case UserBlocContextState.login:
         _otherActionSubject.add(CarPageVMOtherAction(
             state: CarPageVMOtherActionState.nicknamePage));
         break;

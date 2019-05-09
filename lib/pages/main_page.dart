@@ -21,54 +21,39 @@ class MainPageState extends State<MainPage> {
     vm = MainPageVM();
     vm.init().then((_) {});
     return StreamBuilder(
-      stream: vm.actionStream,
-      initialData: MainPageVMAction(),
-      builder: (context, snapshot) {
-        final action = snapshot.data;
-        Widget title = Text(AppLocalizations.of(context).title);
-        Widget child;
-        switch (action.state) {
-          case MainPageVMActionState.none:
-            child = Container();
-            break;
-          case MainPageVMActionState.phone:
-            title = Text(AppLocalizations.of(context).phoneNumberTitle);
-            child = PhonePage();
-            break;
-          case MainPageVMActionState.home:
-            return DefaultTabController(
-              length: 2,
-              child: Scaffold(
-                appBar: AppBar(
-                  bottom: TabBar(
-                    tabs: [
-                      Tab(key: WidgetKeys.parkTabKey, icon: Icon(Icons.directions_car)),
-                      Tab(
-                          key: WidgetKeys.userTabKey,
-                          icon: Icon(Icons.account_circle)),
-                    ],
-                  ),
-                  title: title,
-                ),
-                body: TabBarView(
-                  children: [
-                    HomePage(),
-                    UserPage(),
-                  ],
-                ),
-              ),
-            );
-        }
-        return Scaffold(
-          appBar: AppBar(
-            title: title,
-          ),
-          body: Center(
-            child: child,
-          ),
-        );
-      },
-    );
+        stream: vm.actionStream,
+        initialData: MainPageVMAction(),
+        builder: (context, snapshot) {
+          final action = snapshot.data;
+          Widget title = Text(AppLocalizations.of(context).title);
+          Widget child;
+          switch (action.state) {
+            case MainPageVMActionState.phone:
+              title = Text(AppLocalizations.of(context).phoneNumberTitle);
+              child = PhonePage();
+              break;
+            case MainPageVMActionState.home:
+              return DefaultTabController(
+                  length: 2,
+                  child: Scaffold(
+                      appBar: AppBar(
+                        bottom: TabBar(tabs: [
+                          Tab(
+                              key: WidgetKeys.parkTabKey,
+                              icon: Icon(Icons.directions_car)),
+                          Tab(
+                              key: WidgetKeys.userTabKey,
+                              icon: Icon(Icons.account_circle))
+                        ]),
+                        title: title,
+                      ),
+                      body: TabBarView(children: [HomePage(), UserPage()])));
+            default:
+              child = Container();
+          }
+          return Scaffold(
+              appBar: AppBar(title: title), body: Center(child: child));
+        });
   }
 
   @override
