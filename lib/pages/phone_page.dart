@@ -22,10 +22,10 @@ class PhonePageState extends State<PhonePage> {
     vm.init().then((_) {});
     vm.otherActionStream.listen((action) {
       switch (action.state) {
-        case PhonePageVMOtherActionState.none:
+        case PhonePageVMOtherActionState.validatePage:
+          Navigator.pushNamed(context, Routes.validatePage);
           break;
-        case PhonePageVMOtherActionState.carPage:
-          Navigator.pushNamed(context, Routes.carPage);
+        default:
           break;
       }
     });
@@ -35,11 +35,11 @@ class PhonePageState extends State<PhonePage> {
         builder: (context, snapshot) {
           final action = snapshot.data;
           switch (action.state) {
-            case PhonePageVMActionState.none:
-              return Container();
             case PhonePageVMActionState.phone:
               return phone(
                   context, action.data[PhonePageVMActionDataKey.phone]);
+            default:
+              return Container();
           }
         });
   }
@@ -55,27 +55,24 @@ class PhonePageState extends State<PhonePage> {
         phone == null ? TextEditingValue() : TextEditingValue(text: phone);
     bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        TextField(
-          key: WidgetKeys.phoneTextFieldKey,
-          controller: _textEditingController,
-          autofocus: true,
-          keyboardType: isIOS ? TextInputType.text : TextInputType.number,
-          maxLength: PhonePageState.textFieldMaxLength,
-          textAlign: TextAlign.center,
-          decoration: InputDecoration(
-            hintText: AppLocalizations.of(context).phoneNumberHint,
-          ),
-          onChanged: (String s) {
-            vm.phoneChanged(s);
-          },
-          onSubmitted: (String s) {
-            vm.phoneSubmitted();
-          },
-        ),
-      ],
-    );
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          TextField(
+              key: WidgetKeys.phoneTextFieldKey,
+              controller: _textEditingController,
+              autofocus: true,
+              keyboardType: isIOS ? TextInputType.text : TextInputType.number,
+              maxLength: PhonePageState.textFieldMaxLength,
+              textAlign: TextAlign.center,
+              decoration: InputDecoration(
+                  hintText: AppLocalizations.of(context).phoneNumberHint),
+              onChanged: (String s) {
+                vm.phoneChanged(s);
+              },
+              onSubmitted: (String s) async {
+                await vm.phoneSubmitted();
+              })
+        ]);
   }
 }

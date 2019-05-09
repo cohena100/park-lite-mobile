@@ -5,7 +5,6 @@ import 'package:rxdart/rxdart.dart';
 class ValidatePageVM {
   final _actionSubject = BehaviorSubject<ValidatePageVMAction>();
   final _otherActionSubject = BehaviorSubject<ValidatePageVMOtherAction>();
-
   Stream get actionStream => _actionSubject.stream;
   Stream get otherActionStream => _otherActionSubject.stream;
 
@@ -17,14 +16,9 @@ class ValidatePageVM {
   Future init() async {
     final context = model.userBloc.context;
     switch (context.state) {
-      case UserBlocContextState.none:
-        break;
       case UserBlocContextState.addCar:
       case UserBlocContextState.login:
-        String code = context.data[UserBlocContextDataKey.code];
-        _actionSubject.add(ValidatePageVMAction(
-            data: {ValidatePageVMActionDataKey.validate: code},
-            state: ValidatePageVMActionState.validate));
+        _addValidateAction(context);
         break;
       default:
         break;
@@ -34,8 +28,6 @@ class ValidatePageVM {
   void validateChanged(String s) {
     final context = model.userBloc.context;
     switch (context.state) {
-      case UserBlocContextState.none:
-        break;
       case UserBlocContextState.addCar:
       case UserBlocContextState.login:
         model.userBloc.context.data[UserBlocContextDataKey.code] = s;
@@ -48,26 +40,33 @@ class ValidatePageVM {
   Future validateSubmitted() async {
     final context = model.userBloc.context;
     switch (context.state) {
-      case UserBlocContextState.none:
-        break;
       case UserBlocContextState.addCar:
+        // TODO:
         break;
       case UserBlocContextState.login:
         _actionSubject
             .add(ValidatePageVMAction(state: ValidatePageVMActionState.busy));
         final state = await model.userBloc.userValidate();
         switch (state) {
-          case UserBlocState.loggedIn:
+          case UserBlocState.success:
             _otherActionSubject.add(ValidatePageVMOtherAction(
                 state: ValidatePageVMOtherActionState.rootPage));
             break;
           default:
+            _addValidateAction(context);
             break;
         }
         break;
       default:
         break;
     }
+  }
+
+  void _addValidateAction(UserBlocContext context) {
+    String code = context.data[UserBlocContextDataKey.code];
+    _actionSubject.add(ValidatePageVMAction(
+        data: {ValidatePageVMActionDataKey.validate: code},
+        state: ValidatePageVMActionState.validate));
   }
 }
 

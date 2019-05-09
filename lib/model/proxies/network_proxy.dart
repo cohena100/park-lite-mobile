@@ -49,12 +49,23 @@ class NetworkProxy {
     };
   }
 
-  Future<Map> sendLogin(String phone, String number, String nickname) async {
+  Future<Map> sendLogin(String phone) async {
     var url = _baseUrl + '/users/login';
+    var body = json.encode({'phone': phone});
+    var response = await http.post(url, body: body, headers: headers);
+    return {
+      NetworkProxyKeys.code: response.statusCode,
+      NetworkProxyKeys.body: response.body
+    };
+  }
+
+  Future<Map> sendLoginValidate(
+      String userId, String validateId, String code) async {
+    var url = _baseUrl + '/users/loginValidate';
     var body = json.encode({
-      'phone': phone,
-      'number': number,
-      'nickname': nickname,
+      'userId': userId,
+      'validateId': validateId,
+      'code': code,
     });
     var response = await http.post(url, body: body, headers: headers);
     return {

@@ -22,10 +22,10 @@ class ValidatePageState extends State<ValidatePage> {
     vm.init().then((_) {});
     vm.otherActionStream.listen((action) {
       switch (action.state) {
-        case ValidatePageVMOtherActionState.none:
-          break;
         case ValidatePageVMOtherActionState.rootPage:
           Navigator.of(context).popUntil(ModalRoute.withName(Routes.rootPage));
+          break;
+        default:
           break;
       }
     });
@@ -35,15 +35,13 @@ class ValidatePageState extends State<ValidatePage> {
         builder: (context, snapshot) {
           final action = snapshot.data;
           switch (action.state) {
-            case ValidatePageVMActionState.none:
-              return Container();
             case ValidatePageVMActionState.busy:
-              return Center(
-                child: CircularProgressIndicator(),
-              );
+              return Center(child: CircularProgressIndicator());
             case ValidatePageVMActionState.validate:
-              return nickname(context,
-                  action.data[ValidatePageVMActionDataKey.validate]);
+              return nickname(
+                  context, action.data[ValidatePageVMActionDataKey.validate]);
+            default:
+              return Container();
           }
         });
   }
@@ -55,35 +53,28 @@ class ValidatePageState extends State<ValidatePage> {
   }
 
   Widget nickname(BuildContext context, String code) {
-    _textEditingController.value = code == null
-        ? TextEditingValue()
-        : TextEditingValue(text: code);
+    _textEditingController.value =
+        code == null ? TextEditingValue() : TextEditingValue(text: code);
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context).validateTitle),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          TextField(
-            key: WidgetKeys.validateTextFieldKey,
-            controller: _textEditingController,
-            autofocus: true,
-            maxLength: ValidatePageState.textFieldMaxLength,
-            textAlign: TextAlign.center,
-            decoration: InputDecoration(
-              hintText: AppLocalizations.of(context).validateHint,
-            ),
-            onChanged: (String s) {
-              vm.validateChanged(s);
-            },
-            onSubmitted: (String s) async {
-              vm.validateSubmitted();
-            },
-          ),
-        ],
-      ),
-    );
+        appBar: AppBar(title: Text(AppLocalizations.of(context).validateTitle)),
+        body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              TextField(
+                  key: WidgetKeys.validateTextFieldKey,
+                  controller: _textEditingController,
+                  autofocus: true,
+                  maxLength: ValidatePageState.textFieldMaxLength,
+                  textAlign: TextAlign.center,
+                  decoration: InputDecoration(
+                      hintText: AppLocalizations.of(context).validateHint),
+                  onChanged: (String s) {
+                    vm.validateChanged(s);
+                  },
+                  onSubmitted: (String s) async {
+                    vm.validateSubmitted();
+                  })
+            ]));
   }
 }

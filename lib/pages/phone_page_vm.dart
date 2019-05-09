@@ -6,7 +6,6 @@ class PhonePageVM {
   final _actionSubject = BehaviorSubject<PhonePageVMAction>();
   final _otherActionSubject = BehaviorSubject<PhonePageVMOtherAction>();
   Stream get actionStream => _actionSubject.stream;
-
   Stream get otherActionStream => _otherActionSubject.stream;
 
   void close() {
@@ -17,15 +16,8 @@ class PhonePageVM {
   Future init() async {
     final context = model.userBloc.context;
     switch (context.state) {
-      case UserBlocContextState.none:
-        break;
-      case UserBlocContextState.addCar:
-        break;
       case UserBlocContextState.login:
-        String phone = context.data[UserBlocContextDataKey.phone];
-        _actionSubject.add(PhonePageVMAction(
-            data: {PhonePageVMActionDataKey.phone: phone},
-            state: PhonePageVMActionState.phone));
+        _addPhoneAction(context);
         break;
       default:
         break;
@@ -35,9 +27,6 @@ class PhonePageVM {
   void phoneChanged(String s) {
     final context = model.userBloc.context;
     switch (context.state) {
-      case UserBlocContextState.none:
-        break;
-      case UserBlocContextState.addCar:
       case UserBlocContextState.login:
         model.userBloc.context.data[UserBlocContextDataKey.phone] = s;
         break;
@@ -46,19 +35,32 @@ class PhonePageVM {
     }
   }
 
-  void phoneSubmitted() {
+  Future phoneSubmitted() async {
+    _actionSubject.add(PhonePageVMAction(state: PhonePageVMActionState.busy));
     final context = model.userBloc.context;
     switch (context.state) {
-      case UserBlocContextState.none:
-        break;
-      case UserBlocContextState.addCar:
       case UserBlocContextState.login:
-        _otherActionSubject.add(
-            PhonePageVMOtherAction(state: PhonePageVMOtherActionState.carPage));
+        final state = await model.userBloc.userLogin();
+        switch (state) {
+          case UserBlocState.validate:
+            _otherActionSubject.add(PhonePageVMOtherAction(
+                state: PhonePageVMOtherActionState.validatePage));
+            break;
+          default:
+            _addPhoneAction(context);
+            break;
+        }
         break;
       default:
         break;
     }
+  }
+
+  void _addPhoneAction(UserBlocContext context) {
+    String phone = context.data[UserBlocContextDataKey.phone];
+    _actionSubject.add(PhonePageVMAction(
+        data: {PhonePageVMActionDataKey.phone: phone},
+        state: PhonePageVMActionState.phone));
   }
 }
 
@@ -82,4 +84,4 @@ class PhonePageVMOtherAction {
 
 enum PhonePageVMOtherActionDataKey { none }
 
-enum PhonePageVMOtherActionState { none, carPage }
+enum PhonePageVMOtherActionState { none, validatePage }

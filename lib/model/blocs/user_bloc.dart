@@ -61,21 +61,34 @@ class UserBloc with BaseBloc {
 
   Future<UserBlocState> userLogin() async {
     final phone = context.data[UserBlocContextDataKey.phone];
-    final number = context.data[UserBlocContextDataKey.number];
-    final nickname = context.data[UserBlocContextDataKey.nickname];
-    final data = await _networkProxy.sendLogin(phone, number, nickname);
+    final data = await _networkProxy.sendLogin(phone);
     switch (data[NetworkProxyKeys.code]) {
-      case NetworkProxy.success:
-        final user = User.fromJson(jsonDecode(data[NetworkProxyKeys.body]));
-        await _localDBProxy.saveUser(jsonEncode(user));
-        return UserBlocState.loggedIn;
+      case NetworkProxy.validate:
+        final validate = jsonDecode(data[NetworkProxyKeys.body]);
+        context.data[UserBlocContextDataKey.userId] =
+            validate['validate']['userId'];
+        context.data[UserBlocContextDataKey.validateId] =
+            validate['validate']['validateId'];
+        return UserBlocState.validate;
       default:
-        return UserBlocState.notLoggedIn;
+        return UserBlocState.fail;
     }
   }
 
   Future<UserBlocState> userValidate() async {
-    return UserBlocState.loggedIn;
+    final userId = context.data[UserBlocContextDataKey.userId];
+    final validateId = context.data[UserBlocContextDataKey.validateId];
+    final code = context.data[UserBlocContextDataKey.code];
+    final data =
+        await _networkProxy.sendLoginValidate(userId, validateId, code);
+    switch (data[NetworkProxyKeys.code]) {
+      case NetworkProxy.success:
+        final user = User.fromJson(jsonDecode(data[NetworkProxyKeys.body]));
+        await _localDBProxy.saveUser(jsonEncode(user));
+        return UserBlocState.success;
+      default:
+        return UserBlocState.fail;
+    }
   }
 }
 
@@ -92,6 +105,8 @@ enum UserBlocContextDataKey {
   nickname,
   code,
   car,
+  userId,
+  validateId,
 }
 
 enum UserBlocContextState {

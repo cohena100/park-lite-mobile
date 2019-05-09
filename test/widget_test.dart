@@ -37,20 +37,22 @@ void main() {
     testWidgets('Login success', (WidgetTester tester) async {
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
+      expect(find.byKey(WidgetKeys.phonePageKey), findsOneWidget);
+      when(model.networkProxy.sendLogin(phone1)).thenAnswer((_) async => {
+            NetworkProxyKeys.code: 401,
+            NetworkProxyKeys.body: jsonEncode({validateKey: validate1}),
+          });
       await tester.enterText(find.byKey(WidgetKeys.phoneTextFieldKey), phone1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
-      expect(find.byKey(WidgetKeys.carPageKey), findsOneWidget);
-      await tester.enterText(find.byKey(WidgetKeys.carTextFieldKey), number1);
-      await tester.testTextInput.receiveAction(TextInputAction.done);
-      await tester.pumpAndSettle();
-      expect(find.byKey(WidgetKeys.nicknamePageKey), findsOneWidget);
-      when(model.networkProxy.sendLogin(phone1, number1, nickname1))
+      expect(find.byKey(WidgetKeys.validatePageKey), findsOneWidget);
+      when(model.networkProxy.sendLoginValidate(userId1, validateId1, code1))
           .thenAnswer((_) async => {
                 NetworkProxyKeys.code: 200,
                 NetworkProxyKeys.body: jsonEncode({userKey: user1}),
               });
-      await tester.enterText(find.byKey(WidgetKeys.nicknameTextFieldKey), nickname1);
+      await tester.enterText(
+          find.byKey(WidgetKeys.validateTextFieldKey), code1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
       expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
@@ -72,54 +74,72 @@ void main() {
     testWidgets('Login failed', (WidgetTester tester) async {
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
+      expect(find.byKey(WidgetKeys.phonePageKey), findsOneWidget);
+      when(model.networkProxy.sendLogin(phone1)).thenAnswer((_) async => {
+            NetworkProxyKeys.code: 400,
+            NetworkProxyKeys.body: null,
+          });
       await tester.enterText(find.byKey(WidgetKeys.phoneTextFieldKey), phone1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
-      expect(find.byKey(WidgetKeys.carPageKey), findsOneWidget);
-      await tester.enterText(find.byKey(WidgetKeys.carTextFieldKey), number1);
+      expect(find.byKey(WidgetKeys.phonePageKey), findsOneWidget);
+      when(model.networkProxy.sendLogin(phone1)).thenAnswer((_) async => {
+        NetworkProxyKeys.code: 401,
+        NetworkProxyKeys.body: jsonEncode({validateKey: validate1}),
+      });
+      await tester.enterText(find.byKey(WidgetKeys.phoneTextFieldKey), phone1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
-      expect(find.byKey(WidgetKeys.nicknamePageKey), findsOneWidget);
-      when(model.networkProxy.sendLogin(phone1, number1, nickname1)).thenAnswer(
-          (_) async =>
-              {NetworkProxyKeys.code: 400, NetworkProxyKeys.body: null});
-      await tester.enterText(find.byKey(WidgetKeys.nicknameTextFieldKey), nickname1);
+      expect(find.byKey(WidgetKeys.validatePageKey), findsOneWidget);
+      when(model.networkProxy.sendLoginValidate(userId1, validateId1, code1))
+          .thenAnswer((_) async => {
+                NetworkProxyKeys.code: 400,
+                NetworkProxyKeys.body: null,
+              });
+      await tester.enterText(
+          find.byKey(WidgetKeys.validateTextFieldKey), code1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
-      await tester.pump();
-      expect(find.byKey(WidgetKeys.nicknamePageKey), findsOneWidget);
+      await tester.pumpAndSettle();
+      expect(find.byKey(WidgetKeys.validatePageKey), findsOneWidget);
     });
 
-    testWidgets('Pop and push between pages', (WidgetTester tester) async {
+    testWidgets('Push and pop between pages', (WidgetTester tester) async {
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
+      expect(find.byKey(WidgetKeys.phonePageKey), findsOneWidget);
+      when(model.networkProxy.sendLogin(phone1)).thenAnswer((_) async => {
+        NetworkProxyKeys.code: 401,
+        NetworkProxyKeys.body: jsonEncode({validateKey: validate1}),
+      });
       await tester.enterText(find.byKey(WidgetKeys.phoneTextFieldKey), phone1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
-      await tester.enterText(find.byKey(WidgetKeys.carTextFieldKey), number1);
-      await tester.testTextInput.receiveAction(TextInputAction.done);
-      await tester.pumpAndSettle();
-      await tester.enterText(find.byKey(WidgetKeys.nicknameTextFieldKey), nickname1);
+      expect(find.byKey(WidgetKeys.validatePageKey), findsOneWidget);
+      await tester.enterText(
+          find.byKey(WidgetKeys.validateTextFieldKey), code1);
       final NavigatorState navigator =
-          tester.state<NavigatorState>(find.byType(Navigator));
+      tester.state<NavigatorState>(find.byType(Navigator));
       navigator.pop();
       await tester.pumpAndSettle();
-      navigator.pop();
-      await tester.pumpAndSettle();
-      TextField textField =
-          find.byKey(WidgetKeys.phoneTextFieldKey).evaluate().toList().first.widget;
+      expect(find.byKey(WidgetKeys.phonePageKey), findsOneWidget);
+      TextField textField = find
+          .byKey(WidgetKeys.phoneTextFieldKey)
+          .evaluate()
+          .toList()
+          .first
+          .widget;
       expect(textField.controller.value.text, phone1);
       await tester.enterText(find.byKey(WidgetKeys.phoneTextFieldKey), phone1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
-      textField =
-          find.byKey(WidgetKeys.carTextFieldKey).evaluate().toList().first.widget;
-      expect(textField.controller.value.text, number1);
-      await tester.enterText(find.byKey(WidgetKeys.carTextFieldKey), number1);
-      await tester.testTextInput.receiveAction(TextInputAction.done);
-      await tester.pumpAndSettle();
-      textField =
-          find.byKey(WidgetKeys.nicknameTextFieldKey).evaluate().toList().first.widget;
-      expect(textField.controller.value.text, nickname1);
+      expect(find.byKey(WidgetKeys.validatePageKey), findsOneWidget);
+      textField = find
+          .byKey(WidgetKeys.validateTextFieldKey)
+          .evaluate()
+          .toList()
+          .first
+          .widget;
+      expect(textField.controller.value.text, code1);
     });
   });
 
@@ -205,7 +225,8 @@ void main() {
                 NetworkProxyKeys.code: 200,
                 NetworkProxyKeys.body: jsonEncode({carKey: car2}),
               });
-      await tester.enterText(find.byKey(WidgetKeys.nicknameTextFieldKey), nickname2);
+      await tester.enterText(
+          find.byKey(WidgetKeys.nicknameTextFieldKey), nickname2);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
       expect(find.byKey(WidgetKeys.userPageKey), findsOneWidget);

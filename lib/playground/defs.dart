@@ -81,5 +81,14 @@ final token1 = '1';
 Map<String, Object> user1;
 
 final userId1 = '1';
+final validateId1 = '2';
+
+final validateKey = 'validate';
+
+final validate1 = {
+  'userId': userId1,
+  'validateId': validateId1,
+  'code': code1,
+};
 
 final userKey = 'user';
