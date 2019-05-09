@@ -2,21 +2,15 @@ import 'package:location/location.dart';
 
 final areaId1 = '9';
 final areaName1 = 'b';
-final carId1 = '2';
-final carId2 = '41';
+final carId1 = '30';
+final innerCarId1 = '2';
 final car1 = {
+  '_id': carId1,
   'car': {
     'number': number1,
-    '_id': carId1,
+    '_id': innerCarId1,
   },
   'nickname': nickname1,
-};
-final car2 = {
-  'car': {
-    'number': number2,
-    '_id': carId2,
-  },
-  'nickname': nickname2,
 };
 final carKey = 'car';
 final carsKey = 'cars';
@@ -56,9 +50,7 @@ final location1 = LocationData.fromMap({
 });
 final lon1 = 2.0;
 final nickname1 = 'a';
-final nickname2 = 'b';
-final number1 = '2';
-final number2 = '3';
+final number1 = '3';
 final parking1 = {
   '_id': parkingId1,
   'cityId': cityId1,
@@ -70,17 +62,17 @@ final parking1 = {
   'lat': lat1.toString(),
   'lon': lon1.toString(),
   'user': userId1,
-  'car': carId1,
+  'car': innerCarId1,
 };
 final parkingId1 = '3';
 final parkingKey = 'parking';
-final phone1 = '1';
+final phone1 = '4';
 final rateId1 = '11';
 final rateName1 = 'c';
 final token1 = '1';
 Map<String, Object> user1;
 
-final userId1 = '1';
+final userId1 = '5';
 final validateId1 = '2';
 
 final validateKey = 'validate';

@@ -60,7 +60,9 @@ class User {
   }
 
   void removeCar(Car car) {
-    return null;
+    final allCars = cars;
+    final withoutCar = allCars.where((c) => c.id != car.id).toList();
+    _data[_carsKey] = withoutCar.map((car) => car.data).toList();
   }
 
   Map<String, dynamic> toJson() {
