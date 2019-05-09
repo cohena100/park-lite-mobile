@@ -21,10 +21,10 @@ class SelectCityPageState extends State<SelectCityPage> {
     vm.init().then((_) {});
     vm.otherActionStream.listen((action) {
       switch (action.state) {
-        case SelectCityPageVMOtherActionState.none:
-          break;
         case SelectCityPageVMOtherActionState.selectAreaPage:
           Navigator.pushNamed(context, Routes.selectAreaPage);
+          break;
+        default:
           break;
       }
     });
@@ -35,26 +35,22 @@ class SelectCityPageState extends State<SelectCityPage> {
           final action = snapshot.data;
           Widget body;
           switch (action.state) {
-            case SelectCityPageVMActionState.none:
-              body = Container();
-              break;
             case SelectCityPageVMActionState.cities:
               final List<SelectCityPageVMItem> items =
                   action.data[SelectCityPageVMActionDataKey.items];
               body = Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ListView(
-                    key: WidgetKeys.selectCityPageListViewKey,
-                    children: items.map(_buildItem).toList()),
-              );
+                  padding: const EdgeInsets.all(8.0),
+                  child: ListView(
+                      key: WidgetKeys.selectCityPageListViewKey,
+                      children: items.map(_buildItem).toList()));
               break;
+            default:
+              body = Container();
           }
           return Scaffold(
-            appBar: AppBar(
-              title: Text(AppLocalizations.of(context).selectCityTitle),
-            ),
-            body: body,
-          );
+              appBar: AppBar(
+                  title: Text(AppLocalizations.of(context).selectCityTitle)),
+              body: body);
         });
   }
 
@@ -70,30 +66,27 @@ class SelectCityPageState extends State<SelectCityPage> {
         return Container();
       case SelectCityPageVMItemType.blue:
         return Card(
-          key: WidgetKeys.blueKey,
-          color: Colors.blue,
-          child: Padding(padding: const EdgeInsets.all(24), child: Container()),
-        );
+            key: WidgetKeys.blueKey,
+            color: Colors.blue,
+            child:
+                Padding(padding: const EdgeInsets.all(24), child: Container()));
       case SelectCityPageVMItemType.orange:
         return Card(
-          key: WidgetKeys.orangeKey,
-          color: Colors.orange,
-          child: Padding(padding: const EdgeInsets.all(24), child: Container()),
-        );
+            key: WidgetKeys.orangeKey,
+            color: Colors.orange,
+            child:
+                Padding(padding: const EdgeInsets.all(24), child: Container()));
       case SelectCityPageVMItemType.city:
         final City city = item.data[SelectCityPageVMItemDataKey.city];
         return InkWell(
-          child: Card(
-            key: Key(city.id),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Center(child: Text('${city.name}')),
-            ),
-          ),
-          onTap: () {
-            vm.selectCity(city);
-          },
-        );
+            child: Card(
+                key: Key(city.id),
+                child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Center(child: Text('${city.name}')))),
+            onTap: () {
+              vm.selectCity(city);
+            });
     }
     return Container();
   }

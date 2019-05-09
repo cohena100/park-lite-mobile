@@ -56,11 +56,9 @@ class SelectCarPageState extends State<SelectCarPage> {
               break;
           }
           return Scaffold(
-            appBar: AppBar(
-              title: Text(AppLocalizations.of(context).selectCarTitle),
-            ),
-            body: body,
-          );
+              appBar: AppBar(
+                  title: Text(AppLocalizations.of(context).selectCarTitle)),
+              body: body);
         });
   }
 
@@ -72,35 +70,32 @@ class SelectCarPageState extends State<SelectCarPage> {
 
   Widget _buildItem(SelectCarPageVMItem item) {
     switch (item.type) {
-      case SelectCarPageVMItemType.none:
-        return Container();
       case SelectCarPageVMItemType.blue:
         return Card(
-          key: WidgetKeys.blueKey,
-          color: Colors.blue,
-          child: Padding(padding: const EdgeInsets.all(24), child: Container()),
-        );
+            key: WidgetKeys.blueKey,
+            color: Colors.blue,
+            child:
+                Padding(padding: const EdgeInsets.all(24), child: Container()));
       case SelectCarPageVMItemType.orange:
         return Card(
-          key: WidgetKeys.orangeKey,
-          color: Colors.orange,
-          child: Padding(padding: const EdgeInsets.all(24), child: Container()),
-        );
+            key: WidgetKeys.orangeKey,
+            color: Colors.orange,
+            child:
+                Padding(padding: const EdgeInsets.all(24), child: Container()));
       case SelectCarPageVMItemType.car:
         final Car car = item.data[SelectCarPageVMItemDataKey.car];
         return InkWell(
-          child: Card(
-            key: Key(car.id),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Center(child: Text('${car.nickname} (${car.number})')),
-            ),
-          ),
-          onTap: () async {
-            await vm.selectCar(car);
-          },
-        );
+            child: Card(
+                key: Key(car.id),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Center(child: Text('${car.nickname} (${car.number})')),
+                )),
+            onTap: () async {
+              await vm.selectCar(car);
+            });
+      default:
+        return Container();
     }
-    return Container();
   }
 }
