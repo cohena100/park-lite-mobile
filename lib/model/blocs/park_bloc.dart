@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:location/location.dart';
@@ -8,32 +9,62 @@ import 'package:pango_lite/model/elements/city.dart';
 import 'package:pango_lite/model/elements/geo_park.dart';
 import 'package:pango_lite/model/elements/parking.dart';
 import 'package:pango_lite/model/elements/rate.dart';
+import 'package:pango_lite/model/proxies/bluetooth_proxy.dart';
 import 'package:pango_lite/model/proxies/local_db_proxy.dart';
 import 'package:pango_lite/model/proxies/location_proxy.dart';
 import 'package:pango_lite/model/proxies/network_proxy.dart';
+import 'package:pango_lite/model/proxies/notification_proxy.dart';
 
 class ParkBloc with BaseBloc {
   final LocalDBProxy _localDBProxy;
   final NetworkProxy _networkProxy;
   final LocationProxy _locationProxy;
+  final BluetoothProxy _bluetoothProxy;
+  final NotificationProxy _notificationProxy;
   GeoPark areas;
   LocationData location;
   Car car;
   City city;
   Area area;
   Rate rate;
+  StreamSubscription _bluetoothStateStream;
 
-  ParkBloc(this._localDBProxy, this._networkProxy, this._locationProxy);
+  ParkBloc(
+    this._localDBProxy,
+    this._networkProxy,
+    this._locationProxy,
+    this._bluetoothProxy,
+    this._notificationProxy,
+  );
 
   Future get currentLocation async {
     location = await _locationProxy.currentLocation;
   }
 
+  void _startBluetooth() {
+    if (_bluetoothStateStream != null) {
+      return;
+    }
+    _bluetoothStateStream = _bluetoothProxy.stream.listen((bool data) {
+      _notificationProxy.showNotification();
+    });
+  }
+
+  void _stopBluetooth() {
+    if (_bluetoothStateStream == null) {
+      return;
+    }
+    _bluetoothStateStream.cancel();
+    _bluetoothStateStream = null;
+  }
+
   Future<Parking> get parking async {
     final user = await getUser(_localDBProxy);
     if (user.parking == null) {
+      _stopBluetooth();
       return null;
     }
+    _startBluetooth();
     return user.parking;
   }
 
@@ -70,6 +101,7 @@ class ParkBloc with BaseBloc {
         user.updateParking(
             Parking.fromJson(jsonDecode(data[NetworkProxyKeys.body])));
         _localDBProxy.saveUser(jsonEncode(user));
+        _startBluetooth();
         return ParkBlocState.success;
       default:
         return ParkBlocState.none;
@@ -85,6 +117,7 @@ class ParkBloc with BaseBloc {
         final user = await getUser(_localDBProxy);
         user.deleteParking();
         _localDBProxy.saveUser(jsonEncode(user));
+        _stopBluetooth();
         return ParkBlocState.success;
       default:
         return ParkBlocState.none;

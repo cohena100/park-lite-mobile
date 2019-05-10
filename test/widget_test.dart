@@ -12,16 +12,35 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pango_lite/main.dart';
 import 'package:pango_lite/model/model.dart';
+import 'package:pango_lite/model/proxies/bluetooth_proxy.dart';
 import 'package:pango_lite/model/proxies/local_db_proxy.dart';
 import 'package:pango_lite/model/proxies/location_proxy.dart';
 import 'package:pango_lite/model/proxies/network_proxy.dart';
+import 'package:pango_lite/model/proxies/notification_proxy.dart';
 import 'package:pango_lite/pages/widget_keys.dart';
 import 'package:pango_lite/playground/defs.dart';
+import 'package:rxdart/rxdart.dart';
 
 void main() {
+  final bluetoothProxyStream = BehaviorSubject<bool>();
+
+  tearDownAll(() {
+    bluetoothProxyStream.close();
+  });
+
   setUp(() {
     model = Model(
-        MockNetworkProxy(), LocalDBProxy(inMemory: true), MockLocationProxy());
+      MockNetworkProxy(),
+      LocalDBProxy(inMemory: true),
+      MockLocationProxy(),
+      MockBluetoothProxy(),
+      MockNotificationProxy(),
+    );
+    when(model.bluetoothProxy.stream)
+        .thenAnswer((_) => bluetoothProxyStream.stream);
+    when(model.notificationProxy.showNotification()).thenAnswer((_) {
+      return;
+    });
     model.localDBProxy.inMemoryUser = null;
     user1 = {
       '_id': userId1,
@@ -158,20 +177,20 @@ void main() {
       expect(find.byKey(WidgetKeys.nicknamePageKey), findsOneWidget);
       when(model.networkProxy.sendAdd(userId1, token1))
           .thenAnswer((_) async => {
-        NetworkProxyKeys.code: 401,
-        NetworkProxyKeys.body: jsonEncode({validateKey: validateCar1}),
-      });
+                NetworkProxyKeys.code: 401,
+                NetworkProxyKeys.body: jsonEncode({validateKey: validateCar1}),
+              });
       await tester.enterText(
           find.byKey(WidgetKeys.nicknameTextFieldKey), nickname1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
       expect(find.byKey(WidgetKeys.validatePageKey), findsOneWidget);
       when(model.networkProxy.sendAddValidate(
-          userId1, number1, nickname1, validateId1, code1, token1))
+              userId1, number1, nickname1, validateId1, code1, token1))
           .thenAnswer((_) async => {
-        NetworkProxyKeys.code: 200,
-        NetworkProxyKeys.body: jsonEncode({carKey: car1}),
-      });
+                NetworkProxyKeys.code: 200,
+                NetworkProxyKeys.body: jsonEncode({carKey: car1}),
+              });
       await tester.enterText(
           find.byKey(WidgetKeys.validateTextFieldKey), code1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
@@ -320,3 +339,7 @@ void main() {
 class MockLocationProxy extends Mock implements LocationProxy {}
 
 class MockNetworkProxy extends Mock implements NetworkProxy {}
+
+class MockBluetoothProxy extends Mock implements BluetoothProxy {}
+
+class MockNotificationProxy extends Mock implements NotificationProxy {}
