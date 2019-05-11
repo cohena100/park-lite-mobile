@@ -146,7 +146,8 @@ class NetworkProxy {
   }
 
   void setup(bool isIOS) {
-    _baseUrl = isIOS ? 'http://localhost:3000' : 'http://10.0.2.2:3000';
+    _baseUrl = 'https://stormy-dusk-75310.herokuapp.com';
+//    _baseUrl = isIOS ? 'http://localhost:3000' : 'http://10.0.2.2:3000';
   }
 }
 
