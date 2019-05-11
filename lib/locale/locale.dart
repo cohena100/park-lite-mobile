@@ -149,7 +149,7 @@ class AppLocalizations {
 
   String get removeCarLabel {
     return Intl.message(
-      'Stop parking',
+      'Remove car',
       name: 'removeCarLabel',
       desc: 'Remove car button label',
     );

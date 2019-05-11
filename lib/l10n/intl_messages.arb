@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2019-04-27T18:49:26.468947",
+  "@@last_modified": "2019-05-11T11:25:19.606600",
   "title": "Pango Lite",
   "@title": {
     "description": "Title for the Weather Application",
@@ -96,7 +96,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "removeCarLabel": "Stop parking",
+  "removeCarLabel": "Remove car",
   "@removeCarLabel": {
     "description": "Remove car button label",
     "type": "text",

@@ -96,7 +96,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "removeCarLabel": "Stop parking",
+  "removeCarLabel": "Remove car",
   "@removeCarLabel": {
     "description": "Remove car button label",
     "type": "text",
