@@ -30,6 +30,7 @@ class WidgetKeys {
   static final validatePageKey = Key('ValidatePage');
   static final validateTextFieldKey = Key('ValidateTextField');
   static final myAppKey = Key('MyApp');
+  static final exitKey = Key('Exit');
 }
 
 //       WidgetKeys

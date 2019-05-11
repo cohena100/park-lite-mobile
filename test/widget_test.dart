@@ -81,6 +81,14 @@ void main() {
       expect(find.byKey(WidgetKeys.phonePageKey), findsOneWidget);
     });
 
+    testWidgets('Not logged in because not token', (WidgetTester tester) async {
+      user1.remove('token');
+      model.localDBProxy.inMemoryUser = jsonEncode(user1);
+      await tester.pumpWidget(MyApp());
+      await tester.pumpAndSettle();
+      expect(find.byKey(WidgetKeys.phonePageKey), findsOneWidget);
+    });
+
     testWidgets('Already logged in', (WidgetTester tester) async {
       model.localDBProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
@@ -157,6 +165,43 @@ void main() {
           .first
           .widget;
       expect(textField.controller.value.text, code1);
+    });
+
+    testWidgets('Exit', (WidgetTester tester) async {
+      model.localDBProxy.inMemoryUser = jsonEncode(user1);
+      await tester.pumpWidget(MyApp());
+      await tester.pumpAndSettle();
+      expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
+      await tester.tap(find.byKey(WidgetKeys.userTabKey));
+      await tester.pumpAndSettle();
+      expect(find.byKey(WidgetKeys.userPageKey), findsOneWidget);
+      when(model.networkProxy.sendLogout(userId1, token1))
+          .thenAnswer((_) async => {
+                NetworkProxyKeys.code: 200,
+                NetworkProxyKeys.body: null,
+              });
+      expect(find.byKey(WidgetKeys.exitKey), findsOneWidget);
+      await tester.tap(find.byKey(WidgetKeys.exitKey));
+      await tester.pumpAndSettle();
+      expect(find.byKey(WidgetKeys.phonePageKey), findsOneWidget);
+    });
+
+    testWidgets('Exit still event after 400', (WidgetTester tester) async {
+      model.localDBProxy.inMemoryUser = jsonEncode(user1);
+      await tester.pumpWidget(MyApp());
+      await tester.pumpAndSettle();
+      expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
+      await tester.tap(find.byKey(WidgetKeys.userTabKey));
+      await tester.pumpAndSettle();
+      expect(find.byKey(WidgetKeys.userPageKey), findsOneWidget);
+      when(model.networkProxy.sendLogout(userId1, token1))
+          .thenAnswer((_) async => {
+        NetworkProxyKeys.code: 400,
+        NetworkProxyKeys.body: null,
+      });
+      await tester.tap(find.byKey(WidgetKeys.exitKey));
+      await tester.pumpAndSettle();
+      expect(find.byKey(WidgetKeys.phonePageKey), findsOneWidget);
     });
   });
 

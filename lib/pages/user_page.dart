@@ -26,6 +26,9 @@ class UserPageState extends State<UserPage> {
         case UserPageVMOtherActionState.selectCarPage:
           Navigator.pushNamed(context, Routes.selectCarPage);
           break;
+        case UserPageVMOtherActionState.rootPage:
+          Navigator.pushNamed(context, Routes.rootPage);
+          break;
         default:
           break;
       }
@@ -96,6 +99,17 @@ class UserPageState extends State<UserPage> {
                             AppLocalizations.of(context).removeCarLabel)))),
             onTap: () {
               vm.removeCar();
+            });
+      case UserPageVMItemType.exit:
+        return InkWell(
+            child: Card(
+                key: WidgetKeys.exitKey,
+                child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Center(
+                        child: Text(AppLocalizations.of(context).exitLabel)))),
+            onTap: () async {
+              vm.exit();
             });
       default:
         return Container();

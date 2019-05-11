@@ -101,5 +101,11 @@
     "description": "Remove car button label",
     "type": "text",
     "placeholders": {}
+  },
+  "exitLabel": "Exit",
+  "@exitLabel": {
+    "description": "Exit the app",
+    "type": "text",
+    "placeholders": {}
   }
 }

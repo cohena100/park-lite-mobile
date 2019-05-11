@@ -155,6 +155,14 @@ class AppLocalizations {
     );
   }
 
+  String get exitLabel {
+    return Intl.message(
+      'Exit',
+      name: 'exitLabel',
+      desc: 'Exit the app',
+    );
+  }
+
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

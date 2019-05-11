@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2019-05-11T11:25:19.606600",
+  "@@last_modified": "2019-05-11T12:44:10.174273",
   "title": "Pango Lite",
   "@title": {
     "description": "Title for the Weather Application",
@@ -99,6 +99,12 @@
   "removeCarLabel": "Remove car",
   "@removeCarLabel": {
     "description": "Remove car button label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "exitLabel": "Exit",
+  "@exitLabel": {
+    "description": "Exit the app",
     "type": "text",
     "placeholders": {}
   }

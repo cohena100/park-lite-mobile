@@ -22,7 +22,32 @@ class UserPageVM {
     _otherActionSubject.close();
   }
 
+  void exit() async {
+    _actionSubject.add(UserPageVMAction(state: UserPageVMActionState.busy));
+    final state = await model.userBloc.userLogout();
+    switch (state) {
+      case UserBlocState.success:
+        _otherActionSubject.add(
+            UserPageVMOtherAction(state: UserPageVMOtherActionState.rootPage));
+        break;
+      default:
+        _addUserAction();
+        break;
+    }
+  }
+
   Future init() async {
+    _addUserAction();
+  }
+
+  void removeCar() {
+    model.userBloc.context =
+        UserBlocContext(data: {}, state: UserBlocContextState.removeCar);
+    _otherActionSubject.add(
+        UserPageVMOtherAction(state: UserPageVMOtherActionState.selectCarPage));
+  }
+
+  void _addUserAction() {
     final decorateItems = [
       UserPageVMItem(type: UserPageVMItemType.blue),
       UserPageVMItem(type: UserPageVMItemType.orange),
@@ -33,18 +58,12 @@ class UserPageVM {
     final items = [
       UserPageVMItem(type: UserPageVMItemType.add),
       UserPageVMItem(type: UserPageVMItemType.remove),
+      UserPageVMItem(type: UserPageVMItemType.exit),
     ];
     _actionSubject.add(UserPageVMAction(data: {
       UserPageVMActionDataKey.items:
           [decorateItems, items, decorateItems].expand((x) => x).toList()
     }, state: UserPageVMActionState.user));
-  }
-
-  void removeCar() {
-    model.userBloc.context =
-        UserBlocContext(data: {}, state: UserBlocContextState.removeCar);
-    _otherActionSubject.add(
-        UserPageVMOtherAction(state: UserPageVMOtherActionState.selectCarPage));
   }
 }
 
@@ -69,7 +88,14 @@ class UserPageVMItem {
 
 enum UserPageVMItemDataKey { none }
 
-enum UserPageVMItemType { none, blue, orange, add, remove }
+enum UserPageVMItemType {
+  none,
+  blue,
+  orange,
+  add,
+  remove,
+  exit,
+}
 
 class UserPageVMOtherAction {
   final Map data;
@@ -85,4 +111,5 @@ enum UserPageVMOtherActionState {
   none,
   carPage,
   selectCarPage,
+  rootPage,
 }

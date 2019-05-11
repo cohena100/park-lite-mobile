@@ -15,6 +15,11 @@ class UserBloc with BaseBloc {
 
   UserBloc(this._networkProxy, this._localDBProxy);
 
+  Future<bool> get hasCars async {
+    final theUser = await user;
+    return theUser.cars.length > 0;
+  }
+
   Future<User> get user async {
     return await getUser(_localDBProxy);
   }
@@ -31,11 +36,6 @@ class UserBloc with BaseBloc {
       default:
         return UserBlocState.fail;
     }
-  }
-
-  Future<bool> get hasCars async {
-    final theUser = await user;
-    return theUser.cars.length > 0;
   }
 
   Future<UserBlocState> addCarValidate() async {
@@ -59,7 +59,7 @@ class UserBloc with BaseBloc {
 
   Future<UserBlocState> handshake() async {
     final isUser = await user;
-    if (isUser == null) {
+    if (isUser == null || isUser.token == null) {
       return UserBlocState.notLoggedIn;
     }
     return UserBlocState.loggedIn;
@@ -73,6 +73,21 @@ class UserBloc with BaseBloc {
     switch (data[NetworkProxyKeys.code]) {
       case NetworkProxy.success:
         theUser.removeCar(car);
+        await _localDBProxy.saveUser(jsonEncode(theUser));
+        return UserBlocState.success;
+      default:
+        return UserBlocState.fail;
+    }
+  }
+
+  Future<UserBlocState> userLogout() async {
+    final theUser = await user;
+    final data =
+    await _networkProxy.sendLogout(theUser.id, theUser.token);
+    switch (data[NetworkProxyKeys.code]) {
+      case NetworkProxy.success:
+      case NetworkProxy.error:
+        theUser.deleteToken();
         await _localDBProxy.saveUser(jsonEncode(theUser));
         return UserBlocState.success;
       default:

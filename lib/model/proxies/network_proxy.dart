@@ -50,6 +50,22 @@ class NetworkProxy {
     };
   }
 
+  sendLogout(String userId, String token) async {
+    var url = _baseUrl + '/users/logout';
+    var body = json.encode({
+      'userId': userId,
+    });
+    final Map<String, String> extraHeaders = {'Authorization': token};
+    final Map<String, String> allHeaders = {};
+    allHeaders.addAll(headers);
+    allHeaders.addAll(extraHeaders);
+    var response = await http.post(url, body: body, headers: allHeaders);
+    return {
+      NetworkProxyKeys.code: response.statusCode,
+      NetworkProxyKeys.body: response.body
+    };
+  }
+
   Future<Map> sendLogin(String phone) async {
     var url = _baseUrl + '/users/login';
     var body = json.encode({'phone': phone});

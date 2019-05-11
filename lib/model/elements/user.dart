@@ -51,6 +51,10 @@ class User {
     _data.remove(_parkingKey);
   }
 
+  void deleteToken() {
+    _data.remove(_tokenKey);
+  }
+
   Car findCar(String carId) {
     return cars.firstWhere((car) => car.id == carId, orElse: () => null);
   }
