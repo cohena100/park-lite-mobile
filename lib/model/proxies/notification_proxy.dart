@@ -9,19 +9,16 @@ class NotificationProxy {
     var iOS = new IOSInitializationSettings();
     var initSettings = new InitializationSettings(android, iOS);
     flutterLocalNotificationsPlugin.initialize(initSettings,
-        onSelectNotification: (payload) {
-      print(payload);
-    });
+        onSelectNotification: (payload) {});
   }
 
-  showNotification() async {
+  showNotification(String title, String body) async {
     var android = new AndroidNotificationDetails(
         'channel id', 'channel NAME', 'CHANNEL DESCRIPTION',
         priority: Priority.High, importance: Importance.Max);
     var iOS = new IOSNotificationDetails();
     var platform = new NotificationDetails(android, iOS);
-    await flutterLocalNotificationsPlugin.show(
-        0, 'New Video is out', 'Flutter Local Notification', platform,
-        payload: 'Nitish Kumar Singh is part time Youtuber');
+    await flutterLocalNotificationsPlugin.show(0, title, body, platform,
+        payload: '');
   }
 }

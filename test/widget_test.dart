@@ -38,7 +38,7 @@ void main() {
     );
     when(model.bluetoothProxy.stream)
         .thenAnswer((_) => bluetoothProxyStream.stream);
-    when(model.notificationProxy.showNotification()).thenAnswer((_) {
+    when(model.notificationProxy.showNotification('', '')).thenAnswer((_) {
       return;
     });
     model.localDBProxy.inMemoryUser = null;

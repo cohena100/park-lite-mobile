@@ -45,8 +45,14 @@ class ParkBloc with BaseBloc {
     if (_bluetoothStateStream != null) {
       return;
     }
-    _bluetoothStateStream = _bluetoothProxy.stream.listen((bool data) {
-      _notificationProxy.showNotification();
+    _bluetoothStateStream = _bluetoothProxy.stream.listen((bool data) async {
+      final user = await getUser(_localDBProxy);
+      final aParking = await parking;
+      final parkingCar = user.parkingCar;
+      final title = '${parkingCar.nickname} ${parkingCar.number}';
+      final body =
+          '${aParking.cityName} ${aParking.areaName} ${aParking.rateName}';
+      _notificationProxy.showNotification(title, body);
     });
   }
 
