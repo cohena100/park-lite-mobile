@@ -186,7 +186,7 @@ void main() {
       expect(find.byKey(WidgetKeys.phonePageKey), findsOneWidget);
     });
 
-    testWidgets('Exit still event after 400', (WidgetTester tester) async {
+    testWidgets('Exit still even after 400', (WidgetTester tester) async {
       model.localDBProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
