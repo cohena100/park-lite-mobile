@@ -81,7 +81,7 @@ void main() {
       expect(find.byKey(WidgetKeys.phonePageKey), findsOneWidget);
     });
 
-    testWidgets('Not logged in because not token', (WidgetTester tester) async {
+    testWidgets('Not logged in because no token', (WidgetTester tester) async {
       user1.remove('token');
       model.localDBProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
