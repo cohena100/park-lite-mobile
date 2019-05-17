@@ -119,6 +119,25 @@ class HomePageState extends State<HomePage> {
             onTap: () {
               vm.addCar();
             });
+      case HomePageVMItemType.parking:
+        final Parking parking = item.data[HomePageVMItemDataKey.parking];
+        final Car car = item.data[HomePageVMItemDataKey.car];
+        return InkWell(
+            child: Card(
+                key: Key(parking.id),
+                child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Center(
+                        child: Column(children: [
+                          Text(AppLocalizations.of(context).startPreviousParkingLabel),
+                          Text('${car.nickname} (${car.number})'),
+                          Text(parking.cityName),
+                          Text(parking.areaName),
+                          Text(parking.rateName),
+                        ])))),
+            onTap: () async {
+              await vm.startPreviousParking(parking, car);
+            });
       default:
         return Container();
     }

@@ -5,6 +5,7 @@ class Parking {
   static final _latKey = 'lat';
   static final _lonKey = 'lon';
   static final _cityIdKey = 'cityId';
+  static final _areaIdKey = 'areaId';
   static final _rateIdKey = 'rateId';
   static final _cityName = 'cityName';
   static final _areaName = 'areaName';
@@ -15,12 +16,24 @@ class Parking {
 
   Parking.fromJson(Map<String, dynamic> json) : data = json[_parkingKey];
 
+  String get areaId {
+    return data[_areaIdKey];
+  }
+
+  String get areaName {
+    return data[_areaName];
+  }
+
   String get carId {
     return data[_carIdKey];
   }
 
   String get cityId {
     return data[_cityIdKey];
+  }
+
+  String get cityName {
+    return data[_cityName];
   }
 
   String get id {
@@ -37,14 +50,6 @@ class Parking {
 
   String get rateId {
     return data[_rateIdKey];
-  }
-
-  String get cityName {
-    return data[_cityName];
-  }
-
-  String get areaName {
-    return data[_areaName];
   }
 
   String get rateName {

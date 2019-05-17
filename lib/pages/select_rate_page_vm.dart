@@ -26,7 +26,7 @@ class SelectRatePageVM {
     switch (state) {
       case ParkBlocState.success:
         _otherActionSubject.add(SelectRatePageVMOtherAction(
-            state: SelectRatePageVMOtherActionState.home));
+            state: SelectRatePageVMOtherActionState.homePage));
         break;
       default:
         _addRatesState();
@@ -86,4 +86,4 @@ class SelectRatePageVMOtherAction {
 
 enum SelectRatePageVMOtherActionDataKey { none }
 
-enum SelectRatePageVMOtherActionState { none, home }
+enum SelectRatePageVMOtherActionState { none, homePage }

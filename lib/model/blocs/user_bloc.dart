@@ -15,11 +15,6 @@ class UserBloc with BaseBloc {
 
   UserBloc(this._networkProxy, this._localDBProxy);
 
-  Future<bool> get hasCars async {
-    final theUser = await user;
-    return theUser.cars.length > 0;
-  }
-
   Future<User> get user async {
     return await getUser(_localDBProxy);
   }
@@ -29,9 +24,7 @@ class UserBloc with BaseBloc {
     final data = await _networkProxy.sendAdd(theUser.id, theUser.token);
     switch (data[NetworkProxyKeys.code]) {
       case NetworkProxy.validate:
-        final validate = jsonDecode(data[NetworkProxyKeys.body]);
-        context.data[UserBlocContextDataKey.validateId] =
-            validate['validate']['validateId'];
+        _handleAddCarValidate(data);
         return UserBlocState.validate;
       default:
         return UserBlocState.fail;
@@ -45,12 +38,16 @@ class UserBloc with BaseBloc {
     final validateId = context.data[UserBlocContextDataKey.validateId];
     final code = context.data[UserBlocContextDataKey.code];
     final data = await _networkProxy.sendAddValidate(
-        theUser.id, number, nickname, validateId, code, theUser.token);
+      theUser.id,
+      number,
+      nickname,
+      validateId,
+      code,
+      theUser.token,
+    );
     switch (data[NetworkProxyKeys.code]) {
       case NetworkProxy.success:
-        final car = Car.fromJson(jsonDecode(data[NetworkProxyKeys.body]));
-        theUser.addCar(car);
-        await _localDBProxy.saveUser(jsonEncode(theUser));
+        await _handleAddCarValidateSuccess(data, theUser);
         return UserBlocState.success;
       default:
         return UserBlocState.fail;
@@ -68,27 +65,14 @@ class UserBloc with BaseBloc {
   Future<UserBlocState> removeCar() async {
     final theUser = await user;
     final Car car = context.data[UserBlocContextDataKey.car];
-    final data =
-        await _networkProxy.sendRemove(theUser.id, car.id, theUser.token);
+    final data = await _networkProxy.sendRemove(
+      theUser.id,
+      car.id,
+      theUser.token,
+    );
     switch (data[NetworkProxyKeys.code]) {
       case NetworkProxy.success:
-        theUser.removeCar(car);
-        await _localDBProxy.saveUser(jsonEncode(theUser));
-        return UserBlocState.success;
-      default:
-        return UserBlocState.fail;
-    }
-  }
-
-  Future<UserBlocState> userLogout() async {
-    final theUser = await user;
-    final data =
-    await _networkProxy.sendLogout(theUser.id, theUser.token);
-    switch (data[NetworkProxyKeys.code]) {
-      case NetworkProxy.success:
-      case NetworkProxy.error:
-        theUser.deleteToken();
-        await _localDBProxy.saveUser(jsonEncode(theUser));
+        await _handleRemoveCarSuccess(data, theUser, car);
         return UserBlocState.success;
       default:
         return UserBlocState.fail;
@@ -100,12 +84,21 @@ class UserBloc with BaseBloc {
     final data = await _networkProxy.sendLogin(phone);
     switch (data[NetworkProxyKeys.code]) {
       case NetworkProxy.validate:
-        final validate = jsonDecode(data[NetworkProxyKeys.body]);
-        context.data[UserBlocContextDataKey.userId] =
-            validate['validate']['userId'];
-        context.data[UserBlocContextDataKey.validateId] =
-            validate['validate']['validateId'];
+        _handleUseLoginValidate(data);
         return UserBlocState.validate;
+      default:
+        return UserBlocState.fail;
+    }
+  }
+
+  Future<UserBlocState> userLogout() async {
+    final theUser = await user;
+    final data = await _networkProxy.sendLogout(theUser.id, theUser.token);
+    switch (data[NetworkProxyKeys.code]) {
+      case NetworkProxy.success:
+      case NetworkProxy.error:
+        await _handleUserLogoutSuccess(data, theUser);
+        return UserBlocState.success;
       default:
         return UserBlocState.fail;
     }
@@ -115,16 +108,53 @@ class UserBloc with BaseBloc {
     final userId = context.data[UserBlocContextDataKey.userId];
     final validateId = context.data[UserBlocContextDataKey.validateId];
     final code = context.data[UserBlocContextDataKey.code];
-    final data =
-        await _networkProxy.sendLoginValidate(userId, validateId, code);
+    final data = await _networkProxy.sendLoginValidate(
+      userId,
+      validateId,
+      code,
+    );
     switch (data[NetworkProxyKeys.code]) {
       case NetworkProxy.success:
-        final user = User.fromJson(jsonDecode(data[NetworkProxyKeys.body]));
-        await _localDBProxy.saveUser(jsonEncode(user));
+        await _handleUserValidateSuccess(data);
         return UserBlocState.success;
       default:
         return UserBlocState.fail;
     }
+  }
+
+  void _handleAddCarValidate(Map data) {
+    final validate = jsonDecode(data[NetworkProxyKeys.body]);
+    context.data[UserBlocContextDataKey.validateId] =
+        validate['validate']['validateId'];
+  }
+
+  Future _handleAddCarValidateSuccess(Map data, User user) async {
+    final car = Car.fromJson(jsonDecode(data[NetworkProxyKeys.body]));
+    user.addCar(car);
+    await _localDBProxy.saveUser(jsonEncode(user));
+  }
+
+  Future _handleRemoveCarSuccess(Map data, User user, Car car) async {
+    user.removeCar(car);
+    await _localDBProxy.saveUser(jsonEncode(user));
+  }
+
+  void _handleUseLoginValidate(Map data) {
+    final validate = jsonDecode(data[NetworkProxyKeys.body]);
+    context.data[UserBlocContextDataKey.userId] =
+        validate['validate']['userId'];
+    context.data[UserBlocContextDataKey.validateId] =
+        validate['validate']['validateId'];
+  }
+
+  Future _handleUserLogoutSuccess(Map data, User user) async {
+    user.deleteToken();
+    await _localDBProxy.saveUser(jsonEncode(user));
+  }
+
+  Future _handleUserValidateSuccess(Map data) async {
+    final user = User.fromJson(jsonDecode(data[NetworkProxyKeys.body]));
+    await _localDBProxy.saveUser(jsonEncode(user));
   }
 }
 

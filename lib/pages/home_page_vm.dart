@@ -1,6 +1,7 @@
 import 'package:pango_lite/model/blocs/park_bloc.dart';
 import 'package:pango_lite/model/blocs/user_bloc.dart';
 import 'package:pango_lite/model/elements/car.dart';
+import 'package:pango_lite/model/elements/parking.dart';
 import 'package:pango_lite/model/model.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -13,8 +14,9 @@ class HomePageVM {
   void addCar() {
     model.userBloc.context =
         UserBlocContext(data: {}, state: UserBlocContextState.addCar);
-    _otherActionSubject
-        .add(HomePageVMOtherAction(state: HomePageVMOtherActionState.carPage));
+    _otherActionSubject.add(
+      HomePageVMOtherAction(state: HomePageVMOtherActionState.carPage),
+    );
   }
 
   void close() {
@@ -23,6 +25,35 @@ class HomePageVM {
   }
 
   Future init() async {
+    await _addHomeState();
+  }
+
+  void startParking() {
+    _otherActionSubject.add(
+      HomePageVMOtherAction(state: HomePageVMOtherActionState.selectCarPage),
+    );
+  }
+
+  Future startPreviousParking(Parking parking, Car car) async {
+    _actionSubject.add(HomePageVMAction(state: HomePageVMActionState.busy));
+    final state = await model.parkBloc.startPreviousParking(parking, car);
+    switch (state) {
+      case ParkBlocState.success:
+        await _addHomeState();
+        break;
+      default:
+        await _addHomeState();
+        break;
+    }
+  }
+
+  Future stopParking() async {
+    _actionSubject.add(HomePageVMAction(state: HomePageVMActionState.busy));
+    await model.parkBloc.stopParking();
+    await init();
+  }
+
+  Future _addHomeState() async {
     final decorateItems = [
       HomePageVMItem(type: HomePageVMItemType.blue),
       HomePageVMItem(type: HomePageVMItemType.orange),
@@ -30,22 +61,26 @@ class HomePageVM {
       HomePageVMItem(type: HomePageVMItemType.orange),
       HomePageVMItem(type: HomePageVMItemType.blue),
     ];
-    final hasCars = await model.userBloc.hasCars;
+    final theUser = await model.userBloc.user;
+    final hasCars = theUser.cars.length > 0;
     if (!hasCars) {
-      final items = [
-        HomePageVMItem(type: HomePageVMItemType.add),
-      ];
-      _actionSubject.add(HomePageVMAction(data: {
-        HomePageVMActionDataKey.items:
-            [decorateItems, items, decorateItems].expand((x) => x).toList()
-      }, state: HomePageVMActionState.home));
+      final items = [HomePageVMItem(type: HomePageVMItemType.add)];
+      final allItems = [
+        decorateItems,
+        items,
+        decorateItems,
+      ].expand((x) => x).toList();
+      _actionSubject.add(HomePageVMAction(
+        data: {HomePageVMActionDataKey.items: allItems},
+        state: HomePageVMActionState.home,
+      ));
       return;
     }
     final parkingState = await model.parkBloc.state;
     switch (parkingState) {
       case ParkBlocState.parking:
-        final parking = await model.parkBloc.parking;
-        final Car car = (await model.userBloc.user).parkingCar;
+        final parking = await model.parkBloc.currentParking;
+        final car = theUser.parkingCar;
         final data = {
           HomePageVMItemDataKey.parking: parking,
           HomePageVMItemDataKey.car: car,
@@ -53,34 +88,41 @@ class HomePageVM {
         final items = [
           HomePageVMItem(data: data, type: HomePageVMItemType.stop),
         ];
-        _actionSubject.add(HomePageVMAction(data: {
-          HomePageVMActionDataKey.items:
-              [decorateItems, items, decorateItems].expand((x) => x).toList()
-        }, state: HomePageVMActionState.home));
-        break;
+        final allItems = [
+          decorateItems,
+          items,
+          decorateItems,
+        ].expand((x) => x).toList();
+        _actionSubject.add(HomePageVMAction(
+            data: {HomePageVMActionDataKey.items: allItems},
+            state: HomePageVMActionState.home));
+        return;
       case ParkBlocState.notParking:
+        final parkings = await model.parkBloc.parkings;
+        final parkingItems = parkings.map((parking) {
+          final car = theUser.findInnerCar(parking.carId);
+          final data = {
+            HomePageVMItemDataKey.car: car,
+            HomePageVMItemDataKey.parking: parking,
+          };
+          return HomePageVMItem(data: data, type: HomePageVMItemType.parking);
+        }).toList();
         final items = [
           HomePageVMItem(type: HomePageVMItemType.start),
         ];
-        _actionSubject.add(HomePageVMAction(data: {
-          HomePageVMActionDataKey.items:
-              [decorateItems, items, decorateItems].expand((x) => x).toList()
-        }, state: HomePageVMActionState.home));
-        break;
+        final allItems = [
+          decorateItems,
+          items,
+          parkingItems,
+          decorateItems,
+        ].expand((x) => x).toList();
+        _actionSubject.add(HomePageVMAction(
+            data: {HomePageVMActionDataKey.items: allItems},
+            state: HomePageVMActionState.home));
+        return;
       default:
         break;
     }
-  }
-
-  void startParking() {
-    _otherActionSubject.add(
-        HomePageVMOtherAction(state: HomePageVMOtherActionState.selectCarPage));
-  }
-
-  Future stopParking() async {
-    _actionSubject.add(HomePageVMAction(state: HomePageVMActionState.busy));
-    await model.parkBloc.stopParking();
-    await init();
   }
 }
 
@@ -104,7 +146,7 @@ class HomePageVMItem {
 
 enum HomePageVMItemDataKey { none, parking, car }
 
-enum HomePageVMItemType { none, blue, orange, start, stop, add }
+enum HomePageVMItemType { none, blue, orange, start, stop, add, parking }
 
 class HomePageVMOtherAction {
   final Map data;

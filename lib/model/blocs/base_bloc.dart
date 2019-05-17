@@ -12,7 +12,12 @@ mixin BaseBloc {
   }
 
   Future<Cache> getCache(LocalDBProxy localDBProxy) async {
-    final data = await localDBProxy.loadCache();
+    var data = await localDBProxy.loadCache();
+    if (data == null) {
+      final json = '{"cache": {}}';
+      await localDBProxy.saveCache(json);
+      data = await localDBProxy.loadCache();
+    }
     return Cache(data);
   }
 }

@@ -163,6 +163,14 @@ class AppLocalizations {
     );
   }
 
+  String get startPreviousParkingLabel {
+    return Intl.message(
+      'Start previous parking',
+      name: 'startPreviousParkingLabel',
+      desc: 'Star previous parking button label',
+    );
+  }
+
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

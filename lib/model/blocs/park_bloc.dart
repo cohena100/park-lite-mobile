@@ -41,30 +41,7 @@ class ParkBloc with BaseBloc {
     location = await _locationProxy.currentLocation;
   }
 
-  void _startBluetooth() {
-    if (_bluetoothStateStream != null) {
-      return;
-    }
-    _bluetoothStateStream = _bluetoothProxy.stream.listen((bool data) async {
-      final user = await getUser(_localDBProxy);
-      final aParking = await parking;
-      final parkingCar = user.parkingCar;
-      final title = '${parkingCar.nickname} ${parkingCar.number}';
-      final body =
-          '${aParking.cityName} ${aParking.areaName} ${aParking.rateName}';
-      _notificationProxy.showNotification(title, body);
-    });
-  }
-
-  void _stopBluetooth() {
-    if (_bluetoothStateStream == null) {
-      return;
-    }
-    _bluetoothStateStream.cancel();
-    _bluetoothStateStream = null;
-  }
-
-  Future<Parking> get parking async {
+  Future<Parking> get currentParking async {
     final user = await getUser(_localDBProxy);
     if (user.parking == null) {
       _stopBluetooth();
@@ -74,8 +51,13 @@ class ParkBloc with BaseBloc {
     return user.parking;
   }
 
+  Future<List<Parking>> get parkings async {
+    final cache = await getCache(_localDBProxy);
+    return cache.parkings;
+  }
+
   Future<ParkBlocState> get state async {
-    final isParking = await parking;
+    final isParking = await currentParking;
     if (isParking != null) {
       return ParkBlocState.parking;
     }
@@ -103,11 +85,30 @@ class ParkBloc with BaseBloc {
         user.token);
     switch (data[NetworkProxyKeys.code]) {
       case NetworkProxy.success:
-        final user = await getUser(_localDBProxy);
-        user.updateParking(
-            Parking.fromJson(jsonDecode(data[NetworkProxyKeys.body])));
-        _localDBProxy.saveUser(jsonEncode(user));
-        _startBluetooth();
+        await _handleStartParkingSuccess(data);
+        return ParkBlocState.success;
+      default:
+        return ParkBlocState.none;
+    }
+  }
+
+  Future<ParkBlocState> startPreviousParking(Parking parking, Car car) async {
+    final user = await getUser(_localDBProxy);
+    final data = await _networkProxy.sendStart(
+        user.id,
+        car.id,
+        parking.lat,
+        parking.lon,
+        parking.cityId,
+        parking.cityName,
+        parking.areaId,
+        parking.areaName,
+        parking.rateId,
+        parking.rateName,
+        user.token);
+    switch (data[NetworkProxyKeys.code]) {
+      case NetworkProxy.success:
+        await _handleStartParkingSuccess(data);
         return ParkBlocState.success;
       default:
         return ParkBlocState.none;
@@ -120,14 +121,53 @@ class ParkBloc with BaseBloc {
     final data = await _networkProxy.sendStop(user.id, parking.id, user.token);
     switch (data[NetworkProxyKeys.code]) {
       case NetworkProxy.success:
-        final user = await getUser(_localDBProxy);
-        user.deleteParking();
-        _localDBProxy.saveUser(jsonEncode(user));
-        _stopBluetooth();
+        await _handleStopParkingSuccess(data);
         return ParkBlocState.success;
       default:
         return ParkBlocState.none;
     }
+  }
+
+  Future _handleStartParkingSuccess(Map data) async {
+    final user = await getUser(_localDBProxy);
+    final parking = Parking.fromJson(jsonDecode(data[NetworkProxyKeys.body]));
+    user.updateParking(parking);
+    await _localDBProxy.saveUser(jsonEncode(user));
+    _startBluetooth();
+  }
+
+  Future _handleStopParkingSuccess(Map data) async {
+    final user = await getUser(_localDBProxy);
+    user.deleteParking();
+    await _localDBProxy.saveUser(jsonEncode(user));
+    final cache = await getCache(_localDBProxy);
+    final parking = Parking.fromJson(jsonDecode(data[NetworkProxyKeys.body]));
+    cache.updateParkings(parking);
+    await _localDBProxy.saveCache(jsonEncode(cache));
+    _stopBluetooth();
+  }
+
+  void _startBluetooth() {
+    if (_bluetoothStateStream != null) {
+      return;
+    }
+    _bluetoothStateStream = _bluetoothProxy.stream.listen((bool data) async {
+      final user = await getUser(_localDBProxy);
+      final aParking = await currentParking;
+      final parkingCar = user.parkingCar;
+      final title = '${parkingCar.nickname} ${parkingCar.number}';
+      final b =
+          '${aParking.cityName} ${aParking.areaName} ${aParking.rateName}';
+      _notificationProxy.showNotification(title, b);
+    });
+  }
+
+  void _stopBluetooth() {
+    if (_bluetoothStateStream == null) {
+      return;
+    }
+    _bluetoothStateStream.cancel();
+    _bluetoothStateStream = null;
   }
 }
 
