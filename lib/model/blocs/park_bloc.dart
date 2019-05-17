@@ -53,7 +53,7 @@ class ParkBloc with BaseBloc {
 
   Future<List<Parking>> get parkings async {
     final cache = await getCache(_localDBProxy);
-    return cache.parkings;
+    return cache.parkings.reversed.toList();
   }
 
   Future<ParkBlocState> get state async {
