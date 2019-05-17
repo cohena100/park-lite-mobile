@@ -446,66 +446,15 @@ void main() {
     testWidgets('show last 2 parkings on home page', (WidgetTester tester) async {
       user1[carsKey] = [car1, car2];
       model.localDBProxy.inMemoryUser = jsonEncode(user1);
+      model.localDBProxy.inMemoryCache = jsonEncode(cache1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
       await tester.pump();
       expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
-      expect(find.byKey(WidgetKeys.startKey), findsOneWidget);
-      await tester.tap(find.byKey(WidgetKeys.startKey));
-      await tester.pumpAndSettle();
+      expect(find.byKey(Key(parkingId1)), findsOneWidget);
       when(model.locationProxy.currentLocation)
           .thenAnswer((_) async => location1);
       model.localDBProxy.geoPark = geoPark1;
-      expect(find.byKey(WidgetKeys.selectCarPageKey), findsOneWidget);
-      await tester.tap(find.byKey(Key(carId1)));
-      await tester.pumpAndSettle();
-      expect(find.byKey(WidgetKeys.selectCityPageKey), findsOneWidget);
-      await tester.tap(find.byKey(Key(cityId1)));
-      await tester.pumpAndSettle();
-      expect(find.byKey(WidgetKeys.selectAreaPageKey), findsOneWidget);
-      await tester.tap(find.byKey(Key(areaId1)));
-      await tester.pumpAndSettle();
-      expect(find.byKey(WidgetKeys.selectRatePageKey), findsOneWidget);
-      when(model.networkProxy.sendStart(
-          userId1,
-          carId1,
-          lat1.toString(),
-          lon1.toString(),
-          cityId1,
-          cityName1,
-          areaId1,
-          areaName1,
-          rateId1,
-          rateName1,
-          token1))
-          .thenAnswer((_) async => {
-        NetworkProxyKeys.code: 200,
-        NetworkProxyKeys.body: jsonEncode({parkingKey: parking1}),
-      });
-      await tester.tap(find.byKey(Key(rateId1)));
-      await tester.pumpAndSettle();
-      await tester.pump();
-      expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
-      when(model.networkProxy.sendStop(userId1, parkingId1, token1))
-          .thenAnswer((_) async => {
-        NetworkProxyKeys.code: 200,
-        NetworkProxyKeys.body: jsonEncode({parkingKey: parking1}),
-      });
-      await tester.tap(find.byKey(WidgetKeys.stopKey));
-      await tester.pumpAndSettle();
-      await tester.pump();
-      expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
-      expect(find.byKey(Key(parkingId1)), findsOneWidget);
-      await tester.tap(find.byKey(Key(parkingId1)));
-      await tester.pumpAndSettle();
-      await tester.pump();
-      expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
-      expect(find.byKey(WidgetKeys.stopKey), findsOneWidget);
-      await tester.tap(find.byKey(WidgetKeys.stopKey));
-      await tester.pumpAndSettle();
-      await tester.pump();
-      expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
-      expect(find.byKey(Key(parkingId1)), findsOneWidget);
       await tester.tap(find.byKey(WidgetKeys.startKey));
       await tester.pumpAndSettle();
       expect(find.byKey(WidgetKeys.selectCarPageKey), findsOneWidget);
