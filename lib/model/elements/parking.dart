@@ -55,4 +55,11 @@ class Parking {
   String get rateName {
     return data[_rateName];
   }
+
+  bool isTheSame(Parking other) {
+    return (this.carId == other.carId &&
+        this.cityId == other.cityId &&
+        this.areaId == other.areaId &&
+        this.rateId == other.rateId);
+  }
 }

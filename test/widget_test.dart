@@ -429,6 +429,13 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
       expect(find.byKey(Key(parkingId1)), findsOneWidget);
+      await tester.tap(find.byKey(Key(parkingId1)));
+      await tester.pumpAndSettle();
+      expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
+      expect(find.byKey(WidgetKeys.stopKey), findsOneWidget);
+      await tester.tap(find.byKey(WidgetKeys.stopKey));
+      await tester.pumpAndSettle();
+      expect(find.byKey(Key(parkingId1)), findsOneWidget);
     });
 
 

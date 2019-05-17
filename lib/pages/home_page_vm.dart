@@ -51,7 +51,7 @@ class HomePageVM {
   Future stopParking() async {
     _actionSubject.add(HomePageVMAction(state: HomePageVMActionState.busy));
     await model.parkBloc.stopParking();
-    await init();
+    await _addHomeState();
   }
 
   Future _addHomeState() async {

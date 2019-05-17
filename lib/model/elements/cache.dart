@@ -1,13 +1,10 @@
 import 'package:pango_lite/model/elements/parking.dart';
 
 class Cache {
-  static final _cacheKey = 'cache';
   static final _parkingsKey = 'parkings';
   final Map _data;
 
   Cache(this._data);
-
-  Cache.fromJson(Map<String, dynamic> json) : _data = json[_cacheKey];
 
   List<Parking> get parkings {
     List allParkings = _data[_parkingsKey];
@@ -23,7 +20,7 @@ class Cache {
   }
 
   void updateParkings(Parking parking) {
-    final allParkings = parkings;
+    final allParkings = parkings.where((aParking) => !aParking.isTheSame(parking)).toList();
     allParkings.add(parking);
     _data[_parkingsKey] = allParkings.map((parking) => parking.data).toList();
   }
