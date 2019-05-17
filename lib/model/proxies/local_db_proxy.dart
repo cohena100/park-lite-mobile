@@ -7,6 +7,7 @@ import 'package:path_provider/path_provider.dart';
 class LocalDBProxy {
   final bool inMemory;
   String inMemoryUser;
+  String inMemoryCache;
   Map geoPark = {
     'cities': [
       {
@@ -115,5 +116,37 @@ class LocalDBProxy {
   Future<File> _writeUser(String json) async {
     final file = await _userFile;
     return file.writeAsString(json);
+  }
+
+  Future<File> get _cacheFile async {
+    final path = await _localPath;
+    return File('$path/cache.json');
+  }
+
+  Future<File> _writeCache(String json) async {
+    final file = await _cacheFile;
+    return file.writeAsString(json);
+  }
+
+  Future<Map> loadCache() async {
+    final baseCache = '''{"parkings": []}''';
+    if (inMemory) {
+      if (inMemoryCache == null) {
+        inMemoryCache = baseCache;
+      }
+      return jsonDecode(inMemoryUser);
+    } else {
+      try {
+        final file = await _cacheFile;
+        if (file.existsSync() == false) {
+          await _writeCache(baseCache);
+          return jsonDecode(baseCache);
+        }
+        final jsonString = await file.readAsString();
+        return jsonDecode(jsonString);
+      } catch (e) {
+        return null;
+      }
+    }
   }
 }
