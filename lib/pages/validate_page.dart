@@ -53,6 +53,7 @@ class ValidatePageState extends State<ValidatePage> {
   }
 
   Widget nickname(BuildContext context, String code) {
+    bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     _textEditingController.value =
         code == null ? TextEditingValue() : TextEditingValue(text: code);
     return Scaffold(
@@ -65,6 +66,8 @@ class ValidatePageState extends State<ValidatePage> {
                   key: WidgetKeys.validateTextFieldKey,
                   controller: _textEditingController,
                   autofocus: true,
+                  keyboardType:
+                      isIOS ? TextInputType.text : TextInputType.number,
                   maxLength: ValidatePageState.textFieldMaxLength,
                   textAlign: TextAlign.center,
                   decoration: InputDecoration(
