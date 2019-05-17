@@ -97,7 +97,7 @@ class HomePageVM {
   Future _addHomeStatePopulateNotParking(
       List<HomePageVMItem> decorateItems, User user) async {
     final parkings = await model.parkBloc.parkings;
-    final parkingItems = parkings.map((parking) {
+    final parkingItems = parkings.reversed.map((parking) {
       final car = user.findInnerCar(parking.carId);
       final data = {
         HomePageVMItemDataKey.car: car,
