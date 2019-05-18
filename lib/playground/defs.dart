@@ -2,8 +2,10 @@ import 'package:location/location.dart';
 
 final areaId1 = '9';
 final areaId2 = '90';
+final areaId3 = '900';
 final areaName1 = 'b';
 final areaName2 = 'c';
+final areaName3 = 'd';
 final cache1 = {
   'parkings': [
     parking1,
@@ -31,8 +33,10 @@ final carKey = 'car';
 final carsKey = 'cars';
 final cityId1 = '8';
 final cityId2 = '80';
+final cityId3 = '800';
 final cityName1 = 'a';
 final cityName2 = 'b';
+final cityName3 = 'c';
 final code1 = '3';
 final geoPark1 = {
   'cities': [
@@ -114,14 +118,30 @@ final parking2 = {
   'user': userId1,
   'car': innerCarId2,
 };
-final parkingId1 = '3';
-final parkingId2 = '4';
+final parking3 = {
+  '_id': parkingId3,
+  'cityId': cityId3,
+  'cityName': cityName3,
+  'areaId': areaId3,
+  'areaName': areaName3,
+  'rateId': rateId3,
+  'rateName': rateName3,
+  'lat': lat1.toString(),
+  'lon': lon1.toString(),
+  'user': userId1,
+  'car': innerCarId2,
+};
+final parkingId1 = '1';
+final parkingId2 = '2';
+final parkingId3 = '3';
 final parkingKey = 'parking';
 final phone1 = '4';
 final rateId1 = '11';
 final rateId2 = '22';
+final rateId3 = '33';
 final rateName1 = 'c';
 final rateName2 = 'd';
+final rateName3 = 'e';
 final token1 = '1';
 Map<String, Object> user1;
 final userId1 = '5';

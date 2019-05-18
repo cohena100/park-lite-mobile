@@ -8,6 +8,7 @@ class WidgetKeys {
   static final blueKey = Key('Blue');
   static final orangeKey = Key('Orange');
   static final startKey = Key('Start');
+  static final startTextKey = Key('StartText');
   static final stopKey = Key('Stop');
   static final parkTabKey = Key('ParkTab');
   static final userTabKey = Key('UserTab');

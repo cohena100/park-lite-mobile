@@ -84,7 +84,8 @@ class HomePageState extends State<HomePage> {
                     padding: const EdgeInsets.all(16),
                     child: Center(
                         child: Text(
-                            AppLocalizations.of(context).startParkingLabel)))),
+                            AppLocalizations.of(context).startParkingLabel,
+                            key: WidgetKeys.startTextKey)))),
             onTap: () {
               vm.startParking();
             });
@@ -129,12 +130,15 @@ class HomePageState extends State<HomePage> {
                     padding: const EdgeInsets.all(16),
                     child: Center(
                         child: Column(children: [
-                          Text(AppLocalizations.of(context).startPreviousParkingLabel),
-                          Text('${car.nickname} (${car.number})'),
-                          Text(parking.cityName),
-                          Text(parking.areaName),
-                          Text(parking.rateName),
-                        ])))),
+                      Text(
+                        AppLocalizations.of(context).startPreviousParkingLabel,
+                        key: Key(parking.id + 'Text'),
+                      ),
+                      Text('${car.nickname} (${car.number})'),
+                      Text(parking.cityName),
+                      Text(parking.areaName),
+                      Text(parking.rateName),
+                    ])))),
             onTap: () async {
               await vm.startPreviousParking(parking, car);
             });
