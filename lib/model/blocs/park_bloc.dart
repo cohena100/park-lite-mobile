@@ -21,8 +21,7 @@ class ParkBloc with BaseBloc {
   final LocationProxy _locationProxy;
   final BluetoothProxy _bluetoothProxy;
   final NotificationProxy _notificationProxy;
-  GeoPark areas;
-  LocationData location;
+  LocationData locationData;
   Car car;
   City city;
   Area area;
@@ -37,8 +36,12 @@ class ParkBloc with BaseBloc {
     this._notificationProxy,
   );
 
-  Future get currentLocation async {
-    location = await _locationProxy.currentLocation;
+  Future<ParkBlocState> get location async {
+    locationData = await _locationProxy.location;
+    if (locationData == null) {
+      return ParkBlocState.fail;
+    }
+    return ParkBlocState.success;
   }
 
   Future<Parking> get currentParking async {
@@ -64,9 +67,9 @@ class ParkBloc with BaseBloc {
     return ParkBlocState.notParking;
   }
 
-  Future<ParkBlocState> parkingAreas() async {
-    areas = GeoPark(await _localDbProxy.loadGeoPark());
-    return ParkBlocState.areas;
+  Future<GeoPark> areas() async {
+    final data = await _localDbProxy.loadGeoPark();
+    return GeoPark(data);
   }
 
   Future<ParkBlocState> startParking() async {
@@ -74,8 +77,8 @@ class ParkBloc with BaseBloc {
     final data = await _networkProxy.sendStart(
         user.id,
         car.id,
-        location.latitude.toString(),
-        location.longitude.toString(),
+        locationData.latitude.toString(),
+        locationData.longitude.toString(),
         city.id,
         city.name,
         area.id,
@@ -97,8 +100,8 @@ class ParkBloc with BaseBloc {
     final data = await _networkProxy.sendStart(
         user.id,
         car.id,
-        parking.lat,
-        parking.lon,
+        locationData.latitude.toString(),
+        locationData.longitude.toString(),
         parking.cityId,
         parking.cityName,
         parking.areaId,
@@ -177,4 +180,5 @@ enum ParkBlocState {
   notParking,
   areas,
   success,
+  fail,
 }

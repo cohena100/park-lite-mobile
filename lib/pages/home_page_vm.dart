@@ -37,15 +37,15 @@ class HomePageVM {
 
   Future startPreviousParking(Parking parking, Car car) async {
     _actionSubject.add(HomePageVMAction(state: HomePageVMActionState.busy));
-    final state = await model.parkBloc.startPreviousParking(parking, car);
+    final state = await model.parkBloc.location;
     switch (state) {
       case ParkBlocState.success:
-        await _addHomeState();
+        await model.parkBloc.startPreviousParking(parking, car);
         break;
       default:
-        await _addHomeState();
         break;
     }
+    await _addHomeState();
   }
 
   Future stopParking() async {

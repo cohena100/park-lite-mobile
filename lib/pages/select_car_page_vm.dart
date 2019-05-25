@@ -16,7 +16,7 @@ class SelectCarPageVM {
     _otherActionSubject.close();
   }
 
-  Future init() async {
+  Future _addCarsState() async {
     final User user = await model.userBloc.user;
     final decorateItems = [
       SelectCarPageVMItem(type: SelectCarPageVMItemType.blue),
@@ -31,8 +31,12 @@ class SelectCarPageVM {
     }).toList();
     _actionSubject.add(SelectCarPageVMAction(data: {
       SelectCarPageVMActionDataKey.items:
-          [decorateItems, items, decorateItems].expand((x) => x).toList()
+      [decorateItems, items, decorateItems].expand((x) => x).toList()
     }, state: SelectCarPageVMActionState.cars));
+  }
+
+  Future init() async {
+    await _addCarsState();
   }
 
   Future selectCar(Car car) async {
@@ -51,19 +55,20 @@ class SelectCarPageVM {
                 state: SelectCarPageVMOtherActionState.rootPage));
             break;
           default:
+            await _addCarsState();
             break;
         }
         break;
       default:
-        await model.parkBloc.currentLocation;
-        final state = await model.parkBloc.parkingAreas();
+        final state = await model.parkBloc.location;
         switch (state) {
-          case ParkBlocState.areas:
+          case ParkBlocState.success:
             model.parkBloc.car = car;
             _otherActionSubject.add(SelectCarPageVMOtherAction(
                 state: SelectCarPageVMOtherActionState.selectCityPage));
             break;
           default:
+            await _addCarsState();
             break;
         }
         break;

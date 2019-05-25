@@ -77,6 +77,7 @@ final geoPark1 = {
 final innerCarId1 = '2';
 final innerCarId2 = '3';
 final lat1 = 1.0;
+final lat2 = 11.0;
 final location1 = LocationData.fromMap({
   'latitude': lat1,
   'longitude': lon1,
@@ -87,7 +88,18 @@ final location1 = LocationData.fromMap({
   'heading': 0,
   'time': 0,
 });
+final location2 = LocationData.fromMap({
+  'latitude': lat2,
+  'longitude': lon2,
+  'accuracy': 0,
+  'altitude': 0,
+  'speed': 0,
+  'speed_accuracy': 0,
+  'heading': 0,
+  'time': 0,
+});
 final lon1 = 2.0;
+final lon2 = 22.0;
 final nickname1 = 'a';
 final nickname2 = 'aa';
 final number1 = '3';

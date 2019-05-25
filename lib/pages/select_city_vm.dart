@@ -19,7 +19,8 @@ class SelectCityPageVM {
       SelectCityPageVMItem(type: SelectCityPageVMItemType.orange),
       SelectCityPageVMItem(type: SelectCityPageVMItemType.blue),
     ];
-    final items = model.parkBloc.areas.cities.map((city) {
+    final areas = await model.parkBloc.areas();
+    final items = areas.cities.map((city) {
       final data = {
         SelectCityPageVMItemDataKey.city: city,
       };
