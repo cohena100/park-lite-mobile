@@ -20,10 +20,6 @@ void main() {
       }
     });
 
-    setUp(() async {
-      await driver.requestData('setup');
-    });
-
     test('show last 3 parkings on home page', () async {
       expect(
           await driver.getText(

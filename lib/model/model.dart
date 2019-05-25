@@ -6,7 +6,13 @@ import 'package:pango_lite/model/proxies/location_proxy.dart';
 import 'package:pango_lite/model/proxies/network_proxy.dart';
 import 'package:pango_lite/model/proxies/notification_proxy.dart';
 
-Model model;
+Model model = Model(
+  NetworkProxy(),
+  LocalDbProxy(),
+  LocationProxy(),
+  BluetoothProxy(),
+  NotificationProxy(),
+);
 
 class Model {
   final NetworkProxy networkProxy;

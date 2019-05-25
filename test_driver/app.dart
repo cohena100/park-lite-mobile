@@ -23,7 +23,6 @@ void main() {
         return 'error';
     }
   }
-
   enableFlutterDriverExtension(handler: dataHandler);
   final localDbProxy = LocalDbProxy(inMemory: true);
   localDbProxy.geoPark = geoPark1;
@@ -39,19 +38,21 @@ void main() {
   when(model.notificationProxy.showNotification(any, any)).thenAnswer((_) {
     return;
   });
-  model.localDbProxy.inMemoryUser = null;
   user1 = {
     '_id': userId1,
     'phone': phone1,
     'token': token1,
-    'cars': [],
+    'cars': [car1, car2],
   };
-  user1[carsKey] = [car1, car2];
   model.localDbProxy.inMemoryUser = jsonEncode(user1);
-  List<Map<String, String>> parkings = cache1['parkings'];
-  parkings.addAll([parking2, parking3]);
-  cache1['parkings'] = parkings;
-  model.localDbProxy.inMemoryCache = jsonEncode(cache1);
+  final cache = {
+    'parkings': [
+      parking1,
+      parking2,
+      parking3,
+    ]
+  };
+  model.localDbProxy.inMemoryCache = jsonEncode(cache);
   app.main();
 }
 
