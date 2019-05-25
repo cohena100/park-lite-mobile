@@ -6,17 +6,11 @@ import 'package:pango_lite/model/proxies/location_proxy.dart';
 import 'package:pango_lite/model/proxies/network_proxy.dart';
 import 'package:pango_lite/model/proxies/notification_proxy.dart';
 
-var model = Model(
-  NetworkProxy(),
-  LocalDBProxy(),
-  LocationProxy(),
-  BluetoothProxy(),
-  NotificationProxy(),
-);
+Model model;
 
 class Model {
   final NetworkProxy networkProxy;
-  final LocalDBProxy localDBProxy;
+  final LocalDbProxy localDbProxy;
   final LocationProxy locationProxy;
   final BluetoothProxy bluetoothProxy;
   final NotificationProxy notificationProxy;
@@ -25,16 +19,16 @@ class Model {
 
   Model(
     this.networkProxy,
-    this.localDBProxy,
+    this.localDbProxy,
     this.locationProxy,
     this.bluetoothProxy,
     this.notificationProxy,
   )   : userBloc = UserBloc(
           networkProxy,
-          localDBProxy,
+          localDbProxy,
         ),
         parkBloc = ParkBloc(
-          localDBProxy,
+          localDbProxy,
           networkProxy,
           locationProxy,
           bluetoothProxy,

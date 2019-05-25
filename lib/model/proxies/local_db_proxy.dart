@@ -2,72 +2,16 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:path_provider/path_provider.dart';
 
-class LocalDBProxy {
+class LocalDbProxy {
   final bool inMemory;
   String inMemoryUser;
   String inMemoryCache;
-  Map geoPark = {
-    'cities': [
-      {
-        'id': '1',
-        'name': 'פתח תקווה',
-        'areas': [
-          {
-            'id': '2',
-            'name': 'מערב',
-            'rates': [
-              {
-                'id': '3',
-                'name': 'שעתי',
-              },
-              {
-                'id': '4',
-                'name': 'יומי',
-              },
-              {
-                'id': '5',
-                'name': 'חודשי',
-              },
-            ],
-          },
-          {
-            'id': '6',
-            'name': 'מזרח',
-            'rates': [
-              {
-                'id': '7',
-                'name': 'שעתי',
-              },
-            ],
-          },
-        ],
-      },
-      {
-        'id': '8',
-        'name': 'גבעת שמואל',
-        'areas': [
-          {
-            'id': '9',
-            'name': 'כל העיר',
-            'rates': [
-              {
-                'id': '10',
-                'name': 'שעתי',
-              },
-              {
-                'id': '11',
-                'name': 'יומי',
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  };
+  Map geoPark;
 
-  LocalDBProxy({this.inMemory = false});
+  LocalDbProxy({this.inMemory = false});
 
   Future<File> get _cacheFile async {
     final path = await _localPath;
@@ -104,7 +48,12 @@ class LocalDBProxy {
     }
   }
 
-  Map loadGeoPark() {
+  Future<Map> loadGeoPark() async {
+    if (geoPark != null) {
+      return geoPark;
+    }
+    final json = await rootBundle.loadString('data/geoPark.json');
+    geoPark = jsonDecode(json);
     return geoPark;
   }
 

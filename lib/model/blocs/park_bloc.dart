@@ -16,7 +16,7 @@ import 'package:pango_lite/model/proxies/network_proxy.dart';
 import 'package:pango_lite/model/proxies/notification_proxy.dart';
 
 class ParkBloc with BaseBloc {
-  final LocalDBProxy _localDBProxy;
+  final LocalDbProxy _localDbProxy;
   final NetworkProxy _networkProxy;
   final LocationProxy _locationProxy;
   final BluetoothProxy _bluetoothProxy;
@@ -30,7 +30,7 @@ class ParkBloc with BaseBloc {
   StreamSubscription _bluetoothStateStream;
 
   ParkBloc(
-    this._localDBProxy,
+    this._localDbProxy,
     this._networkProxy,
     this._locationProxy,
     this._bluetoothProxy,
@@ -42,7 +42,7 @@ class ParkBloc with BaseBloc {
   }
 
   Future<Parking> get currentParking async {
-    final user = await getUser(_localDBProxy);
+    final user = await getUser(_localDbProxy);
     if (user.parking == null) {
       _stopBluetooth();
       return null;
@@ -52,7 +52,7 @@ class ParkBloc with BaseBloc {
   }
 
   Future<List<Parking>> get parkings async {
-    final cache = await getCache(_localDBProxy);
+    final cache = await getCache(_localDbProxy);
     return cache.parkings.reversed.toList();
   }
 
@@ -65,12 +65,12 @@ class ParkBloc with BaseBloc {
   }
 
   Future<ParkBlocState> parkingAreas() async {
-    areas = GeoPark(_localDBProxy.loadGeoPark());
+    areas = GeoPark(await _localDbProxy.loadGeoPark());
     return ParkBlocState.areas;
   }
 
   Future<ParkBlocState> startParking() async {
-    final user = await getUser(_localDBProxy);
+    final user = await getUser(_localDbProxy);
     final data = await _networkProxy.sendStart(
         user.id,
         car.id,
@@ -93,7 +93,7 @@ class ParkBloc with BaseBloc {
   }
 
   Future<ParkBlocState> startPreviousParking(Parking parking, Car car) async {
-    final user = await getUser(_localDBProxy);
+    final user = await getUser(_localDbProxy);
     final data = await _networkProxy.sendStart(
         user.id,
         car.id,
@@ -116,7 +116,7 @@ class ParkBloc with BaseBloc {
   }
 
   Future<ParkBlocState> stopParking() async {
-    final user = await getUser(_localDBProxy);
+    final user = await getUser(_localDbProxy);
     final parking = user.parking;
     final data = await _networkProxy.sendStop(user.id, parking.id, user.token);
     switch (data[NetworkProxyKeys.code]) {
@@ -129,21 +129,21 @@ class ParkBloc with BaseBloc {
   }
 
   Future _handleStartParkingSuccess(Map data) async {
-    final user = await getUser(_localDBProxy);
+    final user = await getUser(_localDbProxy);
     final parking = Parking.fromJson(jsonDecode(data[NetworkProxyKeys.body]));
     user.updateParking(parking);
-    await _localDBProxy.saveUser(jsonEncode(user));
+    await _localDbProxy.saveUser(jsonEncode(user));
     _startBluetooth();
   }
 
   Future _handleStopParkingSuccess(Map data) async {
-    final user = await getUser(_localDBProxy);
+    final user = await getUser(_localDbProxy);
     user.deleteParking();
-    await _localDBProxy.saveUser(jsonEncode(user));
-    final cache = await getCache(_localDBProxy);
+    await _localDbProxy.saveUser(jsonEncode(user));
+    final cache = await getCache(_localDbProxy);
     final parking = Parking.fromJson(jsonDecode(data[NetworkProxyKeys.body]));
     cache.updateParkings(parking);
-    await _localDBProxy.saveCache(jsonEncode(cache));
+    await _localDbProxy.saveCache(jsonEncode(cache));
     _stopBluetooth();
   }
 
@@ -152,7 +152,7 @@ class ParkBloc with BaseBloc {
       return;
     }
     _bluetoothStateStream = _bluetoothProxy.stream.listen((bool data) async {
-      final user = await getUser(_localDBProxy);
+      final user = await getUser(_localDbProxy);
       final aParking = await currentParking;
       final parkingCar = user.parkingCar;
       final title = '${parkingCar.nickname} ${parkingCar.number}';

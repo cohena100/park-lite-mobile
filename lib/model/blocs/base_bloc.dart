@@ -3,20 +3,20 @@ import 'package:pango_lite/model/elements/user.dart';
 import 'package:pango_lite/model/proxies/local_db_proxy.dart';
 
 mixin BaseBloc {
-  Future<User> getUser(LocalDBProxy localDBProxy) async {
-    final data = await localDBProxy.loadUser();
+  Future<User> getUser(LocalDbProxy localDbProxy) async {
+    final data = await localDbProxy.loadUser();
     if (data == null) {
       return null;
     }
     return User(data);
   }
 
-  Future<Cache> getCache(LocalDBProxy localDBProxy) async {
-    var data = await localDBProxy.loadCache();
+  Future<Cache> getCache(LocalDbProxy localDbProxy) async {
+    var data = await localDbProxy.loadCache();
     if (data == null) {
       final json = '{}';
-      await localDBProxy.saveCache(json);
-      data = await localDBProxy.loadCache();
+      await localDbProxy.saveCache(json);
+      data = await localDbProxy.loadCache();
     }
     return Cache(data);
   }

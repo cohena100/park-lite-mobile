@@ -29,9 +29,11 @@ void main() {
   });
 
   setUp(() {
+    final localDBProxy = LocalDbProxy(inMemory: true);
+    localDBProxy.geoPark = geoPark1;
     model = Model(
       MockNetworkProxy(),
-      LocalDBProxy(inMemory: true),
+      localDBProxy,
       MockLocationProxy(),
       MockBluetoothProxy(),
       MockNotificationProxy(),
@@ -41,7 +43,7 @@ void main() {
     when(model.notificationProxy.showNotification(any, any)).thenAnswer((_) {
       return;
     });
-    model.localDBProxy.inMemoryUser = null;
+    model.localDbProxy.inMemoryUser = null;
     user1 = {
       '_id': userId1,
       'phone': phone1,
@@ -83,14 +85,14 @@ void main() {
 
     testWidgets('Not logged in because no token', (WidgetTester tester) async {
       user1.remove('token');
-      model.localDBProxy.inMemoryUser = jsonEncode(user1);
+      model.localDbProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
       expect(find.byKey(WidgetKeys.phonePageKey), findsOneWidget);
     });
 
     testWidgets('Already logged in', (WidgetTester tester) async {
-      model.localDBProxy.inMemoryUser = jsonEncode(user1);
+      model.localDbProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
       expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
@@ -168,7 +170,7 @@ void main() {
     });
 
     testWidgets('Exit', (WidgetTester tester) async {
-      model.localDBProxy.inMemoryUser = jsonEncode(user1);
+      model.localDbProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
       expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
@@ -187,7 +189,7 @@ void main() {
     });
 
     testWidgets('Exit still even after 400', (WidgetTester tester) async {
-      model.localDBProxy.inMemoryUser = jsonEncode(user1);
+      model.localDbProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
       expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
@@ -207,7 +209,7 @@ void main() {
 
   group('car', () {
     testWidgets('Add first car after login', (WidgetTester tester) async {
-      model.localDBProxy.inMemoryUser = jsonEncode(user1);
+      model.localDbProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
       expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
@@ -246,7 +248,7 @@ void main() {
     });
 
     testWidgets('add car success', (WidgetTester tester) async {
-      model.localDBProxy.inMemoryUser = jsonEncode(user1);
+      model.localDbProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
       expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
@@ -295,7 +297,7 @@ void main() {
 
     testWidgets('remove car success', (WidgetTester tester) async {
       user1[carsKey] = [car1];
-      model.localDBProxy.inMemoryUser = jsonEncode(user1);
+      model.localDbProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(WidgetKeys.userTabKey));
@@ -320,7 +322,7 @@ void main() {
   group('park', () {
     testWidgets('start parking success', (WidgetTester tester) async {
       user1[carsKey] = [car1];
-      model.localDBProxy.inMemoryUser = jsonEncode(user1);
+      model.localDbProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
       await tester.pump();
@@ -330,7 +332,6 @@ void main() {
       await tester.pumpAndSettle();
       when(model.locationProxy.currentLocation)
           .thenAnswer((_) async => location1);
-      model.localDBProxy.geoPark = geoPark1;
       expect(find.byKey(WidgetKeys.selectCarPageKey), findsOneWidget);
       await tester.tap(find.byKey(Key(carId1)));
       await tester.pumpAndSettle();
@@ -365,7 +366,7 @@ void main() {
     testWidgets('stop parking success', (WidgetTester tester) async {
       user1[carsKey] = [car1];
       user1[parkingKey] = parking1;
-      model.localDBProxy.inMemoryUser = jsonEncode(user1);
+      model.localDbProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
       expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
@@ -385,7 +386,7 @@ void main() {
   group('parkings', () {
     testWidgets('show last parking on home page', (WidgetTester tester) async {
       user1[carsKey] = [car1];
-      model.localDBProxy.inMemoryUser = jsonEncode(user1);
+      model.localDbProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
       await tester.pump();
@@ -394,7 +395,6 @@ void main() {
       await tester.pumpAndSettle();
       when(model.locationProxy.currentLocation)
           .thenAnswer((_) async => location1);
-      model.localDBProxy.geoPark = geoPark1;
       expect(find.byKey(WidgetKeys.selectCarPageKey), findsOneWidget);
       await tester.tap(find.byKey(Key(carId1)));
       await tester.pumpAndSettle();
@@ -445,8 +445,8 @@ void main() {
 
     testWidgets('show last 2 parkings on home page', (WidgetTester tester) async {
       user1[carsKey] = [car1, car2];
-      model.localDBProxy.inMemoryUser = jsonEncode(user1);
-      model.localDBProxy.inMemoryCache = jsonEncode(cache1);
+      model.localDbProxy.inMemoryUser = jsonEncode(user1);
+      model.localDbProxy.inMemoryCache = jsonEncode(cache1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
       await tester.pump();
@@ -454,7 +454,6 @@ void main() {
       expect(find.byKey(Key(parkingId1)), findsOneWidget);
       when(model.locationProxy.currentLocation)
           .thenAnswer((_) async => location1);
-      model.localDBProxy.geoPark = geoPark1;
       await tester.tap(find.byKey(WidgetKeys.startKey));
       await tester.pumpAndSettle();
       expect(find.byKey(WidgetKeys.selectCarPageKey), findsOneWidget);

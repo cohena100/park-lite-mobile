@@ -9,14 +9,14 @@ import 'package:pango_lite/model/proxies/network_proxy.dart';
 
 class UserBloc with BaseBloc {
   final NetworkProxy _networkProxy;
-  final LocalDBProxy _localDBProxy;
+  final LocalDbProxy _localDbProxy;
 
   UserBlocContext context = UserBlocContext();
 
-  UserBloc(this._networkProxy, this._localDBProxy);
+  UserBloc(this._networkProxy, this._localDbProxy);
 
   Future<User> get user async {
-    return await getUser(_localDBProxy);
+    return await getUser(_localDbProxy);
   }
 
   Future<UserBlocState> addCar() async {
@@ -131,12 +131,12 @@ class UserBloc with BaseBloc {
   Future _handleAddCarValidateSuccess(Map data, User user) async {
     final car = Car.fromJson(jsonDecode(data[NetworkProxyKeys.body]));
     user.addCar(car);
-    await _localDBProxy.saveUser(jsonEncode(user));
+    await _localDbProxy.saveUser(jsonEncode(user));
   }
 
   Future _handleRemoveCarSuccess(Map data, User user, Car car) async {
     user.removeCar(car);
-    await _localDBProxy.saveUser(jsonEncode(user));
+    await _localDbProxy.saveUser(jsonEncode(user));
   }
 
   void _handleUseLoginValidate(Map data) {
@@ -149,12 +149,12 @@ class UserBloc with BaseBloc {
 
   Future _handleUserLogoutSuccess(Map data, User user) async {
     user.deleteToken();
-    await _localDBProxy.saveUser(jsonEncode(user));
+    await _localDbProxy.saveUser(jsonEncode(user));
   }
 
   Future _handleUserValidateSuccess(Map data) async {
     final user = User.fromJson(jsonDecode(data[NetworkProxyKeys.body]));
-    await _localDBProxy.saveUser(jsonEncode(user));
+    await _localDbProxy.saveUser(jsonEncode(user));
   }
 }
 

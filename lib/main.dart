@@ -13,7 +13,22 @@ import 'package:pango_lite/pages/select_rate_page.dart';
 import 'package:pango_lite/pages/validate_page.dart';
 import 'package:pango_lite/pages/widget_keys.dart';
 
-void main() => runApp(MyApp());
+import 'model/proxies/bluetooth_proxy.dart';
+import 'model/proxies/local_db_proxy.dart';
+import 'model/proxies/location_proxy.dart';
+import 'model/proxies/network_proxy.dart';
+import 'model/proxies/notification_proxy.dart';
+
+void main() {
+  model = Model(
+    NetworkProxy(),
+    LocalDbProxy(),
+    LocationProxy(),
+    BluetoothProxy(),
+    NotificationProxy(),
+  );
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
