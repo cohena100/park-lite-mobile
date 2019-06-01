@@ -18,11 +18,7 @@ class NetworkProxy {
     var body = json.encode({
       'userId': userId,
     });
-    final Map<String, String> extraHeaders = {'Authorization': token};
-    final Map<String, String> allHeaders = {};
-    allHeaders.addAll(headers);
-    allHeaders.addAll(extraHeaders);
-    var response = await http.post(url, body: body, headers: allHeaders);
+    var response = await http.post(url, body: body, headers: _allHeaders(token));
     return {
       NetworkProxyKeys.code: response.statusCode,
       NetworkProxyKeys.body: response.body
@@ -39,27 +35,7 @@ class NetworkProxy {
       'validateId': validateId,
       'code': code,
     });
-    final Map<String, String> extraHeaders = {'Authorization': token};
-    final Map<String, String> allHeaders = {};
-    allHeaders.addAll(headers);
-    allHeaders.addAll(extraHeaders);
-    var response = await http.post(url, body: body, headers: allHeaders);
-    return {
-      NetworkProxyKeys.code: response.statusCode,
-      NetworkProxyKeys.body: response.body
-    };
-  }
-
-  sendLogout(String userId, String token) async {
-    var url = _baseUrl + '/users/logout';
-    var body = json.encode({
-      'userId': userId,
-    });
-    final Map<String, String> extraHeaders = {'Authorization': token};
-    final Map<String, String> allHeaders = {};
-    allHeaders.addAll(headers);
-    allHeaders.addAll(extraHeaders);
-    var response = await http.post(url, body: body, headers: allHeaders);
+    var response = await http.post(url, body: body, headers: _allHeaders(token));
     return {
       NetworkProxyKeys.code: response.statusCode,
       NetworkProxyKeys.body: response.body
@@ -91,17 +67,25 @@ class NetworkProxy {
     };
   }
 
+  sendLogout(String userId, String token) async {
+    var url = _baseUrl + '/users/logout';
+    var body = json.encode({
+      'userId': userId,
+    });
+    var response = await http.post(url, body: body, headers: _allHeaders(token));
+    return {
+      NetworkProxyKeys.code: response.statusCode,
+      NetworkProxyKeys.body: response.body
+    };
+  }
+
   Future<Map> sendRemove(String userId, String carId, String token) async {
     var url = _baseUrl + '/cars/remove';
     var body = json.encode({
       'userId': userId,
       'carId': carId,
     });
-    final Map<String, String> extraHeaders = {'Authorization': token};
-    final Map<String, String> allHeaders = {};
-    allHeaders.addAll(headers);
-    allHeaders.addAll(extraHeaders);
-    var response = await http.post(url, body: body, headers: allHeaders);
+    var response = await http.post(url, body: body, headers: _allHeaders(token));
     return {
       NetworkProxyKeys.code: response.statusCode,
       NetworkProxyKeys.body: response.body
@@ -133,11 +117,7 @@ class NetworkProxy {
       'rateId': rateId,
       'rateName': rateName,
     });
-    final Map<String, String> extraHeaders = {'Authorization': token};
-    final Map<String, String> allHeaders = {};
-    allHeaders.addAll(headers);
-    allHeaders.addAll(extraHeaders);
-    var response = await http.post(url, body: body, headers: allHeaders);
+    var response = await http.post(url, body: body, headers: _allHeaders(token));
     return {
       NetworkProxyKeys.code: response.statusCode,
       NetworkProxyKeys.body: response.body
@@ -150,11 +130,7 @@ class NetworkProxy {
       'userId': userId,
       'parkingId': parkingId,
     });
-    final Map<String, String> extraHeaders = {'Authorization': token};
-    final Map<String, String> allHeaders = {};
-    allHeaders.addAll(headers);
-    allHeaders.addAll(extraHeaders);
-    var response = await http.post(url, body: body, headers: allHeaders);
+    var response = await http.post(url, body: body, headers: _allHeaders(token));
     return {
       NetworkProxyKeys.code: response.statusCode,
       NetworkProxyKeys.body: response.body
@@ -164,6 +140,14 @@ class NetworkProxy {
   void setup(bool isIOS) {
     _baseUrl = 'https://stormy-dusk-75310.herokuapp.com';
 //    _baseUrl = isIOS ? 'http://localhost:3000' : 'http://10.0.2.2:3000';
+  }
+
+  Map<String, String> _allHeaders(String token) {
+    final Map<String, String> extraHeaders = {'Authorization': token};
+    final Map<String, String> allHeaders = {};
+    allHeaders.addAll(headers);
+    allHeaders.addAll(extraHeaders);
+    return allHeaders;
   }
 }
 
