@@ -44,7 +44,7 @@ class ParkBloc with BaseBloc {
     return ParkBlocState.success;
   }
 
-  Future<Parking> get currentParking async {
+  Future<Parking> get parking async {
     final user = await getUser(_localDbProxy);
     if (user.parking == null) {
       _stopBluetooth();
@@ -60,7 +60,7 @@ class ParkBloc with BaseBloc {
   }
 
   Future<ParkBlocState> get state async {
-    final isParking = await currentParking;
+    final isParking = await parking;
     if (isParking != null) {
       return ParkBlocState.parking;
     }
@@ -156,7 +156,7 @@ class ParkBloc with BaseBloc {
     }
     _bluetoothStateStream = _bluetoothProxy.stream.listen((bool data) async {
       final user = await getUser(_localDbProxy);
-      final aParking = await currentParking;
+      final aParking = await parking;
       final parkingCar = user.parkingCar;
       final title = '${parkingCar.nickname} ${parkingCar.number}';
       final b =

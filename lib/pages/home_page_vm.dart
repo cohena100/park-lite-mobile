@@ -121,7 +121,7 @@ class HomePageVM {
 
   Future _addHomeStatePopulateParking(
       List<HomePageVMItem> decorateItems, User user) async {
-    final parking = await model.parkBloc.currentParking;
+    final parking = await model.parkBloc.parking;
     final car = user.parkingCar;
     final data = {
       HomePageVMItemDataKey.parking: parking,
