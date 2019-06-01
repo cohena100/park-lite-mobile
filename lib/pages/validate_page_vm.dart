@@ -25,7 +25,7 @@ class ValidatePageVM {
     }
   }
 
-  void validateChanged(String s) {
+  void codeChanged(String s) {
     final context = model.userBloc.context;
     switch (context.state) {
       case UserBlocContextState.addCar:
@@ -37,7 +37,7 @@ class ValidatePageVM {
     }
   }
 
-  Future validateSubmitted() async {
+  Future codeSubmitted() async {
     final context = model.userBloc.context;
     switch (context.state) {
       case UserBlocContextState.addCar:
@@ -46,6 +46,11 @@ class ValidatePageVM {
         final state = await model.userBloc.addCarValidate();
         switch (state) {
           case UserBlocState.success:
+            _otherActionSubject.add(ValidatePageVMOtherAction(
+                state: ValidatePageVMOtherActionState.rootPage));
+            break;
+          case UserBlocState.authorize:
+            await model.userBloc.userLogout(isForced: true);
             _otherActionSubject.add(ValidatePageVMOtherAction(
                 state: ValidatePageVMOtherActionState.rootPage));
             break;
@@ -76,7 +81,7 @@ class ValidatePageVM {
   void _addValidateAction(UserBlocContext context) {
     String code = context.data[UserBlocContextDataKey.code];
     _actionSubject.add(ValidatePageVMAction(
-        data: {ValidatePageVMActionDataKey.validate: code},
+        data: {ValidatePageVMActionDataKey.code: code},
         state: ValidatePageVMActionState.validate));
   }
 }
@@ -88,7 +93,7 @@ class ValidatePageVMAction {
       {this.data = const {}, this.state = ValidatePageVMActionState.none});
 }
 
-enum ValidatePageVMActionDataKey { none, validate }
+enum ValidatePageVMActionDataKey { none, code }
 
 enum ValidatePageVMActionState { none, busy, validate }
 

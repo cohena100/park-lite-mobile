@@ -28,6 +28,11 @@ class SelectRatePageVM {
         _otherActionSubject.add(SelectRatePageVMOtherAction(
             state: SelectRatePageVMOtherActionState.homePage));
         break;
+      case ParkBlocState.authorize:
+        await model.userBloc.userLogout(isForced: true);
+        _otherActionSubject.add(SelectRatePageVMOtherAction(
+            state: SelectRatePageVMOtherActionState.rootPage));
+        break;
       default:
         _addRatesState();
         break;
@@ -86,4 +91,4 @@ class SelectRatePageVMOtherAction {
 
 enum SelectRatePageVMOtherActionDataKey { none }
 
-enum SelectRatePageVMOtherActionState { none, homePage }
+enum SelectRatePageVMOtherActionState { none, homePage, rootPage }

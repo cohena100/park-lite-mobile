@@ -39,7 +39,7 @@ class ParkBloc with BaseBloc {
   Future<ParkBlocState> get location async {
     locationData = await _locationProxy.location;
     if (locationData == null) {
-      return ParkBlocState.fail;
+      return ParkBlocState.failure;
     }
     return ParkBlocState.success;
   }
@@ -90,9 +90,10 @@ class ParkBloc with BaseBloc {
       case NetworkProxy.success:
         await _handleStartParkingSuccess(data);
         return ParkBlocState.success;
-      default:
-        return ParkBlocState.none;
+      case NetworkProxy.authorize:
+        return ParkBlocState.authorize;
     }
+    return ParkBlocState.failure;
   }
 
   Future<ParkBlocState> startPreviousParking(Parking parking, Car car) async {
@@ -113,9 +114,10 @@ class ParkBloc with BaseBloc {
       case NetworkProxy.success:
         await _handleStartParkingSuccess(data);
         return ParkBlocState.success;
-      default:
-        return ParkBlocState.none;
+      case NetworkProxy.authorize:
+        return ParkBlocState.authorize;
     }
+    return ParkBlocState.failure;
   }
 
   Future<ParkBlocState> stopParking() async {
@@ -126,9 +128,10 @@ class ParkBloc with BaseBloc {
       case NetworkProxy.success:
         await _handleStopParkingSuccess(data);
         return ParkBlocState.success;
-      default:
-        return ParkBlocState.none;
+      case NetworkProxy.authorize:
+        return ParkBlocState.authorize;
     }
+    return ParkBlocState.failure;
   }
 
   Future _handleStartParkingSuccess(Map data) async {
@@ -175,10 +178,10 @@ class ParkBloc with BaseBloc {
 }
 
 enum ParkBlocState {
-  none,
   parking,
   notParking,
   areas,
   success,
-  fail,
+  failure,
+  authorize,
 }

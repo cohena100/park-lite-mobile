@@ -40,18 +40,41 @@ class HomePageVM {
     final state = await model.parkBloc.location;
     switch (state) {
       case ParkBlocState.success:
-        await model.parkBloc.startPreviousParking(parking, car);
+        final state = await model.parkBloc.startPreviousParking(parking, car);
+        switch (state) {
+          case ParkBlocState.authorize:
+            await model.userBloc.userLogout(isForced: true);
+            _otherActionSubject.add(
+              HomePageVMOtherAction(
+                  state: HomePageVMOtherActionState.rootPage),
+            );
+            break;
+          default:
+            await _addHomeState();
+            break;
+        }
         break;
       default:
+        await _addHomeState();
         break;
     }
-    await _addHomeState();
   }
 
   Future stopParking() async {
     _actionSubject.add(HomePageVMAction(state: HomePageVMActionState.busy));
-    await model.parkBloc.stopParking();
-    await _addHomeState();
+    final state = await model.parkBloc.stopParking();
+    switch (state) {
+      case ParkBlocState.authorize:
+        await model.userBloc.userLogout(isForced: true);
+        _otherActionSubject.add(
+          HomePageVMOtherAction(
+              state: HomePageVMOtherActionState.rootPage),
+        );
+        break;
+      default:
+        await _addHomeState();
+        break;
+    }
   }
 
   Future _addHomeState() async {
@@ -172,4 +195,4 @@ class HomePageVMOtherAction {
 
 enum HomePageVMOtherActionDataKey { none }
 
-enum HomePageVMOtherActionState { none, selectCarPage, carPage }
+enum HomePageVMOtherActionState { none, selectCarPage, carPage, rootPage }

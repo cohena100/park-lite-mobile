@@ -54,6 +54,11 @@ class NicknamePageVM {
             _otherActionSubject.add(NicknamePageVMOtherAction(
                 state: NicknamePageVMOtherActionState.validatePage));
             break;
+          case UserBlocState.authorize:
+            await model.userBloc.userLogout(isForced: true);
+            _otherActionSubject.add(NicknamePageVMOtherAction(
+                state: NicknamePageVMOtherActionState.rootPage));
+            break;
           default:
             _addNicknameAction(context);
             break;
@@ -85,4 +90,4 @@ class NicknamePageVMOtherAction {
 
 enum NicknamePageVMOtherActionDataKey { none }
 
-enum NicknamePageVMOtherActionState { none, validatePage }
+enum NicknamePageVMOtherActionState { none, validatePage, rootPage }

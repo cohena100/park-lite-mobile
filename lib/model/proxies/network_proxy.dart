@@ -9,7 +9,7 @@ class NetworkProxy {
     'Accept': 'application/json',
   };
   static const success = 200;
-  static const validate = 401;
+  static const authorize = 401;
   static const error = 400;
   String _baseUrl;
 

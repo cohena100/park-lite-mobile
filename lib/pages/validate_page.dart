@@ -39,7 +39,7 @@ class ValidatePageState extends State<ValidatePage> {
               return Center(child: CircularProgressIndicator());
             case ValidatePageVMActionState.validate:
               return nickname(
-                  context, action.data[ValidatePageVMActionDataKey.validate]);
+                  context, action.data[ValidatePageVMActionDataKey.code]);
             default:
               return Container();
           }
@@ -73,10 +73,10 @@ class ValidatePageState extends State<ValidatePage> {
                   decoration: InputDecoration(
                       hintText: AppLocalizations.of(context).validateHint),
                   onChanged: (String s) {
-                    vm.validateChanged(s);
+                    vm.codeChanged(s);
                   },
                   onSubmitted: (String s) async {
-                    vm.validateSubmitted();
+                    vm.codeSubmitted();
                   })
             ]));
   }

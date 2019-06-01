@@ -28,7 +28,8 @@ class HomePageState extends State<HomePage> {
         case HomePageVMOtherActionState.carPage:
           Navigator.pushNamed(context, Routes.carPage);
           break;
-        default:
+        case HomePageVMOtherActionState.rootPage:
+          Navigator.pushNamed(context, Routes.rootPage);
           break;
       }
     });

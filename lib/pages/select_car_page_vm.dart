@@ -54,6 +54,13 @@ class SelectCarPageVM {
             _otherActionSubject.add(SelectCarPageVMOtherAction(
                 state: SelectCarPageVMOtherActionState.rootPage));
             break;
+          case UserBlocState.authorize:
+            await model.userBloc.userLogout(isForced: true);
+            _otherActionSubject.add(
+              SelectCarPageVMOtherAction(
+                  state: SelectCarPageVMOtherActionState.rootPage),
+            );
+            break;
           default:
             await _addCarsState();
             break;

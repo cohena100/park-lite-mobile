@@ -155,6 +155,7 @@ final rateName1 = 'c';
 final rateName2 = 'd';
 final rateName3 = 'e';
 final token1 = '1';
+final tokenKey = 'token';
 Map<String, Object> user1;
 final userId1 = '5';
 final userKey = 'user';
