@@ -47,6 +47,12 @@ class ValidatePageVM {
     );
   }
 
+  void _addFullRootPageOtherAction() {
+    _otherActionSubject.add(
+      ValidatePageVMOtherAction(state: ValidatePageVMOtherActionState.fullRootPage),
+    );
+  }
+
   void _addValidateAction() {
     String code = model.userBloc.context.data[UserBlocContextDataKey.code];
     _actionSubject.add(
@@ -61,11 +67,11 @@ class ValidatePageVM {
     final state = await model.userBloc.addCarValidate();
     switch (state) {
       case UserBlocState.success:
-        _addRootPageOtherAction();
+        _addFullRootPageOtherAction();
         break;
       case UserBlocState.authorize:
         await model.userBloc.userLogout(isForced: true);
-        _addRootPageOtherAction();
+        _addFullRootPageOtherAction();
         break;
       default:
         _addValidateAction();
@@ -107,4 +113,4 @@ class ValidatePageVMOtherAction {
 
 enum ValidatePageVMOtherActionDataKey { none }
 
-enum ValidatePageVMOtherActionState { none, rootPage }
+enum ValidatePageVMOtherActionState { none, rootPage, fullRootPage }
