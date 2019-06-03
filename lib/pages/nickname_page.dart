@@ -28,15 +28,24 @@ class NicknamePageState extends State<NicknamePage> {
         initialData: NicknamePageVMAction(),
         builder: (context, snapshot) {
           final action = snapshot.data;
+          Widget body;
           switch (action.state) {
             case NicknamePageVMActionState.busy:
-              return Center(child: CircularProgressIndicator());
+              body = Center(child: CircularProgressIndicator());
+              break;
             case NicknamePageVMActionState.nickname:
-              return nickname(
+              body = nickname(
                   context, action.data[NicknamePageVMActionDataKey.nickname]);
+              break;
             default:
-              return Container();
+              body = Container();
+              break;
           }
+          return Scaffold(
+            appBar: AppBar(
+                title: Text(AppLocalizations.of(context).carNicknameTitle)),
+            body: body,
+          );
         });
   }
 
@@ -67,27 +76,24 @@ class NicknamePageState extends State<NicknamePage> {
   Widget nickname(BuildContext context, String number) {
     _textEditingController.value =
         number == null ? TextEditingValue() : TextEditingValue(text: number);
-    return Scaffold(
-        appBar:
-            AppBar(title: Text(AppLocalizations.of(context).carNicknameTitle)),
-        body: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              TextField(
-                  key: WidgetKeys.nicknameTextFieldKey,
-                  controller: _textEditingController,
-                  autofocus: true,
-                  maxLength: NicknamePageState.textFieldMaxLength,
-                  textAlign: TextAlign.center,
-                  decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context).carNicknameHint),
-                  onChanged: (String s) {
-                    vm.nicknameChanged(s);
-                  },
-                  onSubmitted: (String s) async {
-                    vm.nicknameSubmitted();
-                  })
-            ]));
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          TextField(
+              key: WidgetKeys.nicknameTextFieldKey,
+              controller: _textEditingController,
+              autofocus: true,
+              maxLength: NicknamePageState.textFieldMaxLength,
+              textAlign: TextAlign.center,
+              decoration: InputDecoration(
+                  hintText: AppLocalizations.of(context).carNicknameHint),
+              onChanged: (String s) {
+                vm.nicknameChanged(s);
+              },
+              onSubmitted: (String s) async {
+                await vm.nicknameSubmitted();
+              })
+        ]);
   }
 }

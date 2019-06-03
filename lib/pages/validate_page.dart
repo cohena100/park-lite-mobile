@@ -28,15 +28,24 @@ class ValidatePageState extends State<ValidatePage> {
         initialData: ValidatePageVMAction(),
         builder: (context, snapshot) {
           final action = snapshot.data;
+          Widget body;
           switch (action.state) {
             case ValidatePageVMActionState.busy:
-              return Center(child: CircularProgressIndicator());
+              body = Center(child: CircularProgressIndicator());
+              break;
             case ValidatePageVMActionState.validate:
-              return nickname(
+              body = nickname(
                   context, action.data[ValidatePageVMActionDataKey.code]);
+              break;
             default:
-              return Container();
+              body = Container();
+              break;
           }
+          return Scaffold(
+            appBar:
+                AppBar(title: Text(AppLocalizations.of(context).validateTitle)),
+            body: body,
+          );
         });
   }
 
@@ -65,28 +74,25 @@ class ValidatePageState extends State<ValidatePage> {
     bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     _textEditingController.value =
         code == null ? TextEditingValue() : TextEditingValue(text: code);
-    return Scaffold(
-        appBar: AppBar(title: Text(AppLocalizations.of(context).validateTitle)),
-        body: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              TextField(
-                  key: WidgetKeys.validateTextFieldKey,
-                  controller: _textEditingController,
-                  autofocus: true,
-                  keyboardType:
-                      isIOS ? TextInputType.text : TextInputType.number,
-                  maxLength: ValidatePageState.textFieldMaxLength,
-                  textAlign: TextAlign.center,
-                  decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context).validateHint),
-                  onChanged: (String s) {
-                    vm.codeChanged(s);
-                  },
-                  onSubmitted: (String s) async {
-                    vm.codeSubmitted();
-                  })
-            ]));
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          TextField(
+              key: WidgetKeys.validateTextFieldKey,
+              controller: _textEditingController,
+              autofocus: true,
+              keyboardType: isIOS ? TextInputType.text : TextInputType.number,
+              maxLength: ValidatePageState.textFieldMaxLength,
+              textAlign: TextAlign.center,
+              decoration: InputDecoration(
+                  hintText: AppLocalizations.of(context).validateHint),
+              onChanged: (String s) {
+                vm.codeChanged(s);
+              },
+              onSubmitted: (String s) async {
+                await vm.codeSubmitted();
+              })
+        ]);
   }
 }
