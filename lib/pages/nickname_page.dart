@@ -64,6 +64,7 @@ class NicknamePageState extends State<NicknamePage> {
           break;
         case NicknamePageVMOtherActionState.rootPage:
           Navigator.of(context).popUntil(ModalRoute.withName(Routes.rootPage));
+          Navigator.of(context).popAndPushNamed(Routes.rootPage);
           break;
         default:
           break;

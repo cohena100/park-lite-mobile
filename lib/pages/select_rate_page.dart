@@ -62,6 +62,7 @@ class SelectRatePageState extends State<SelectRatePage> {
     vm.otherActionStream.listen((action) {
       switch (action.state) {
         case SelectRatePageVMOtherActionState.rootPage:
+          Navigator.of(context).popUntil(ModalRoute.withName(Routes.rootPage));
           Navigator.of(context).popAndPushNamed(Routes.rootPage);
           break;
         default:
