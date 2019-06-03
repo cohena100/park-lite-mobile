@@ -14,6 +14,14 @@ class SelectCityPageVM {
   }
 
   Future init() async {
+    await _addCitiesAction();
+  }
+
+  void selectCity(City city) {
+    _addSelectAreaPageOtherAction(city);
+  }
+
+  Future _addCitiesAction() async {
     final decorateItems = [
       SelectCityPageVMItem(type: SelectCityPageVMItemType.blue),
       SelectCityPageVMItem(type: SelectCityPageVMItemType.orange),
@@ -21,22 +29,27 @@ class SelectCityPageVM {
     ];
     final areas = await model.parkBloc.areas();
     final items = areas.cities.map((city) {
-      final data = {
-        SelectCityPageVMItemDataKey.city: city,
-      };
+      final data = {SelectCityPageVMItemDataKey.city: city};
       return SelectCityPageVMItem(
-          data: data, type: SelectCityPageVMItemType.city);
+        data: data,
+        type: SelectCityPageVMItemType.city,
+      );
     }).toList();
-    _actionSubject.add(SelectCityPageVMAction(data: {
-      SelectCityPageVMActionDataKey.items:
-          [decorateItems, items, decorateItems].expand((x) => x).toList()
-    }, state: SelectCityPageVMActionState.cities));
+    final allItems =
+        [decorateItems, items, decorateItems].expand((x) => x).toList();
+    _actionSubject.add(
+      SelectCityPageVMAction(
+          data: {SelectCityPageVMActionDataKey.items: allItems},
+          state: SelectCityPageVMActionState.cities),
+    );
   }
 
-  void selectCity(City city) {
+  void _addSelectAreaPageOtherAction(City city) {
     model.parkBloc.city = city;
-    _otherActionSubject.add(SelectCityPageVMOtherAction(
-        state: SelectCityPageVMOtherActionState.selectAreaPage));
+    _otherActionSubject.add(
+      SelectCityPageVMOtherAction(
+          state: SelectCityPageVMOtherActionState.selectAreaPage),
+    );
   }
 }
 

@@ -16,7 +16,29 @@ class SelectCarPageVM {
     _otherActionSubject.close();
   }
 
-  Future _addCarsState() async {
+  Future init() async {
+    await _addCarsAction();
+  }
+
+  Future selectCar(Car car) async {
+    _addBusyAction();
+    final context = model.userBloc.context;
+    switch (context.state) {
+      case UserBlocContextState.removeCar:
+        await _handleRemoveCarUserBlocContextState(car);
+        break;
+      default:
+        await _handleDefaultUserBlocContextState(car);
+    }
+  }
+
+  void _addBusyAction() {
+    _actionSubject.add(
+      SelectCarPageVMAction(state: SelectCarPageVMActionState.busy),
+    );
+  }
+
+  Future _addCarsAction() async {
     final User user = await model.userBloc.user;
     final decorateItems = [
       SelectCarPageVMItem(type: SelectCarPageVMItemType.blue),
@@ -27,58 +49,63 @@ class SelectCarPageVM {
     ];
     final items = user.cars.map((car) {
       final data = {SelectCarPageVMItemDataKey.car: car};
-      return SelectCarPageVMItem(data: data, type: SelectCarPageVMItemType.car);
+      return SelectCarPageVMItem(
+        data: data,
+        type: SelectCarPageVMItemType.car,
+      );
     }).toList();
-    _actionSubject.add(SelectCarPageVMAction(data: {
-      SelectCarPageVMActionDataKey.items:
-      [decorateItems, items, decorateItems].expand((x) => x).toList()
-    }, state: SelectCarPageVMActionState.cars));
+    final allItems = [
+      decorateItems,
+      items,
+      decorateItems,
+    ].expand((x) => x).toList();
+    _actionSubject.add(
+      SelectCarPageVMAction(
+          data: {SelectCarPageVMActionDataKey.items: allItems},
+          state: SelectCarPageVMActionState.cars),
+    );
   }
 
-  Future init() async {
-    await _addCarsState();
+  void _addRootPageOtherAction() {
+    _otherActionSubject.add(
+      SelectCarPageVMOtherAction(
+          state: SelectCarPageVMOtherActionState.rootPage),
+    );
   }
 
-  Future selectCar(Car car) async {
-    _actionSubject
-        .add(SelectCarPageVMAction(state: SelectCarPageVMActionState.busy));
-    final context = model.userBloc.context;
-    switch (context.state) {
-      case UserBlocContextState.removeCar:
-        _actionSubject
-            .add(SelectCarPageVMAction(state: SelectCarPageVMActionState.busy));
-        model.userBloc.context.data[UserBlocContextDataKey.car] = car;
-        final state = await model.userBloc.removeCar();
-        switch (state) {
-          case UserBlocState.success:
-            _otherActionSubject.add(SelectCarPageVMOtherAction(
-                state: SelectCarPageVMOtherActionState.rootPage));
-            break;
-          case UserBlocState.authorize:
-            await model.userBloc.userLogout(isForced: true);
-            _otherActionSubject.add(
-              SelectCarPageVMOtherAction(
-                  state: SelectCarPageVMOtherActionState.rootPage),
-            );
-            break;
-          default:
-            await _addCarsState();
-            break;
-        }
+  void _addSelectCityPageOtherAction() {
+    _otherActionSubject.add(
+      SelectCarPageVMOtherAction(
+          state: SelectCarPageVMOtherActionState.selectCityPage),
+    );
+  }
+
+  Future _handleDefaultUserBlocContextState(Car car) async {
+    final state = await model.parkBloc.location;
+    switch (state) {
+      case ParkBlocState.success:
+        model.parkBloc.car = car;
+        _addSelectCityPageOtherAction();
         break;
       default:
-        final state = await model.parkBloc.location;
-        switch (state) {
-          case ParkBlocState.success:
-            model.parkBloc.car = car;
-            _otherActionSubject.add(SelectCarPageVMOtherAction(
-                state: SelectCarPageVMOtherActionState.selectCityPage));
-            break;
-          default:
-            await _addCarsState();
-            break;
-        }
+        await _addCarsAction();
+    }
+  }
+
+  Future _handleRemoveCarUserBlocContextState(Car car) async {
+    _addBusyAction();
+    model.userBloc.context.data[UserBlocContextDataKey.car] = car;
+    final state = await model.userBloc.removeCar();
+    switch (state) {
+      case UserBlocState.success:
+        _addRootPageOtherAction();
         break;
+      case UserBlocState.authorize:
+        await model.userBloc.userLogout(isForced: true);
+        _addRootPageOtherAction();
+        break;
+      default:
+        await _addCarsAction();
     }
   }
 }

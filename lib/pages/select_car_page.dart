@@ -13,24 +13,15 @@ class SelectCarPage extends StatefulWidget {
 }
 
 class SelectCarPageState extends State<SelectCarPage> {
-  SelectCarPageVM vm;
+  SelectCarPageVM vm = SelectCarPageVM();
+  bool isDirty = true;
 
   @override
   Widget build(BuildContext context) {
-    vm = SelectCarPageVM();
-    vm.init().then((_) {});
-    vm.otherActionStream.listen((action) {
-      switch (action.state) {
-        case SelectCarPageVMOtherActionState.selectCityPage:
-          Navigator.pushNamed(context, Routes.selectCityPage);
-          break;
-        case SelectCarPageVMOtherActionState.rootPage:
-          Navigator.pushNamed(context, Routes.rootPage);
-          break;
-        default:
-          break;
-      }
-    });
+    if (isDirty) {
+      vm.init().then((_) {});
+      isDirty = false;
+    }
     return StreamBuilder(
         stream: vm.actionStream,
         initialData: SelectCarPageVMAction(),
@@ -64,8 +55,26 @@ class SelectCarPageState extends State<SelectCarPage> {
 
   @override
   void dispose() {
-    vm?.close();
+    vm.close();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    vm.otherActionStream.listen((action) {
+      switch (action.state) {
+        case SelectCarPageVMOtherActionState.selectCityPage:
+          Navigator.pushNamed(context, Routes.selectCityPage);
+          break;
+        case SelectCarPageVMOtherActionState.rootPage:
+          Navigator.pushNamed(context, Routes.rootPage);
+          break;
+        default:
+          break;
+      }
+      isDirty = true;
+    });
+    super.initState();
   }
 
   Widget _buildItem(SelectCarPageVMItem item) {

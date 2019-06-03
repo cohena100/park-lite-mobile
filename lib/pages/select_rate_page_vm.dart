@@ -19,24 +19,27 @@ class SelectRatePageVM {
   }
 
   Future selectRate(Rate rate) async {
-    _actionSubject
-        .add(SelectRatePageVMAction(state: SelectRatePageVMActionState.busy));
+    _addBusyAction();
     model.parkBloc.rate = rate;
     final state = await model.parkBloc.startParking();
     switch (state) {
       case ParkBlocState.success:
-        _otherActionSubject.add(SelectRatePageVMOtherAction(
-            state: SelectRatePageVMOtherActionState.homePage));
+        _addRootPageOtherAction();
         break;
       case ParkBlocState.authorize:
         await model.userBloc.userLogout(isForced: true);
-        _otherActionSubject.add(SelectRatePageVMOtherAction(
-            state: SelectRatePageVMOtherActionState.rootPage));
+        _addRootPageOtherAction();
         break;
       default:
         _addRatesState();
         break;
     }
+  }
+
+  void _addBusyAction() {
+    _actionSubject.add(
+      SelectRatePageVMAction(state: SelectRatePageVMActionState.busy),
+    );
   }
 
   void _addRatesState() {
@@ -46,16 +49,29 @@ class SelectRatePageVM {
       SelectRatePageVMItem(type: SelectRatePageVMItemType.blue),
     ];
     final items = model.parkBloc.area.rates.map((rate) {
-      final data = {
-        SelectRatePageVMItemDataKey.rate: rate,
-      };
+      final data = {SelectRatePageVMItemDataKey.rate: rate};
       return SelectRatePageVMItem(
-          data: data, type: SelectRatePageVMItemType.rate);
+        data: data,
+        type: SelectRatePageVMItemType.rate,
+      );
     }).toList();
-    _actionSubject.add(SelectRatePageVMAction(data: {
-      SelectRatePageVMActionDataKey.items:
-          [decorateItems, items, decorateItems].expand((x) => x).toList()
-    }, state: SelectRatePageVMActionState.rates));
+    final allItems = [
+      decorateItems,
+      items,
+      decorateItems,
+    ].expand((x) => x).toList();
+    _actionSubject.add(
+      SelectRatePageVMAction(
+          data: {SelectRatePageVMActionDataKey.items: allItems},
+          state: SelectRatePageVMActionState.rates),
+    );
+  }
+
+  void _addRootPageOtherAction() {
+    _otherActionSubject.add(
+      SelectRatePageVMOtherAction(
+          state: SelectRatePageVMOtherActionState.rootPage),
+    );
   }
 }
 
@@ -91,4 +107,4 @@ class SelectRatePageVMOtherAction {
 
 enum SelectRatePageVMOtherActionDataKey { none }
 
-enum SelectRatePageVMOtherActionState { none, homePage, rootPage }
+enum SelectRatePageVMOtherActionState { none, rootPage }

@@ -13,22 +13,16 @@ class PhonePage extends StatefulWidget {
 
 class PhonePageState extends State<PhonePage> {
   static const textFieldMaxLength = 10;
-  PhonePageVM vm;
+  PhonePageVM vm = PhonePageVM();
   final _textEditingController = TextEditingController();
+  bool isDirty = true;
 
   @override
   Widget build(BuildContext context) {
-    vm = PhonePageVM();
-    vm.init().then((_) {});
-    vm.otherActionStream.listen((action) {
-      switch (action.state) {
-        case PhonePageVMOtherActionState.validatePage:
-          Navigator.pushNamed(context, Routes.validatePage);
-          break;
-        default:
-          break;
-      }
-    });
+    if (isDirty) {
+      vm.init().then((_) {});
+      isDirty = false;
+    }
     return StreamBuilder(
         stream: vm.actionStream,
         initialData: PhonePageVMAction(),
@@ -38,6 +32,8 @@ class PhonePageState extends State<PhonePage> {
             case PhonePageVMActionState.phone:
               return phone(
                   context, action.data[PhonePageVMActionDataKey.phone]);
+            case PhonePageVMActionState.busy:
+              return Center(child: CircularProgressIndicator());
             default:
               return Container();
           }
@@ -46,8 +42,23 @@ class PhonePageState extends State<PhonePage> {
 
   @override
   void dispose() {
-    vm?.close();
+    vm.close();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    vm.otherActionStream.listen((action) {
+      switch (action.state) {
+        case PhonePageVMOtherActionState.validatePage:
+          Navigator.pushNamed(context, Routes.validatePage);
+          break;
+        default:
+          break;
+      }
+      isDirty = true;
+    });
+    super.initState();
   }
 
   Widget phone(BuildContext context, String phone) {

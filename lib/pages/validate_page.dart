@@ -13,22 +13,16 @@ class ValidatePage extends StatefulWidget {
 
 class ValidatePageState extends State<ValidatePage> {
   static const textFieldMaxLength = 4;
-  ValidatePageVM vm;
+  ValidatePageVM vm = ValidatePageVM();
   final _textEditingController = TextEditingController();
+  bool isDirty = true;
 
   @override
   Widget build(BuildContext context) {
-    vm = ValidatePageVM();
-    vm.init().then((_) {});
-    vm.otherActionStream.listen((action) {
-      switch (action.state) {
-        case ValidatePageVMOtherActionState.rootPage:
-          Navigator.of(context).popUntil(ModalRoute.withName(Routes.rootPage));
-          break;
-        default:
-          break;
-      }
-    });
+    if (isDirty) {
+      vm.init().then((_) {});
+      isDirty = false;
+    }
     return StreamBuilder(
         stream: vm.actionStream,
         initialData: ValidatePageVMAction(),
@@ -50,6 +44,21 @@ class ValidatePageState extends State<ValidatePage> {
   void dispose() {
     vm?.close();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    vm.otherActionStream.listen((action) {
+      switch (action.state) {
+        case ValidatePageVMOtherActionState.rootPage:
+          Navigator.of(context).popUntil(ModalRoute.withName(Routes.rootPage));
+          break;
+        default:
+          break;
+      }
+      isDirty = true;
+    });
+    super.initState();
   }
 
   Widget nickname(BuildContext context, String code) {

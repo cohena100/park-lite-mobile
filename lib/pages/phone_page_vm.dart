@@ -14,61 +14,56 @@ class PhonePageVM {
   }
 
   Future init() async {
-    final context = model.userBloc.context;
-    switch (context.state) {
-      case UserBlocContextState.login:
-        _addPhoneAction(context);
-        break;
-      default:
-        break;
-    }
+    _addPhoneAction();
   }
 
   void phoneChanged(String s) {
-    final context = model.userBloc.context;
-    switch (context.state) {
-      case UserBlocContextState.login:
-        model.userBloc.context.data[UserBlocContextDataKey.phone] = s;
-        break;
-      default:
-        break;
-    }
+    model.userBloc.context.data[UserBlocContextDataKey.phone] = s;
   }
 
   Future phoneSubmitted() async {
-    _actionSubject.add(PhonePageVMAction(state: PhonePageVMActionState.busy));
-    final context = model.userBloc.context;
-    switch (context.state) {
-      case UserBlocContextState.login:
-        final state = await model.userBloc.userLogin();
-        switch (state) {
-          case UserBlocState.validate:
-            _otherActionSubject.add(PhonePageVMOtherAction(
-                state: PhonePageVMOtherActionState.validatePage));
-            break;
-          default:
-            _addPhoneAction(context);
-            break;
-        }
+    _addBusyAction();
+    final state = await model.userBloc.userLogin();
+    switch (state) {
+      case UserBlocState.success:
+        _addValidatePageOtherAction();
         break;
       default:
+        _addPhoneAction();
         break;
     }
   }
 
-  void _addPhoneAction(UserBlocContext context) {
-    String phone = context.data[UserBlocContextDataKey.phone];
-    _actionSubject.add(PhonePageVMAction(
+  void _addBusyAction() {
+    _actionSubject.add(
+      PhonePageVMAction(state: PhonePageVMActionState.busy),
+    );
+  }
+
+  void _addPhoneAction() {
+    String phone = model.userBloc.context.data[UserBlocContextDataKey.phone];
+    _actionSubject.add(
+      PhonePageVMAction(
         data: {PhonePageVMActionDataKey.phone: phone},
-        state: PhonePageVMActionState.phone));
+        state: PhonePageVMActionState.phone,
+      ),
+    );
+  }
+
+  void _addValidatePageOtherAction() {
+    _otherActionSubject.add(
+      PhonePageVMOtherAction(state: PhonePageVMOtherActionState.validatePage),
+    );
   }
 }
 
 class PhonePageVMAction {
   final Map data;
   final PhonePageVMActionState state;
-  PhonePageVMAction(
-      {this.data = const {}, this.state = PhonePageVMActionState.none});
+  PhonePageVMAction({
+    this.data = const {},
+    this.state = PhonePageVMActionState.none,
+  });
 }
 
 enum PhonePageVMActionDataKey { none, phone }
@@ -78,8 +73,10 @@ enum PhonePageVMActionState { none, busy, phone }
 class PhonePageVMOtherAction {
   final Map data;
   final PhonePageVMOtherActionState state;
-  PhonePageVMOtherAction(
-      {this.data = const {}, this.state = PhonePageVMOtherActionState.none});
+  PhonePageVMOtherAction({
+    this.data = const {},
+    this.state = PhonePageVMOtherActionState.none,
+  });
 }
 
 enum PhonePageVMOtherActionDataKey { none }

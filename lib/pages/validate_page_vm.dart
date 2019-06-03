@@ -13,76 +13,77 @@ class ValidatePageVM {
     _otherActionSubject.close();
   }
 
-  Future init() async {
-    final context = model.userBloc.context;
-    switch (context.state) {
-      case UserBlocContextState.addCar:
-      case UserBlocContextState.login:
-        _addValidateAction(context);
-        break;
-      default:
-        break;
-    }
-  }
-
   void codeChanged(String s) {
-    final context = model.userBloc.context;
-    switch (context.state) {
-      case UserBlocContextState.addCar:
-      case UserBlocContextState.login:
-        model.userBloc.context.data[UserBlocContextDataKey.code] = s;
-        break;
-      default:
-        break;
-    }
+    model.userBloc.context.data[UserBlocContextDataKey.code] = s;
   }
 
   Future codeSubmitted() async {
     final context = model.userBloc.context;
     switch (context.state) {
       case UserBlocContextState.addCar:
-        _actionSubject
-            .add(ValidatePageVMAction(state: ValidatePageVMActionState.busy));
-        final state = await model.userBloc.addCarValidate();
-        switch (state) {
-          case UserBlocState.success:
-            _otherActionSubject.add(ValidatePageVMOtherAction(
-                state: ValidatePageVMOtherActionState.rootPage));
-            break;
-          case UserBlocState.authorize:
-            await model.userBloc.userLogout(isForced: true);
-            _otherActionSubject.add(ValidatePageVMOtherAction(
-                state: ValidatePageVMOtherActionState.rootPage));
-            break;
-          default:
-            _addValidateAction(context);
-            break;
-        }
+        await _handleAddCarUserBlocContextState();
         break;
       case UserBlocContextState.login:
-        _actionSubject
-            .add(ValidatePageVMAction(state: ValidatePageVMActionState.busy));
-        final state = await model.userBloc.userValidate();
-        switch (state) {
-          case UserBlocState.success:
-            _otherActionSubject.add(ValidatePageVMOtherAction(
-                state: ValidatePageVMOtherActionState.rootPage));
-            break;
-          default:
-            _addValidateAction(context);
-            break;
-        }
+        await _handleLoginUserBlocContextState();
         break;
       default:
         break;
     }
   }
 
-  void _addValidateAction(UserBlocContext context) {
-    String code = context.data[UserBlocContextDataKey.code];
-    _actionSubject.add(ValidatePageVMAction(
-        data: {ValidatePageVMActionDataKey.code: code},
-        state: ValidatePageVMActionState.validate));
+  Future init() async {
+    _addValidateAction();
+  }
+
+  void _addBusyAction() {
+    _actionSubject.add(
+      ValidatePageVMAction(state: ValidatePageVMActionState.busy),
+    );
+  }
+
+  void _addRootPageOtherAction() {
+    _otherActionSubject.add(
+      ValidatePageVMOtherAction(state: ValidatePageVMOtherActionState.rootPage),
+    );
+  }
+
+  void _addValidateAction() {
+    String code = model.userBloc.context.data[UserBlocContextDataKey.code];
+    _actionSubject.add(
+      ValidatePageVMAction(
+          data: {ValidatePageVMActionDataKey.code: code},
+          state: ValidatePageVMActionState.validate),
+    );
+  }
+
+  Future _handleAddCarUserBlocContextState() async {
+    _addBusyAction();
+    final state = await model.userBloc.addCarValidate();
+    switch (state) {
+      case UserBlocState.success:
+        _addRootPageOtherAction();
+        break;
+      case UserBlocState.authorize:
+        await model.userBloc.userLogout(isForced: true);
+        _addRootPageOtherAction();
+        break;
+      default:
+        _addValidateAction();
+        break;
+    }
+  }
+
+  Future _handleLoginUserBlocContextState() async {
+    _addBusyAction();
+    final state = await model.userBloc.userValidate();
+    switch (state) {
+      case UserBlocState.success:
+        _addRootPageOtherAction();
+        break;
+      default:
+        _addValidateAction();
+        break;
+    }
   }
 }
 

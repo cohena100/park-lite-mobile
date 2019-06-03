@@ -13,25 +13,16 @@ class NicknamePage extends StatefulWidget {
 
 class NicknamePageState extends State<NicknamePage> {
   static const textFieldMaxLength = 20;
-  NicknamePageVM vm;
+  NicknamePageVM vm = NicknamePageVM();
   final _textEditingController = TextEditingController();
+  bool isDirty = true;
 
   @override
   Widget build(BuildContext context) {
-    vm = NicknamePageVM();
-    vm.init().then((_) {});
-    vm.otherActionStream.listen((action) {
-      switch (action.state) {
-        case NicknamePageVMOtherActionState.validatePage:
-          Navigator.pushNamed(context, Routes.validatePage);
-          break;
-        case NicknamePageVMOtherActionState.rootPage:
-          Navigator.of(context).popUntil(ModalRoute.withName(Routes.rootPage));
-          break;
-        default:
-          break;
-      }
-    });
+    if (isDirty) {
+      vm.init().then((_) {});
+      isDirty = false;
+    }
     return StreamBuilder(
         stream: vm.actionStream,
         initialData: NicknamePageVMAction(),
@@ -53,6 +44,24 @@ class NicknamePageState extends State<NicknamePage> {
   void dispose() {
     vm?.close();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    vm.otherActionStream.listen((action) {
+      switch (action.state) {
+        case NicknamePageVMOtherActionState.validatePage:
+          Navigator.pushNamed(context, Routes.validatePage);
+          break;
+        case NicknamePageVMOtherActionState.rootPage:
+          Navigator.of(context).popUntil(ModalRoute.withName(Routes.rootPage));
+          break;
+        default:
+          break;
+      }
+      isDirty = true;
+    });
+    super.initState();
   }
 
   Widget nickname(BuildContext context, String number) {

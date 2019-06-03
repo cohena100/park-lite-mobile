@@ -13,32 +13,22 @@ class CarPage extends StatefulWidget {
 
 class CarPageState extends State<CarPage> {
   static const textFieldMaxLength = 8;
-  CarPageVM vm;
+  CarPageVM vm = CarPageVM();
   final _textEditingController = TextEditingController();
+  bool isDirty = true;
 
   @override
   Widget build(BuildContext context) {
-    vm = CarPageVM();
-    vm.init().then((_) {});
-    vm.otherActionStream.listen((action) {
-      switch (action.state) {
-        case CarPageVMOtherActionState.nicknamePage:
-          Navigator.pushNamed(context, Routes.nicknamePage);
-          break;
-        default:
-          break;
-      }
-    });
+    if (isDirty) {
+      vm.init().then((_) {});
+      isDirty = false;
+    }
     return StreamBuilder(
         stream: vm.actionStream,
         initialData: CarPageVMAction(),
         builder: (context, snapshot) {
           final action = snapshot.data;
           switch (action.state) {
-            case CarPageVMActionState.busy:
-              return Center(
-                child: CircularProgressIndicator(),
-              );
             case CarPageVMActionState.number:
               return car(context, action.data[CarPageVMActionDataKey.number]);
             default:
@@ -79,7 +69,22 @@ class CarPageState extends State<CarPage> {
 
   @override
   void dispose() {
-    vm?.close();
+    vm.close();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    vm.otherActionStream.listen((action) {
+      switch (action.state) {
+        case CarPageVMOtherActionState.nicknamePage:
+          Navigator.pushNamed(context, Routes.nicknamePage);
+          break;
+        default:
+          break;
+      }
+      isDirty = true;
+    });
+    super.initState();
   }
 }

@@ -25,7 +25,7 @@ class UserBloc with BaseBloc {
     switch (data[NetworkProxyKeys.code]) {
       case NetworkProxy.success:
         _handleAddCarSuccess(data);
-        return UserBlocState.validate;
+        return UserBlocState.success;
       case NetworkProxy.authorize:
         return UserBlocState.authorize;
     }
@@ -88,7 +88,7 @@ class UserBloc with BaseBloc {
     switch (data[NetworkProxyKeys.code]) {
       case NetworkProxy.success:
         _handleUserLoginSuccess(data);
-        return UserBlocState.validate;
+        return UserBlocState.success;
     }
     return UserBlocState.failure;
   }
@@ -182,7 +182,6 @@ enum UserBlocContextState {
 enum UserBlocState {
   notLoggedIn,
   loggedIn,
-  validate,
   success,
   failure,
   authorize,

@@ -13,21 +13,15 @@ class SelectCityPage extends StatefulWidget {
 }
 
 class SelectCityPageState extends State<SelectCityPage> {
-  SelectCityPageVM vm;
+  SelectCityPageVM vm = SelectCityPageVM();
+  bool isDirty = true;
 
   @override
   Widget build(BuildContext context) {
-    vm = SelectCityPageVM();
-    vm.init().then((_) {});
-    vm.otherActionStream.listen((action) {
-      switch (action.state) {
-        case SelectCityPageVMOtherActionState.selectAreaPage:
-          Navigator.pushNamed(context, Routes.selectAreaPage);
-          break;
-        default:
-          break;
-      }
-    });
+    if (isDirty) {
+      vm.init().then((_) {});
+      isDirty = false;
+    }
     return StreamBuilder(
         stream: vm.actionStream,
         initialData: SelectCityPageVMAction(),
@@ -58,6 +52,21 @@ class SelectCityPageState extends State<SelectCityPage> {
   void dispose() {
     vm?.close();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    vm.otherActionStream.listen((action) {
+      switch (action.state) {
+        case SelectCityPageVMOtherActionState.selectAreaPage:
+          Navigator.pushNamed(context, Routes.selectAreaPage);
+          break;
+        default:
+          break;
+      }
+      isDirty = true;
+    });
+    super.initState();
   }
 
   Widget _buildItem(SelectCityPageVMItem item) {

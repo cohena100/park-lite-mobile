@@ -13,60 +13,59 @@ class NicknamePageVM {
     _otherActionSubject.close();
   }
 
-  void _addNicknameAction(UserBlocContext context) {
-    String nickname = context.data[UserBlocContextDataKey.nickname];
-    _actionSubject.add(NicknamePageVMAction(
-        data: {NicknamePageVMActionDataKey.nickname: nickname},
-        state: NicknamePageVMActionState.nickname));
-  }
-
   Future init() async {
-    final context = model.userBloc.context;
-    switch (context.state) {
-      case UserBlocContextState.addCar:
-        _addNicknameAction(context);
-        break;
-      default:
-        break;
-    }
+    _addNicknameAction();
   }
 
   void nicknameChanged(String s) {
-    final context = model.userBloc.context;
-    switch (context.state) {
-      case UserBlocContextState.addCar:
-        model.userBloc.context.data[UserBlocContextDataKey.nickname] = s;
+    model.userBloc.context.data[UserBlocContextDataKey.nickname] = s;
+  }
+
+  Future nicknameSubmitted() async {
+    _addBusyAction();
+    final state = await model.userBloc.addCar();
+    switch (state) {
+      case UserBlocState.success:
+        _addValidatePageOtherAction();
+        break;
+      case UserBlocState.authorize:
+        await model.userBloc.userLogout(isForced: true);
+        _addRootPageOtherAction();
         break;
       default:
+        _addNicknameAction();
         break;
     }
   }
 
-  Future nicknameSubmitted() async {
-    _actionSubject
-        .add(NicknamePageVMAction(state: NicknamePageVMActionState.busy));
-    final context = model.userBloc.context;
-    switch (context.state) {
-      case UserBlocContextState.addCar:
-        final state = await model.userBloc.addCar();
-        switch (state) {
-          case UserBlocState.validate:
-            _otherActionSubject.add(NicknamePageVMOtherAction(
-                state: NicknamePageVMOtherActionState.validatePage));
-            break;
-          case UserBlocState.authorize:
-            await model.userBloc.userLogout(isForced: true);
-            _otherActionSubject.add(NicknamePageVMOtherAction(
-                state: NicknamePageVMOtherActionState.rootPage));
-            break;
-          default:
-            _addNicknameAction(context);
-            break;
-        }
-        break;
-      default:
-        break;
-    }
+  void _addBusyAction() {
+    _actionSubject.add(
+      NicknamePageVMAction(state: NicknamePageVMActionState.busy),
+    );
+  }
+
+  void _addNicknameAction() {
+    String nickname =
+        model.userBloc.context.data[UserBlocContextDataKey.nickname];
+    _actionSubject.add(
+      NicknamePageVMAction(
+        data: {NicknamePageVMActionDataKey.nickname: nickname},
+        state: NicknamePageVMActionState.nickname,
+      ),
+    );
+  }
+
+  void _addRootPageOtherAction() {
+    _otherActionSubject.add(
+      NicknamePageVMOtherAction(state: NicknamePageVMOtherActionState.rootPage),
+    );
+  }
+
+  void _addValidatePageOtherAction() {
+    _otherActionSubject.add(
+      NicknamePageVMOtherAction(
+          state: NicknamePageVMOtherActionState.validatePage),
+    );
   }
 }
 

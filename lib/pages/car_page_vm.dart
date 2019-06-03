@@ -5,9 +5,7 @@ import 'package:rxdart/rxdart.dart';
 class CarPageVM {
   final _actionSubject = BehaviorSubject<CarPageVMAction>();
   final _otherActionSubject = BehaviorSubject<CarPageVMOtherAction>();
-
   Stream get actionStream => _actionSubject.stream;
-
   Stream get otherActionStream => _otherActionSubject.stream;
 
   void close() {
@@ -16,40 +14,30 @@ class CarPageVM {
   }
 
   Future init() async {
-    final context = model.userBloc.context;
-    switch (context.state) {
-      case UserBlocContextState.addCar:
-        String number = context.data[UserBlocContextDataKey.number];
-        _actionSubject.add(CarPageVMAction(
-            data: {CarPageVMActionDataKey.number: number},
-            state: CarPageVMActionState.number));
-        break;
-      default:
-        break;
-    }
+    _addCarAction();
   }
 
   void numberChanged(String s) {
-    final context = model.userBloc.context;
-    switch (context.state) {
-      case UserBlocContextState.addCar:
-        model.userBloc.context.data[UserBlocContextDataKey.number] = s;
-        break;
-      default:
-        break;
-    }
+    model.userBloc.context.data[UserBlocContextDataKey.number] = s;
   }
 
   Future numberSubmitted() async {
-    final context = model.userBloc.context;
-    switch (context.state) {
-      case UserBlocContextState.addCar:
-        _otherActionSubject.add(CarPageVMOtherAction(
-            state: CarPageVMOtherActionState.nicknamePage));
-        break;
-      default:
-        break;
-    }
+    _addNicknamePageOtherAction();
+  }
+
+  void _addCarAction() {
+    String number = model.userBloc.context.data[UserBlocContextDataKey.number];
+    _actionSubject.add(
+      CarPageVMAction(
+          data: {CarPageVMActionDataKey.number: number},
+          state: CarPageVMActionState.number),
+    );
+  }
+
+  void _addNicknamePageOtherAction() {
+    _otherActionSubject.add(
+      CarPageVMOtherAction(state: CarPageVMOtherActionState.nicknamePage),
+    );
   }
 }
 
@@ -62,7 +50,7 @@ class CarPageVMAction {
 
 enum CarPageVMActionDataKey { none, number }
 
-enum CarPageVMActionState { none, busy, number }
+enum CarPageVMActionState { none, number }
 
 class CarPageVMOtherAction {
   final Map data;

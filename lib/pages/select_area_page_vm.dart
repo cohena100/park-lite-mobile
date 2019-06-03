@@ -13,7 +13,7 @@ class SelectAreaPageVM {
     _otherActionSubject.close();
   }
 
-  Future init() async {
+  void _addAreasAction() {
     final decorateItems = [
       SelectAreaPageVMItem(type: SelectAreaPageVMItemType.blue),
       SelectAreaPageVMItem(type: SelectAreaPageVMItemType.orange),
@@ -24,18 +24,29 @@ class SelectAreaPageVM {
         SelectAreaPageVMItemDataKey.area: area,
       };
       return SelectAreaPageVMItem(
-          data: data, type: SelectAreaPageVMItemType.area);
+        data: data,
+        type: SelectAreaPageVMItemType.area,
+      );
     }).toList();
-    _actionSubject.add(SelectAreaPageVMAction(data: {
-      SelectAreaPageVMActionDataKey.items:
-      [decorateItems, items, decorateItems].expand((x) => x).toList()
-    }, state: SelectAreaPageVMActionState.areas));
+    final allItems =
+        [decorateItems, items, decorateItems].expand((x) => x).toList();
+    _actionSubject.add(
+      SelectAreaPageVMAction(
+          data: {SelectAreaPageVMActionDataKey.items: allItems},
+          state: SelectAreaPageVMActionState.areas),
+    );
+  }
+
+  Future init() async {
+    _addAreasAction();
   }
 
   void selectArea(Area area) {
     model.parkBloc.area = area;
-    _otherActionSubject.add(SelectAreaPageVMOtherAction(
-        state: SelectAreaPageVMOtherActionState.selectRatePage));
+    _otherActionSubject.add(
+      SelectAreaPageVMOtherAction(
+          state: SelectAreaPageVMOtherActionState.selectRatePage),
+    );
   }
 }
 
@@ -66,7 +77,7 @@ class SelectAreaPageVMOtherAction {
   final SelectAreaPageVMOtherActionState state;
   SelectAreaPageVMOtherAction(
       {this.data = const {},
-        this.state = SelectAreaPageVMOtherActionState.none});
+      this.state = SelectAreaPageVMOtherActionState.none});
 }
 
 enum SelectAreaPageVMOtherActionDataKey { none }
