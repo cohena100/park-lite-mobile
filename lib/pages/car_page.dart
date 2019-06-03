@@ -13,7 +13,7 @@ class CarPage extends StatefulWidget {
 
 class CarPageState extends State<CarPage> {
   static const textFieldMaxLength = 8;
-  CarPageVM vm = CarPageVM();
+  CarPageVM vm;
   final _textEditingController = TextEditingController();
   bool isDirty = true;
 
@@ -75,6 +75,7 @@ class CarPageState extends State<CarPage> {
 
   @override
   void initState() {
+    vm = CarPageVM();
     vm.otherActionStream.listen((action) {
       switch (action.state) {
         case CarPageVMOtherActionState.nicknamePage:

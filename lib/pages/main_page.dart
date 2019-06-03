@@ -14,7 +14,7 @@ class MainPage extends StatefulWidget {
 }
 
 class MainPageState extends State<MainPage> {
-  MainPageVM vm = MainPageVM();
+  MainPageVM vm;
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +53,12 @@ class MainPageState extends State<MainPage> {
           return Scaffold(
               appBar: AppBar(title: title), body: Center(child: child));
         });
+  }
+
+  @override
+  void initState() {
+    vm = MainPageVM();
+    super.initState();
   }
 
   @override

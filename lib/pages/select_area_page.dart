@@ -13,7 +13,7 @@ class SelectAreaPage extends StatefulWidget {
 }
 
 class SelectAreaPageState extends State<SelectAreaPage> {
-  SelectAreaPageVM vm = SelectAreaPageVM();
+  SelectAreaPageVM vm;
   bool isDirty = true;
 
   @override
@@ -57,6 +57,7 @@ class SelectAreaPageState extends State<SelectAreaPage> {
 
   @override
   void initState() {
+    vm = SelectAreaPageVM();
     vm.otherActionStream.listen((action) {
       switch (action.state) {
         case SelectAreaPageVMOtherActionState.selectRatePage:

@@ -13,7 +13,7 @@ class SelectCityPage extends StatefulWidget {
 }
 
 class SelectCityPageState extends State<SelectCityPage> {
-  SelectCityPageVM vm = SelectCityPageVM();
+  SelectCityPageVM vm;
   bool isDirty = true;
 
   @override
@@ -56,6 +56,7 @@ class SelectCityPageState extends State<SelectCityPage> {
 
   @override
   void initState() {
+    vm = SelectCityPageVM();
     vm.otherActionStream.listen((action) {
       switch (action.state) {
         case SelectCityPageVMOtherActionState.selectAreaPage:

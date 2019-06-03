@@ -12,7 +12,7 @@ class UserPage extends StatefulWidget {
 }
 
 class UserPageState extends State<UserPage> {
-  UserPageVM vm = UserPageVM();
+  UserPageVM vm;
   bool isDirty = true;
 
   @override
@@ -52,6 +52,7 @@ class UserPageState extends State<UserPage> {
 
   @override
   void initState() {
+    vm = UserPageVM();
     vm.otherActionStream.listen((action) {
       switch (action.state) {
         case UserPageVMOtherActionState.carPage:
@@ -61,7 +62,7 @@ class UserPageState extends State<UserPage> {
           Navigator.pushNamed(context, Routes.selectCarPage);
           break;
         case UserPageVMOtherActionState.rootPage:
-          Navigator.of(context).popAndPushNamed(Routes.rootPage);
+          Navigator.of(context).pushReplacementNamed(Routes.rootPage);
           break;
         default:
           break;

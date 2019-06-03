@@ -14,7 +14,7 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  HomePageVM vm = HomePageVM();
+  HomePageVM vm;
   bool isDirty = true;
 
   @override
@@ -55,6 +55,7 @@ class HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    vm = HomePageVM();
     vm.otherActionStream.listen((action) {
       switch (action.state) {
         case HomePageVMOtherActionState.selectCarPage:
@@ -64,7 +65,7 @@ class HomePageState extends State<HomePage> {
           Navigator.pushNamed(context, Routes.carPage);
           break;
         case HomePageVMOtherActionState.rootPage:
-          Navigator.of(context).popAndPushNamed(Routes.rootPage);
+          Navigator.of(context).pushReplacementNamed(Routes.rootPage);
           break;
       }
       isDirty = true;

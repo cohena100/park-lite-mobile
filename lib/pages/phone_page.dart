@@ -13,7 +13,7 @@ class PhonePage extends StatefulWidget {
 
 class PhonePageState extends State<PhonePage> {
   static const textFieldMaxLength = 10;
-  PhonePageVM vm = PhonePageVM();
+  PhonePageVM vm;
   final _textEditingController = TextEditingController();
   bool isDirty = true;
 
@@ -48,6 +48,7 @@ class PhonePageState extends State<PhonePage> {
 
   @override
   void initState() {
+    vm = PhonePageVM();
     vm.otherActionStream.listen((action) {
       switch (action.state) {
         case PhonePageVMOtherActionState.validatePage:
