@@ -14,25 +14,15 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  HomePageVM vm;
+  HomePageVM vm = HomePageVM();
+  bool isDirty = true;
 
   @override
   Widget build(BuildContext context) {
-    vm = HomePageVM();
-    vm.init().then((_) {});
-    vm.otherActionStream.listen((action) {
-      switch (action.state) {
-        case HomePageVMOtherActionState.selectCarPage:
-          Navigator.pushNamed(context, Routes.selectCarPage);
-          break;
-        case HomePageVMOtherActionState.carPage:
-          Navigator.pushNamed(context, Routes.carPage);
-          break;
-        case HomePageVMOtherActionState.rootPage:
-          Navigator.of(context).popAndPushNamed(Routes.rootPage);
-          break;
-      }
-    });
+    if (isDirty) {
+      vm.init().then((_) {});
+      isDirty = false;
+    }
     return StreamBuilder(
         stream: vm.actionStream,
         initialData: HomePageVMAction(),
@@ -61,6 +51,25 @@ class HomePageState extends State<HomePage> {
   void dispose() {
     vm.close();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    vm.otherActionStream.listen((action) {
+      switch (action.state) {
+        case HomePageVMOtherActionState.selectCarPage:
+          Navigator.pushNamed(context, Routes.selectCarPage);
+          break;
+        case HomePageVMOtherActionState.carPage:
+          Navigator.pushNamed(context, Routes.carPage);
+          break;
+        case HomePageVMOtherActionState.rootPage:
+          Navigator.of(context).popAndPushNamed(Routes.rootPage);
+          break;
+      }
+      isDirty = true;
+    });
+    super.initState();
   }
 
   Widget _buildItem(HomePageVMItem item) {

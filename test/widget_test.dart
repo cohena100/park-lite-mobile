@@ -303,9 +303,6 @@ void main() {
           find.byKey(WidgetKeys.validateTextFieldKey), code1);
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle();
-      expect(find.byKey(WidgetKeys.userPageKey), findsOneWidget);
-      await tester.tap(find.byKey(WidgetKeys.parkTabKey));
-      await tester.pumpAndSettle();
       expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
       expect(find.byKey(WidgetKeys.startKey), findsOneWidget);
       await tester.tap(find.byKey(WidgetKeys.startKey));
