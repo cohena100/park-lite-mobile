@@ -14,11 +14,10 @@ class MainPage extends StatefulWidget {
 }
 
 class MainPageState extends State<MainPage> {
-  MainPageVM vm;
+  MainPageVM vm = MainPageVM();
 
   @override
   Widget build(BuildContext context) {
-    vm = MainPageVM();
     vm.init().then((_) {});
     return StreamBuilder(
         stream: vm.actionStream,
