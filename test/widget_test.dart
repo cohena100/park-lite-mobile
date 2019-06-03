@@ -396,7 +396,7 @@ void main() {
               });
       await tester.tap(find.byKey(Key(carId1)));
       await tester.pumpAndSettle();
-      expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
+      expect(find.byKey(WidgetKeys.userPageKey), findsOneWidget);
     });
 
     testWidgets('remove car failed', (WidgetTester tester) async {
