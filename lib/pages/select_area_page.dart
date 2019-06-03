@@ -51,7 +51,7 @@ class SelectAreaPageState extends State<SelectAreaPage> {
 
   @override
   void dispose() {
-    vm?.close();
+    vm.close();
     super.dispose();
   }
 

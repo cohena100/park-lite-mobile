@@ -58,7 +58,7 @@ class MainPageState extends State<MainPage> {
 
   @override
   void dispose() {
-    vm?.close();
+    vm.close();
     super.dispose();
   }
 }

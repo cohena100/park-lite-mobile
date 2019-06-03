@@ -12,27 +12,15 @@ class UserPage extends StatefulWidget {
 }
 
 class UserPageState extends State<UserPage> {
-  UserPageVM vm;
+  UserPageVM vm = UserPageVM();
+  bool isDirty = true;
 
   @override
   Widget build(BuildContext context) {
-    vm = UserPageVM();
-    vm.init().then((_) {});
-    vm.otherActionStream.listen((action) {
-      switch (action.state) {
-        case UserPageVMOtherActionState.carPage:
-          Navigator.pushNamed(context, Routes.carPage);
-          break;
-        case UserPageVMOtherActionState.selectCarPage:
-          Navigator.pushNamed(context, Routes.selectCarPage);
-          break;
-        case UserPageVMOtherActionState.rootPage:
-          Navigator.pushNamed(context, Routes.rootPage);
-          break;
-        default:
-          break;
-      }
-    });
+    if (isDirty) {
+      vm.init().then((_) {});
+      isDirty = false;
+    }
     return StreamBuilder(
         stream: vm.actionStream,
         initialData: UserPageVMAction(),
@@ -58,8 +46,29 @@ class UserPageState extends State<UserPage> {
 
   @override
   void dispose() {
-    vm?.close();
+    vm.close();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    vm.otherActionStream.listen((action) {
+      switch (action.state) {
+        case UserPageVMOtherActionState.carPage:
+          Navigator.pushNamed(context, Routes.carPage);
+          break;
+        case UserPageVMOtherActionState.selectCarPage:
+          Navigator.pushNamed(context, Routes.selectCarPage);
+          break;
+        case UserPageVMOtherActionState.rootPage:
+          Navigator.of(context).popAndPushNamed(Routes.rootPage);
+          break;
+        default:
+          break;
+      }
+      isDirty = true;
+    });
+    super.initState();
   }
 
   Widget _buildItem(UserPageVMItem item) {

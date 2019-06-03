@@ -29,7 +29,7 @@ class HomePageState extends State<HomePage> {
           Navigator.pushNamed(context, Routes.carPage);
           break;
         case HomePageVMOtherActionState.rootPage:
-          Navigator.pushNamed(context, Routes.rootPage);
+          Navigator.of(context).popAndPushNamed(Routes.rootPage);
           break;
       }
     });
@@ -59,7 +59,7 @@ class HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
-    vm?.close();
+    vm.close();
     super.dispose();
   }
 

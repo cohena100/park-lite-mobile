@@ -50,7 +50,7 @@ class SelectCityPageState extends State<SelectCityPage> {
 
   @override
   void dispose() {
-    vm?.close();
+    vm.close();
     super.dispose();
   }
 

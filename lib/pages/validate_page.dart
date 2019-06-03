@@ -51,7 +51,7 @@ class ValidatePageState extends State<ValidatePage> {
 
   @override
   void dispose() {
-    vm?.close();
+    vm.close();
     super.dispose();
   }
 

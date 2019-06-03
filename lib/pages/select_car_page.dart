@@ -67,7 +67,7 @@ class SelectCarPageState extends State<SelectCarPage> {
           Navigator.pushNamed(context, Routes.selectCityPage);
           break;
         case SelectCarPageVMOtherActionState.rootPage:
-          Navigator.pushNamed(context, Routes.rootPage);
+          Navigator.of(context).popUntil(ModalRoute.withName(Routes.rootPage));
           break;
         default:
           break;

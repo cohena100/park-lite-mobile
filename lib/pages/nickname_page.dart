@@ -51,7 +51,7 @@ class NicknamePageState extends State<NicknamePage> {
 
   @override
   void dispose() {
-    vm?.close();
+    vm.close();
     super.dispose();
   }
 

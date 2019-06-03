@@ -53,7 +53,7 @@ class SelectRatePageState extends State<SelectRatePage> {
 
   @override
   void dispose() {
-    vm?.close();
+    vm.close();
     super.dispose();
   }
 

@@ -21,15 +21,8 @@ class UserPageVM {
 
   void exit() async {
     _addBusyAction();
-    final state = await model.userBloc.userLogout();
-    switch (state) {
-      case UserBlocState.success:
-        _addRootPageOtherAction();
-        break;
-      default:
-        _addUserAction();
-        break;
-    }
+    await model.userBloc.userLogout();
+    _addRootPageOtherAction();
   }
 
   Future init() async {
