@@ -5,16 +5,13 @@ import 'package:rxdart/rxdart.dart';
 class UserPageVM {
   final _actionSubject = BehaviorSubject<UserPageVMAction>();
   final _otherActionSubject = BehaviorSubject<UserPageVMOtherAction>();
-
   Stream get actionStream => _actionSubject.stream;
-
   Stream get otherActionStream => _otherActionSubject.stream;
 
   void addCar() {
     model.userBloc.context =
         UserBlocContext(data: {}, state: UserBlocContextState.addCar);
-    _otherActionSubject
-        .add(UserPageVMOtherAction(state: UserPageVMOtherActionState.carPage));
+    _addCarPageOtherAction();
   }
 
   void close() {
@@ -23,12 +20,11 @@ class UserPageVM {
   }
 
   void exit() async {
-    _actionSubject.add(UserPageVMAction(state: UserPageVMActionState.busy));
+    _addBusyAction();
     final state = await model.userBloc.userLogout();
     switch (state) {
       case UserBlocState.success:
-        _otherActionSubject.add(
-            UserPageVMOtherAction(state: UserPageVMOtherActionState.rootPage));
+        _addRootPageOtherAction();
         break;
       default:
         _addUserAction();
@@ -43,6 +39,27 @@ class UserPageVM {
   void removeCar() {
     model.userBloc.context =
         UserBlocContext(data: {}, state: UserBlocContextState.removeCar);
+    _addSelectCarPageOtherAction();
+  }
+
+  void _addBusyAction() {
+    _actionSubject.add(
+      UserPageVMAction(state: UserPageVMActionState.busy),
+    );
+  }
+
+  void _addCarPageOtherAction() {
+    _otherActionSubject
+        .add(UserPageVMOtherAction(state: UserPageVMOtherActionState.carPage));
+  }
+
+  void _addRootPageOtherAction() {
+    _otherActionSubject.add(
+      UserPageVMOtherAction(state: UserPageVMOtherActionState.rootPage),
+    );
+  }
+
+  void _addSelectCarPageOtherAction() {
     _otherActionSubject.add(
         UserPageVMOtherAction(state: UserPageVMOtherActionState.selectCarPage));
   }
@@ -60,10 +77,13 @@ class UserPageVM {
       UserPageVMItem(type: UserPageVMItemType.remove),
       UserPageVMItem(type: UserPageVMItemType.exit),
     ];
-    _actionSubject.add(UserPageVMAction(data: {
-      UserPageVMActionDataKey.items:
-          [decorateItems, items, decorateItems].expand((x) => x).toList()
-    }, state: UserPageVMActionState.user));
+    final allItems =
+        [decorateItems, items, decorateItems].expand((x) => x).toList();
+    _actionSubject.add(
+      UserPageVMAction(
+          data: {UserPageVMActionDataKey.items: allItems},
+          state: UserPageVMActionState.user),
+    );
   }
 }
 

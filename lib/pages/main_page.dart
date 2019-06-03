@@ -28,11 +28,11 @@ class MainPageState extends State<MainPage> {
           Widget title = Text(AppLocalizations.of(context).title);
           Widget child;
           switch (action.state) {
-            case MainPageVMActionState.phone:
+            case MainPageVMActionState.phonePage:
               title = Text(AppLocalizations.of(context).phoneNumberTitle);
               child = PhonePage();
               break;
-            case MainPageVMActionState.home:
+            case MainPageVMActionState.homePage:
               return DefaultTabController(
                   length: 2,
                   child: Scaffold(

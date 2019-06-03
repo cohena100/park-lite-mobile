@@ -15,9 +15,7 @@ class HomePageVM {
   void addCar() {
     model.userBloc.context =
         UserBlocContext(data: {}, state: UserBlocContextState.addCar);
-    _otherActionSubject.add(
-      HomePageVMOtherAction(state: HomePageVMOtherActionState.carPage),
-    );
+    _addCarPageAction();
   }
 
   void close() {
@@ -26,17 +24,17 @@ class HomePageVM {
   }
 
   Future init() async {
-    await _addHomeState();
+    await _addHomeAction();
   }
 
   void startParking() {
-    _otherActionSubject.add(
-      HomePageVMOtherAction(state: HomePageVMOtherActionState.selectCarPage),
-    );
+    model.userBloc.context =
+        UserBlocContext(data: {}, state: UserBlocContextState.park);
+    _addSelectCarPageOtherAction();
   }
 
   Future startPreviousParking(Parking parking, Car car) async {
-    _actionSubject.add(HomePageVMAction(state: HomePageVMActionState.busy));
+    _addBusyAction();
     final state = await model.parkBloc.location;
     switch (state) {
       case ParkBlocState.success:
@@ -44,40 +42,44 @@ class HomePageVM {
         switch (state) {
           case ParkBlocState.authorize:
             await model.userBloc.userLogout(isForced: true);
-            _otherActionSubject.add(
-              HomePageVMOtherAction(
-                  state: HomePageVMOtherActionState.rootPage),
-            );
+            _addRootPageOtherAction();
             break;
           default:
-            await _addHomeState();
+            await _addHomeAction();
             break;
         }
         break;
       default:
-        await _addHomeState();
+        await _addHomeAction();
         break;
     }
   }
 
   Future stopParking() async {
-    _actionSubject.add(HomePageVMAction(state: HomePageVMActionState.busy));
+    _addBusyAction();
     final state = await model.parkBloc.stopParking();
     switch (state) {
       case ParkBlocState.authorize:
         await model.userBloc.userLogout(isForced: true);
-        _otherActionSubject.add(
-          HomePageVMOtherAction(
-              state: HomePageVMOtherActionState.rootPage),
-        );
+        _addRootPageOtherAction();
         break;
       default:
-        await _addHomeState();
+        await _addHomeAction();
         break;
     }
   }
 
-  Future _addHomeState() async {
+  void _addBusyAction() {
+    _actionSubject.add(HomePageVMAction(state: HomePageVMActionState.busy));
+  }
+
+  void _addCarPageAction() {
+    _otherActionSubject.add(
+      HomePageVMOtherAction(state: HomePageVMOtherActionState.carPage),
+    );
+  }
+
+  Future _addHomeAction() async {
     final decorateItems = [
       HomePageVMItem(type: HomePageVMItemType.blue),
       HomePageVMItem(type: HomePageVMItemType.orange),
@@ -94,30 +96,17 @@ class HomePageVM {
     final parkingState = await model.parkBloc.state;
     switch (parkingState) {
       case ParkBlocState.parking:
-        await _addHomeStatePopulateParking(decorateItems, user);
-        return;
+        await _addHomeActionPopulateParking(decorateItems, user);
+        break;
       case ParkBlocState.notParking:
-        await _addHomeStatePopulateNotParking(decorateItems, user);
-        return;
+        await _addHomeActionPopulateNotParking(decorateItems, user);
+        break;
       default:
         break;
     }
   }
 
-  void _addHomeStatePopulateNoCars(List<HomePageVMItem> decorateItems) {
-    final items = [HomePageVMItem(type: HomePageVMItemType.add)];
-    final allItems = [
-      decorateItems,
-      items,
-      decorateItems,
-    ].expand((x) => x).toList();
-    _actionSubject.add(HomePageVMAction(
-      data: {HomePageVMActionDataKey.items: allItems},
-      state: HomePageVMActionState.home,
-    ));
-  }
-
-  Future _addHomeStatePopulateNotParking(
+  Future _addHomeActionPopulateNotParking(
       List<HomePageVMItem> decorateItems, User user) async {
     final parkings = await model.parkBloc.parkings;
     final parkingItems = parkings.map((parking) {
@@ -137,12 +126,14 @@ class HomePageVM {
       parkingItems,
       decorateItems,
     ].expand((x) => x).toList();
-    _actionSubject.add(HomePageVMAction(
-        data: {HomePageVMActionDataKey.items: allItems},
-        state: HomePageVMActionState.home));
+    _actionSubject.add(
+      HomePageVMAction(
+          data: {HomePageVMActionDataKey.items: allItems},
+          state: HomePageVMActionState.home),
+    );
   }
 
-  Future _addHomeStatePopulateParking(
+  Future _addHomeActionPopulateParking(
       List<HomePageVMItem> decorateItems, User user) async {
     final parking = await model.parkBloc.parking;
     final car = user.parkingCar;
@@ -158,9 +149,36 @@ class HomePageVM {
       items,
       decorateItems,
     ].expand((x) => x).toList();
+    _actionSubject.add(
+      HomePageVMAction(
+          data: {HomePageVMActionDataKey.items: allItems},
+          state: HomePageVMActionState.home),
+    );
+  }
+
+  void _addHomeStatePopulateNoCars(List<HomePageVMItem> decorateItems) {
+    final items = [HomePageVMItem(type: HomePageVMItemType.add)];
+    final allItems = [
+      decorateItems,
+      items,
+      decorateItems,
+    ].expand((x) => x).toList();
     _actionSubject.add(HomePageVMAction(
-        data: {HomePageVMActionDataKey.items: allItems},
-        state: HomePageVMActionState.home));
+      data: {HomePageVMActionDataKey.items: allItems},
+      state: HomePageVMActionState.home,
+    ));
+  }
+
+  void _addRootPageOtherAction() {
+    _otherActionSubject.add(
+      HomePageVMOtherAction(state: HomePageVMOtherActionState.rootPage),
+    );
+  }
+
+  void _addSelectCarPageOtherAction() {
+    _otherActionSubject.add(
+      HomePageVMOtherAction(state: HomePageVMOtherActionState.selectCarPage),
+    );
   }
 }
 

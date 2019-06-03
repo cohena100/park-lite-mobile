@@ -27,8 +27,11 @@ class SelectCarPageVM {
       case UserBlocContextState.removeCar:
         await _handleRemoveCarUserBlocContextState(car);
         break;
+      case UserBlocContextState.park:
+        await _handleParkUserBlocContextState(car);
+        break;
       default:
-        await _handleDefaultUserBlocContextState(car);
+        break;
     }
   }
 
@@ -80,7 +83,7 @@ class SelectCarPageVM {
     );
   }
 
-  Future _handleDefaultUserBlocContextState(Car car) async {
+  Future _handleParkUserBlocContextState(Car car) async {
     final state = await model.parkBloc.location;
     switch (state) {
       case ParkBlocState.success:

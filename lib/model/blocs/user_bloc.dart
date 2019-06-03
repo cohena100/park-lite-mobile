@@ -177,6 +177,7 @@ enum UserBlocContextState {
   login,
   addCar,
   removeCar,
+  park,
 }
 
 enum UserBlocState {

@@ -14,19 +14,27 @@ class MainPageVM {
     final state = await model.userBloc.handshake();
     switch (state) {
       case UserBlocState.loggedIn:
-        _actionSubject.add(MainPageVMAction(state: MainPageVMActionState.home));
+        _addHomePageAction();
         break;
       case UserBlocState.notLoggedIn:
         if (model.userBloc.context.state != UserBlocContextState.login) {
           model.userBloc.context =
               UserBlocContext(data: {}, state: UserBlocContextState.login);
         }
-        _actionSubject
-            .add(MainPageVMAction(state: MainPageVMActionState.phone));
+        _addPhonePageAction();
         break;
       default:
         break;
     }
+  }
+
+  void _addHomePageAction() {
+    _actionSubject.add(MainPageVMAction(state: MainPageVMActionState.homePage));
+  }
+
+  void _addPhonePageAction() {
+    _actionSubject
+        .add(MainPageVMAction(state: MainPageVMActionState.phonePage));
   }
 }
 
@@ -39,4 +47,4 @@ class MainPageVMAction {
 
 enum MainPageVMActionDataKey { none }
 
-enum MainPageVMActionState { none, busy, phone, home }
+enum MainPageVMActionState { none, busy, phonePage, homePage }
