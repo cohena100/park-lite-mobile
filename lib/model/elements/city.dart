@@ -1,9 +1,12 @@
 import 'package:pango_lite/model/elements/area.dart';
 
+import 'Polygon.dart';
+
 class City {
   static final _idKey = 'id';
   static final _nameKey = 'name';
   static final _areasKey = 'areas';
+  static final _polygonKey = 'polygon';
   final Map data;
 
   City(this.data);
@@ -19,5 +22,9 @@ class City {
 
   String get name {
     return data[_nameKey];
+  }
+
+  Polygon get polygon {
+    return Polygon(data[_polygonKey]);
   }
 }

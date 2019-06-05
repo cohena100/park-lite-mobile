@@ -63,7 +63,7 @@ class ParkBloc with BaseBloc {
     return ParkBlocState.notParking;
   }
 
-  Future<GeoPark> areas() async {
+  Future<GeoPark> geoPark() async {
     final data = await _localDbProxy.loadGeoPark();
     return GeoPark(data);
   }

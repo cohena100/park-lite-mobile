@@ -22,7 +22,10 @@ class SelectAreaPageVM {
       SelectAreaPageVMItem(type: SelectAreaPageVMItemType.blue),
     ];
     final City city = model.localDbProxy.appContext.data[AppContextDataKey.city];
-    final items = city.areas.map((area) {
+    final relevantAreas = city.areas.where(
+            (area) => area.polygon.isInside(model.parkBloc.locationData.latitude,
+            model.parkBloc.locationData.longitude));
+    final items = relevantAreas.map((area) {
       final data = {
         SelectAreaPageVMItemDataKey.area: area,
       };

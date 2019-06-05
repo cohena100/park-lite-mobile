@@ -1,11 +1,16 @@
 import 'package:location/location.dart';
 
 final areaId1 = '9';
+final areaId11 = '90';
 final areaId2 = '90';
 final areaId3 = '900';
 final areaName1 = 'b';
+final areaName11 = 'bb';
 final areaName2 = 'c';
 final areaName3 = 'd';
+final bl = [32.08258, 34.85486];
+final bm = [32.08258, 34.85631];
+final br = [32.08258, 34.85775];
 final cache1 = {
   'parkings': [
     parking1,
@@ -35,6 +40,7 @@ final cityId1 = '8';
 final cityId2 = '80';
 final cityId3 = '800';
 final cityName1 = 'a';
+
 final cityName2 = 'b';
 final cityName3 = 'c';
 final code1 = '3';
@@ -53,7 +59,37 @@ final geoPark1 = {
               'name': rateName1,
             },
           ],
-        }
+          'polygon': [
+            mm,
+            tm,
+            tr,
+            mr,
+          ],
+        },
+        {
+          'id': areaId11,
+          'name': areaName11,
+          'rates': [
+            {
+              'id': rateId11,
+              'name': rateName11,
+            },
+          ],
+          'polygon': [
+            bm,
+            mm,
+            mr,
+            br,
+          ],
+        },
+      ],
+      'polygon': [
+        bm,
+        mm,
+        tm,
+        tr,
+        mr,
+        br,
       ],
     },
     {
@@ -69,15 +105,29 @@ final geoPark1 = {
               'name': rateName2,
             },
           ],
+          'polygon': [
+            bl,
+            tl,
+            tm,
+            mm,
+            bm,
+          ],
         }
+      ],
+      'polygon': [
+        bl,
+        tl,
+        tm,
+        mm,
+        bm,
       ],
     },
   ],
 };
 final innerCarId1 = '2';
 final innerCarId2 = '3';
-final lat1 = 1.0;
-final lat2 = 11.0;
+final lat1 = 32.08373;
+final lat2 = 32.083731;
 final location1 = LocationData.fromMap({
   'latitude': lat1,
   'longitude': lon1,
@@ -98,8 +148,10 @@ final location2 = LocationData.fromMap({
   'heading': 0,
   'time': 0,
 });
-final lon1 = 2.0;
-final lon2 = 22.0;
+final lon1 = 34.85641;
+final lon2 = 34.856411;
+final mm = [32.08373, 34.85641];
+final mr = [32.08381, 34.85805];
 final nickname1 = 'a';
 final nickname2 = 'aa';
 final number1 = '3';
@@ -149,13 +201,18 @@ final parkingId3 = '3';
 final parkingKey = 'parking';
 final phone1 = '4';
 final rateId1 = '11';
+final rateId11 = '111';
 final rateId2 = '22';
 final rateId3 = '33';
 final rateName1 = 'c';
+final rateName11 = 'cc';
 final rateName2 = 'd';
 final rateName3 = 'e';
+final tl = [32.08489, 34.85542];
+final tm = [32.08487, 34.85641];
 final token1 = '1';
 final tokenKey = 'token';
+final tr = [32.08504, 34.85801];
 Map<String, Object> user1;
 final userId1 = '5';
 final userKey = 'user';

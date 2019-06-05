@@ -28,8 +28,11 @@ class SelectCityPageVM {
       SelectCityPageVMItem(type: SelectCityPageVMItemType.orange),
       SelectCityPageVMItem(type: SelectCityPageVMItemType.blue),
     ];
-    final areas = await model.parkBloc.areas();
-    final items = areas.cities.map((city) {
+    final geoPark = await model.parkBloc.geoPark();
+    final relevantCities = geoPark.cities.where(
+        (city) => city.polygon.isInside(model.parkBloc.locationData.latitude,
+            model.parkBloc.locationData.longitude));
+    final items = relevantCities.map((city) {
       final data = {SelectCityPageVMItemDataKey.city: city};
       return SelectCityPageVMItem(
         data: data,
