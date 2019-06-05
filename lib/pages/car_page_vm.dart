@@ -1,5 +1,5 @@
-import 'package:pango_lite/model/blocs/user_bloc.dart';
 import 'package:pango_lite/model/model.dart';
+import 'package:pango_lite/model/proxies/local_db_proxy.dart';
 import 'package:rxdart/rxdart.dart';
 
 class CarPageVM {
@@ -18,7 +18,7 @@ class CarPageVM {
   }
 
   void numberChanged(String s) {
-    model.userBloc.context.data[UserBlocContextDataKey.number] = s;
+    model.localDbProxy.appContext.data[AppContextDataKey.number] = s;
   }
 
   Future numberSubmitted() async {
@@ -26,7 +26,7 @@ class CarPageVM {
   }
 
   void _addCarAction() {
-    String number = model.userBloc.context.data[UserBlocContextDataKey.number];
+    String number = model.localDbProxy.appContext.data[AppContextDataKey.number];
     _actionSubject.add(
       CarPageVMAction(
           data: {CarPageVMActionDataKey.number: number},

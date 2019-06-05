@@ -1,8 +1,8 @@
 import 'package:pango_lite/model/blocs/park_bloc.dart';
-import 'package:pango_lite/model/blocs/user_bloc.dart';
 import 'package:pango_lite/model/elements/car.dart';
 import 'package:pango_lite/model/elements/user.dart';
 import 'package:pango_lite/model/model.dart';
+import 'package:pango_lite/model/proxies/local_db_proxy.dart';
 import 'package:rxdart/rxdart.dart';
 
 class SelectCarPageVM {
@@ -22,12 +22,11 @@ class SelectCarPageVM {
 
   Future selectCar(Car car) async {
     _addBusyAction();
-    final context = model.userBloc.context;
-    switch (context.state) {
-      case UserBlocContextState.removeCar:
+    switch (model.localDbProxy.appContext.state) {
+      case AppContextState.removeCar:
         await _handleRemoveCarUserBlocContextState(car);
         break;
-      case UserBlocContextState.park:
+      case AppContextState.park:
         await _handleParkUserBlocContextState(car);
         break;
       default:
@@ -97,13 +96,13 @@ class SelectCarPageVM {
 
   Future _handleRemoveCarUserBlocContextState(Car car) async {
     _addBusyAction();
-    model.userBloc.context.data[UserBlocContextDataKey.car] = car;
+    model.localDbProxy.appContext.data[AppContextDataKey.car] = car;
     final state = await model.userBloc.removeCar();
     switch (state) {
-      case UserBlocState.success:
+      case AppState.success:
         _addRootPageOtherAction();
         break;
-      case UserBlocState.authorize:
+      case AppState.authorize:
         await model.userBloc.userLogout(isForced: true);
         _addRootPageOtherAction();
         break;

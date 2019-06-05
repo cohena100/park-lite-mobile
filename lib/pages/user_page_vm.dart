@@ -1,5 +1,5 @@
-import 'package:pango_lite/model/blocs/user_bloc.dart';
 import 'package:pango_lite/model/model.dart';
+import 'package:pango_lite/model/proxies/local_db_proxy.dart';
 import 'package:rxdart/rxdart.dart';
 
 class UserPageVM {
@@ -9,8 +9,8 @@ class UserPageVM {
   Stream get otherActionStream => _otherActionSubject.stream;
 
   void addCar() {
-    model.userBloc.context =
-        UserBlocContext(data: {}, state: UserBlocContextState.addCar);
+    model.localDbProxy.appContext =
+        AppContext(data: {}, state: AppContextState.addCar);
     _addCarPageOtherAction();
   }
 
@@ -30,8 +30,8 @@ class UserPageVM {
   }
 
   void removeCar() {
-    model.userBloc.context =
-        UserBlocContext(data: {}, state: UserBlocContextState.removeCar);
+    model.localDbProxy.appContext =
+        AppContext(data: {}, state: AppContextState.removeCar);
     _addSelectCarPageOtherAction();
   }
 

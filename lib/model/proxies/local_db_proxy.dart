@@ -5,11 +5,45 @@ import 'dart:io';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:path_provider/path_provider.dart';
 
+class AppContext {
+  final Map data;
+  final AppContextState state;
+  AppContext(
+      {this.data = const {}, this.state = AppContextState.none});
+}
+
+enum AppContextDataKey {
+  phone,
+  number,
+  nickname,
+  code,
+  car,
+  userId,
+  validateId,
+}
+
+enum AppContextState {
+  none,
+  login,
+  addCar,
+  removeCar,
+  park,
+}
+
+enum AppState {
+  notLoggedIn,
+  loggedIn,
+  success,
+  failure,
+  authorize,
+}
+
 class LocalDbProxy {
   final bool inMemory;
   String inMemoryUser;
   String inMemoryCache;
   Map geoPark;
+  AppContext appContext = AppContext();
 
   LocalDbProxy({this.inMemory = false});
 

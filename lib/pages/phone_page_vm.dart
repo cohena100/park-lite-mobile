@@ -1,5 +1,5 @@
-import 'package:pango_lite/model/blocs/user_bloc.dart';
 import 'package:pango_lite/model/model.dart';
+import 'package:pango_lite/model/proxies/local_db_proxy.dart';
 import 'package:rxdart/rxdart.dart';
 
 class PhonePageVM {
@@ -18,14 +18,14 @@ class PhonePageVM {
   }
 
   void phoneChanged(String s) {
-    model.userBloc.context.data[UserBlocContextDataKey.phone] = s;
+    model.localDbProxy.appContext.data[AppContextDataKey.phone] = s;
   }
 
   Future phoneSubmitted() async {
     _addBusyAction();
     final state = await model.userBloc.userLogin();
     switch (state) {
-      case UserBlocState.success:
+      case AppState.success:
         _addValidatePageOtherAction();
         break;
       default:
@@ -41,7 +41,7 @@ class PhonePageVM {
   }
 
   void _addPhoneAction() {
-    String phone = model.userBloc.context.data[UserBlocContextDataKey.phone];
+    String phone = model.localDbProxy.appContext.data[AppContextDataKey.phone];
     _actionSubject.add(
       PhonePageVMAction(
         data: {PhonePageVMActionDataKey.phone: phone},

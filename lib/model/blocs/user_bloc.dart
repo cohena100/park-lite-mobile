@@ -11,33 +11,31 @@ class UserBloc with BaseBloc {
   final NetworkProxy _networkProxy;
   final LocalDbProxy _localDbProxy;
 
-  UserBlocContext context = UserBlocContext();
-
   UserBloc(this._networkProxy, this._localDbProxy);
 
   Future<User> get user async {
     return await getUser(_localDbProxy);
   }
 
-  Future<UserBlocState> addCar() async {
+  Future<AppState> addCar() async {
     final theUser = await user;
     final data = await _networkProxy.sendAdd(theUser.id, theUser.token);
     switch (data[NetworkProxyKeys.code]) {
       case NetworkProxy.success:
         _handleAddCarSuccess(data);
-        return UserBlocState.success;
+        return AppState.success;
       case NetworkProxy.authorize:
-        return UserBlocState.authorize;
+        return AppState.authorize;
     }
-    return UserBlocState.failure;
+    return AppState.failure;
   }
 
-  Future<UserBlocState> addCarValidate() async {
+  Future<AppState> addCarValidate() async {
     final theUser = await user;
-    final number = context.data[UserBlocContextDataKey.number];
-    final nickname = context.data[UserBlocContextDataKey.nickname];
-    final validateId = context.data[UserBlocContextDataKey.validateId];
-    final code = context.data[UserBlocContextDataKey.code];
+    final number = _localDbProxy.appContext.data[AppContextDataKey.number];
+    final nickname = _localDbProxy.appContext.data[AppContextDataKey.nickname];
+    final validateId = _localDbProxy.appContext.data[AppContextDataKey.validateId];
+    final code = _localDbProxy.appContext.data[AppContextDataKey.code];
     final data = await _networkProxy.sendAddValidate(
       theUser.id,
       number,
@@ -49,24 +47,24 @@ class UserBloc with BaseBloc {
     switch (data[NetworkProxyKeys.code]) {
       case NetworkProxy.success:
         await _handleAddCarValidateSuccess(data, theUser);
-        return UserBlocState.success;
+        return AppState.success;
       case NetworkProxy.authorize:
-        return UserBlocState.authorize;
+        return AppState.authorize;
     }
-    return UserBlocState.failure;
+    return AppState.failure;
   }
 
-  Future<UserBlocState> handshake() async {
+  Future<AppState> handshake() async {
     final isUser = await user;
     if (isUser == null || isUser.token == null) {
-      return UserBlocState.notLoggedIn;
+      return AppState.notLoggedIn;
     }
-    return UserBlocState.loggedIn;
+    return AppState.loggedIn;
   }
 
-  Future<UserBlocState> removeCar() async {
+  Future<AppState> removeCar() async {
     final theUser = await user;
-    final Car car = context.data[UserBlocContextDataKey.car];
+    final Car car = _localDbProxy.appContext.data[AppContextDataKey.car];
     final data = await _networkProxy.sendRemove(
       theUser.id,
       car.id,
@@ -75,37 +73,37 @@ class UserBloc with BaseBloc {
     switch (data[NetworkProxyKeys.code]) {
       case NetworkProxy.success:
         await _handleRemoveCarSuccess(data, theUser, car);
-        return UserBlocState.success;
+        return AppState.success;
       case NetworkProxy.authorize:
-        return UserBlocState.authorize;
+        return AppState.authorize;
     }
-    return UserBlocState.failure;
+    return AppState.failure;
   }
 
-  Future<UserBlocState> userLogin() async {
-    final phone = context.data[UserBlocContextDataKey.phone];
+  Future<AppState> userLogin() async {
+    final phone = _localDbProxy.appContext.data[AppContextDataKey.phone];
     final data = await _networkProxy.sendLogin(phone);
     switch (data[NetworkProxyKeys.code]) {
       case NetworkProxy.success:
         _handleUserLoginSuccess(data);
-        return UserBlocState.success;
+        return AppState.success;
     }
-    return UserBlocState.failure;
+    return AppState.failure;
   }
 
-  Future<UserBlocState> userLogout({bool isForced = false}) async {
+  Future<AppState> userLogout({bool isForced = false}) async {
     final theUser = await user;
     if (!isForced) {
       await _networkProxy.sendLogout(theUser.id, theUser.token);
     }
     await _handleUserLogout(theUser);
-    return UserBlocState.success;
+    return AppState.success;
   }
 
-  Future<UserBlocState> userValidate() async {
-    final userId = context.data[UserBlocContextDataKey.userId];
-    final validateId = context.data[UserBlocContextDataKey.validateId];
-    final code = context.data[UserBlocContextDataKey.code];
+  Future<AppState> userValidate() async {
+    final userId = _localDbProxy.appContext.data[AppContextDataKey.userId];
+    final validateId = _localDbProxy.appContext.data[AppContextDataKey.validateId];
+    final code = _localDbProxy.appContext.data[AppContextDataKey.code];
     final data = await _networkProxy.sendLoginValidate(
       userId,
       validateId,
@@ -114,14 +112,14 @@ class UserBloc with BaseBloc {
     switch (data[NetworkProxyKeys.code]) {
       case NetworkProxy.success:
         await _handleUserValidateSuccess(data);
-        return UserBlocState.success;
+        return AppState.success;
     }
-    return UserBlocState.failure;
+    return AppState.failure;
   }
 
   void _handleAddCarSuccess(Map data) {
     final validate = jsonDecode(data[NetworkProxyKeys.body]);
-    context.data[UserBlocContextDataKey.validateId] =
+    _localDbProxy.appContext.data[AppContextDataKey.validateId] =
         validate['validate']['validateId'];
   }
 
@@ -138,9 +136,8 @@ class UserBloc with BaseBloc {
 
   void _handleUserLoginSuccess(Map data) {
     final validate = jsonDecode(data[NetworkProxyKeys.body]);
-    context.data[UserBlocContextDataKey.userId] =
-        validate['validate']['userId'];
-    context.data[UserBlocContextDataKey.validateId] =
+    _localDbProxy.appContext.data[AppContextDataKey.userId] = validate['validate']['userId'];
+    _localDbProxy.appContext.data[AppContextDataKey.validateId] =
         validate['validate']['validateId'];
   }
 
@@ -153,37 +150,4 @@ class UserBloc with BaseBloc {
     final user = User.fromJson(jsonDecode(data[NetworkProxyKeys.body]));
     await _localDbProxy.saveUser(jsonEncode(user));
   }
-}
-
-class UserBlocContext {
-  final Map data;
-  final UserBlocContextState state;
-  UserBlocContext(
-      {this.data = const {}, this.state = UserBlocContextState.none});
-}
-
-enum UserBlocContextDataKey {
-  phone,
-  number,
-  nickname,
-  code,
-  car,
-  userId,
-  validateId,
-}
-
-enum UserBlocContextState {
-  none,
-  login,
-  addCar,
-  removeCar,
-  park,
-}
-
-enum UserBlocState {
-  notLoggedIn,
-  loggedIn,
-  success,
-  failure,
-  authorize,
 }

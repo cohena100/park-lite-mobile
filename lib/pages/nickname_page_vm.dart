@@ -1,5 +1,5 @@
-import 'package:pango_lite/model/blocs/user_bloc.dart';
 import 'package:pango_lite/model/model.dart';
+import 'package:pango_lite/model/proxies/local_db_proxy.dart';
 import 'package:rxdart/rxdart.dart';
 
 class NicknamePageVM {
@@ -18,17 +18,17 @@ class NicknamePageVM {
   }
 
   void nicknameChanged(String s) {
-    model.userBloc.context.data[UserBlocContextDataKey.nickname] = s;
+    model.localDbProxy.appContext.data[AppContextDataKey.nickname] = s;
   }
 
   Future nicknameSubmitted() async {
     _addBusyAction();
     final state = await model.userBloc.addCar();
     switch (state) {
-      case UserBlocState.success:
+      case AppState.success:
         _addValidatePageOtherAction();
         break;
-      case UserBlocState.authorize:
+      case AppState.authorize:
         await model.userBloc.userLogout(isForced: true);
         _addRootPageOtherAction();
         break;
@@ -46,7 +46,7 @@ class NicknamePageVM {
 
   void _addNicknameAction() {
     String nickname =
-        model.userBloc.context.data[UserBlocContextDataKey.nickname];
+    model.localDbProxy.appContext.data[AppContextDataKey.nickname];
     _actionSubject.add(
       NicknamePageVMAction(
         data: {NicknamePageVMActionDataKey.nickname: nickname},

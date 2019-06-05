@@ -1,5 +1,5 @@
-import 'package:pango_lite/model/blocs/user_bloc.dart';
 import 'package:pango_lite/model/model.dart';
+import 'package:pango_lite/model/proxies/local_db_proxy.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ValidatePageVM {
@@ -14,16 +14,15 @@ class ValidatePageVM {
   }
 
   void codeChanged(String s) {
-    model.userBloc.context.data[UserBlocContextDataKey.code] = s;
+    model.localDbProxy.appContext.data[AppContextDataKey.code] = s;
   }
 
   Future codeSubmitted() async {
-    final context = model.userBloc.context;
-    switch (context.state) {
-      case UserBlocContextState.addCar:
+    switch (model.localDbProxy.appContext.state) {
+      case AppContextState.addCar:
         await _handleAddCarUserBlocContextState();
         break;
-      case UserBlocContextState.login:
+      case AppContextState.login:
         await _handleLoginUserBlocContextState();
         break;
       default:
@@ -54,7 +53,7 @@ class ValidatePageVM {
   }
 
   void _addValidateAction() {
-    String code = model.userBloc.context.data[UserBlocContextDataKey.code];
+    String code = model.localDbProxy.appContext.data[AppContextDataKey.code];
     _actionSubject.add(
       ValidatePageVMAction(
           data: {ValidatePageVMActionDataKey.code: code},
@@ -66,10 +65,10 @@ class ValidatePageVM {
     _addBusyAction();
     final state = await model.userBloc.addCarValidate();
     switch (state) {
-      case UserBlocState.success:
+      case AppState.success:
         _addFullRootPageOtherAction();
         break;
-      case UserBlocState.authorize:
+      case AppState.authorize:
         await model.userBloc.userLogout(isForced: true);
         _addFullRootPageOtherAction();
         break;
@@ -83,7 +82,7 @@ class ValidatePageVM {
     _addBusyAction();
     final state = await model.userBloc.userValidate();
     switch (state) {
-      case UserBlocState.success:
+      case AppState.success:
         _addRootPageOtherAction();
         break;
       default:

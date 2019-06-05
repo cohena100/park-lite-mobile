@@ -1,9 +1,9 @@
 import 'package:pango_lite/model/blocs/park_bloc.dart';
-import 'package:pango_lite/model/blocs/user_bloc.dart';
 import 'package:pango_lite/model/elements/car.dart';
 import 'package:pango_lite/model/elements/parking.dart';
 import 'package:pango_lite/model/elements/user.dart';
 import 'package:pango_lite/model/model.dart';
+import 'package:pango_lite/model/proxies/local_db_proxy.dart';
 import 'package:rxdart/rxdart.dart';
 
 class HomePageVM {
@@ -13,8 +13,8 @@ class HomePageVM {
   Stream get otherActionStream => _otherActionSubject.stream;
 
   void addCar() {
-    model.userBloc.context =
-        UserBlocContext(data: {}, state: UserBlocContextState.addCar);
+    model.localDbProxy.appContext =
+        AppContext(data: {}, state: AppContextState.addCar);
     _addCarPageAction();
   }
 
@@ -28,8 +28,8 @@ class HomePageVM {
   }
 
   void startParking() {
-    model.userBloc.context =
-        UserBlocContext(data: {}, state: UserBlocContextState.park);
+    model.localDbProxy.appContext =
+        AppContext(data: {}, state: AppContextState.park);
     _addSelectCarPageOtherAction();
   }
 
