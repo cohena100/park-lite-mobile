@@ -1,5 +1,7 @@
 import 'package:pango_lite/model/elements/area.dart';
+import 'package:pango_lite/model/elements/city.dart';
 import 'package:pango_lite/model/model.dart';
+import 'package:pango_lite/model/proxies/local_db_proxy.dart';
 import 'package:rxdart/rxdart.dart';
 
 class SelectAreaPageVM {
@@ -19,7 +21,8 @@ class SelectAreaPageVM {
       SelectAreaPageVMItem(type: SelectAreaPageVMItemType.orange),
       SelectAreaPageVMItem(type: SelectAreaPageVMItemType.blue),
     ];
-    final items = model.parkBloc.city.areas.map((area) {
+    final City city = model.localDbProxy.appContext.data[AppContextDataKey.city];
+    final items = city.areas.map((area) {
       final data = {
         SelectAreaPageVMItemDataKey.area: area,
       };
@@ -42,7 +45,7 @@ class SelectAreaPageVM {
   }
 
   void selectArea(Area area) {
-    model.parkBloc.area = area;
+    model.localDbProxy.appContext.data[AppContextDataKey.area] = area;
     _otherActionSubject.add(
       SelectAreaPageVMOtherAction(
           state: SelectAreaPageVMOtherActionState.selectRatePage),

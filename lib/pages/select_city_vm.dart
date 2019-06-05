@@ -1,5 +1,6 @@
 import 'package:pango_lite/model/elements/city.dart';
 import 'package:pango_lite/model/model.dart';
+import 'package:pango_lite/model/proxies/local_db_proxy.dart';
 import 'package:rxdart/rxdart.dart';
 
 class SelectCityPageVM {
@@ -45,7 +46,7 @@ class SelectCityPageVM {
   }
 
   void _addSelectAreaPageOtherAction(City city) {
-    model.parkBloc.city = city;
+    model.localDbProxy.appContext.data[AppContextDataKey.city] = city;
     _otherActionSubject.add(
       SelectCityPageVMOtherAction(
           state: SelectCityPageVMOtherActionState.selectAreaPage),

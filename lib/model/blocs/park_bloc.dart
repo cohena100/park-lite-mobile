@@ -22,10 +22,6 @@ class ParkBloc with BaseBloc {
   final BluetoothProxy _bluetoothProxy;
   final NotificationProxy _notificationProxy;
   LocationData locationData;
-  Car car;
-  City city;
-  Area area;
-  Rate rate;
   StreamSubscription _bluetoothStateStream;
 
   ParkBloc(
@@ -74,6 +70,10 @@ class ParkBloc with BaseBloc {
 
   Future<ParkBlocState> startParking() async {
     final user = await getUser(_localDbProxy);
+    Car car = _localDbProxy.appContext.data[AppContextDataKey.car];
+    City city = _localDbProxy.appContext.data[AppContextDataKey.city];
+    Area area = _localDbProxy.appContext.data[AppContextDataKey.area];
+    Rate rate = _localDbProxy.appContext.data[AppContextDataKey.rate];
     final data = await _networkProxy.sendStart(
         user.id,
         car.id,

@@ -1,6 +1,8 @@
 import 'package:pango_lite/model/blocs/park_bloc.dart';
+import 'package:pango_lite/model/elements/area.dart';
 import 'package:pango_lite/model/elements/rate.dart';
 import 'package:pango_lite/model/model.dart';
+import 'package:pango_lite/model/proxies/local_db_proxy.dart';
 import 'package:rxdart/rxdart.dart';
 
 class SelectRatePageVM {
@@ -20,7 +22,7 @@ class SelectRatePageVM {
 
   Future selectRate(Rate rate) async {
     _addBusyAction();
-    model.parkBloc.rate = rate;
+    model.localDbProxy.appContext.data[AppContextDataKey.rate] = rate;
     final state = await model.parkBloc.startParking();
     switch (state) {
       case ParkBlocState.success:
@@ -48,7 +50,8 @@ class SelectRatePageVM {
       SelectRatePageVMItem(type: SelectRatePageVMItemType.orange),
       SelectRatePageVMItem(type: SelectRatePageVMItemType.blue),
     ];
-    final items = model.parkBloc.area.rates.map((rate) {
+    final Area area = model.localDbProxy.appContext.data[AppContextDataKey.area];
+    final items = area.rates.map((rate) {
       final data = {SelectRatePageVMItemDataKey.rate: rate};
       return SelectRatePageVMItem(
         data: data,

@@ -18,6 +18,9 @@ enum AppContextDataKey {
   nickname,
   code,
   car,
+  city,
+  area,
+  rate,
   userId,
   validateId,
 }

@@ -86,7 +86,7 @@ class SelectCarPageVM {
     final state = await model.parkBloc.location;
     switch (state) {
       case ParkBlocState.success:
-        model.parkBloc.car = car;
+        model.localDbProxy.appContext.data[AppContextDataKey.car] = car;
         _addSelectCityPageOtherAction();
         break;
       default:
