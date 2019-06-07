@@ -57,6 +57,12 @@ final geoPark1 = {
             {
               'id': rateId1,
               'name': rateName1,
+              'price': price1,
+            },
+            {
+              'id': rateId2,
+              'name': rateName2,
+              'price': price3,
             },
           ],
           'polygon': [
@@ -71,8 +77,9 @@ final geoPark1 = {
           'name': areaName11,
           'rates': [
             {
-              'id': rateId11,
-              'name': rateName11,
+              'id': rateId1,
+              'name': rateName1,
+              'price': price2,
             },
           ],
           'polygon': [
@@ -103,6 +110,7 @@ final geoPark1 = {
             {
               'id': rateId2,
               'name': rateName2,
+              'price': price2,
             },
           ],
           'polygon': [
@@ -188,26 +196,25 @@ final parking3 = {
   'cityName': cityName3,
   'areaId': areaId3,
   'areaName': areaName3,
-  'rateId': rateId3,
-  'rateName': rateName3,
+  'rateId': rateId2,
+  'rateName': rateName2,
   'lat': lat1.toString(),
   'lon': lon1.toString(),
   'user': userId1,
   'car': innerCarId2,
 };
+final price1 = '100';
+final price2 = '200';
+final price3 = '500';
 final parkingId1 = '1';
 final parkingId2 = '2';
 final parkingId3 = '3';
 final parkingKey = 'parking';
 final phone1 = '4';
-final rateId1 = '11';
-final rateId11 = '111';
-final rateId2 = '22';
-final rateId3 = '33';
-final rateName1 = 'c';
-final rateName11 = 'cc';
-final rateName2 = 'd';
-final rateName3 = 'e';
+final rateId1 = '1';
+final rateId2 = '2';
+final rateName1 = 'a';
+final rateName2 = 'b';
 final tl = [32.08489, 34.85542];
 final tm = [32.08487, 34.85641];
 final token1 = '1';
