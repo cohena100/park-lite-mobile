@@ -89,7 +89,7 @@ class LocalDbProxy {
     if (geoPark != null) {
       return geoPark;
     }
-    final json = await rootBundle.loadString('data/geoPark.json');
+    final json = await rootBundle.loadString('data/geo_park.json');
     geoPark = jsonDecode(json);
     return geoPark;
   }
