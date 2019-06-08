@@ -126,7 +126,7 @@ class ParkBloc with BaseBloc {
     final data = await _networkProxy.sendEnd(user.id, parking.id, user.token);
     switch (data[NetworkProxyKeys.code]) {
       case NetworkProxy.success:
-        await _handleStopParkingSuccess(data);
+        await _handleEndParkingSuccess(data);
         return ParkBlocState.success;
       case NetworkProxy.authorize:
         return ParkBlocState.authorize;
@@ -142,7 +142,7 @@ class ParkBloc with BaseBloc {
     _startBluetooth();
   }
 
-  Future _handleStopParkingSuccess(Map data) async {
+  Future _handleEndParkingSuccess(Map data) async {
     final user = await getUser(_localDbProxy);
     user.deleteParking();
     await _localDbProxy.saveUser(jsonEncode(user));
