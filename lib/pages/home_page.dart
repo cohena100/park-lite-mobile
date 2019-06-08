@@ -117,7 +117,7 @@ class HomePageState extends State<HomePage> {
                       Text(parking.rateName),
                     ])))),
             onTap: () async {
-              await vm.stopParking();
+              await vm.endParking();
             });
       case HomePageVMItemType.add:
         return InkWell(

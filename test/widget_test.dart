@@ -510,7 +510,7 @@ void main() {
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
       expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
-      when(model.networkProxy.sendStop(userId1, parkingId1, token1))
+      when(model.networkProxy.sendEnd(userId1, parkingId1, token1))
           .thenAnswer((_) async => {
                 NetworkProxyKeys.code: NetworkProxy.success,
                 NetworkProxyKeys.body: jsonEncode({parkingKey: parking1}),
@@ -573,7 +573,7 @@ void main() {
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
       expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
-      when(model.networkProxy.sendStop(userId1, parkingId1, token1))
+      when(model.networkProxy.sendEnd(userId1, parkingId1, token1))
           .thenAnswer((_) async => {
                 NetworkProxyKeys.code: NetworkProxy.authorize,
                 NetworkProxyKeys.body: null,
@@ -655,7 +655,7 @@ void main() {
               });
       await tester.tap(find.byKey(Key(rateId1)));
       await tester.pumpAndSettle();
-      when(model.networkProxy.sendStop(userId1, parkingId1, token1))
+      when(model.networkProxy.sendEnd(userId1, parkingId1, token1))
           .thenAnswer((_) async => {
                 NetworkProxyKeys.code: NetworkProxy.success,
                 NetworkProxyKeys.body: jsonEncode({parkingKey: parking1}),
@@ -718,7 +718,7 @@ void main() {
       await tester.pumpAndSettle();
       await tester.pump();
       expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
-      when(model.networkProxy.sendStop(userId1, parkingId2, token1))
+      when(model.networkProxy.sendEnd(userId1, parkingId2, token1))
           .thenAnswer((_) async => {
                 NetworkProxyKeys.code: NetworkProxy.success,
                 NetworkProxyKeys.body: jsonEncode({parkingKey: parking2}),

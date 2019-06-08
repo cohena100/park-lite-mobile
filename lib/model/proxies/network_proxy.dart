@@ -124,8 +124,8 @@ class NetworkProxy {
     };
   }
 
-  Future<Map> sendStop(String userId, String parkingId, String token) async {
-    var url = _baseUrl + '/parkings/stop';
+  Future<Map> sendEnd(String userId, String parkingId, String token) async {
+    var url = _baseUrl + '/parkings/end';
     var body = json.encode({
       'userId': userId,
       'parkingId': parkingId,

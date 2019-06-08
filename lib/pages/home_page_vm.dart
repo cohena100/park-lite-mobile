@@ -55,9 +55,9 @@ class HomePageVM {
     }
   }
 
-  Future stopParking() async {
+  Future endParking() async {
     _addBusyAction();
-    final state = await model.parkBloc.stopParking();
+    final state = await model.parkBloc.endParking();
     switch (state) {
       case ParkBlocState.authorize:
         await model.userBloc.userLogout(isForced: true);

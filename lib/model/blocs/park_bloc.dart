@@ -120,10 +120,10 @@ class ParkBloc with BaseBloc {
     return ParkBlocState.failure;
   }
 
-  Future<ParkBlocState> stopParking() async {
+  Future<ParkBlocState> endParking() async {
     final user = await getUser(_localDbProxy);
     final parking = user.parking;
-    final data = await _networkProxy.sendStop(user.id, parking.id, user.token);
+    final data = await _networkProxy.sendEnd(user.id, parking.id, user.token);
     switch (data[NetworkProxyKeys.code]) {
       case NetworkProxy.success:
         await _handleStopParkingSuccess(data);
