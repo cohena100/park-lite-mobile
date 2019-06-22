@@ -1,6 +1,6 @@
 import 'package:pango_lite/model/elements/rate.dart';
 
-import 'Polygon.dart';
+import 'polygon.dart';
 
 class Area {
   static final _idKey = 'id';

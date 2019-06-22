@@ -113,5 +113,17 @@
     "description": "Star previous parking button label",
     "type": "text",
     "placeholders": {}
+  },
+  "payParkingLabel": "Pay for parking",
+  "@payParkingLabel": {
+    "description": "Pay for parking button label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "payTitle": "Pay",
+  "@payTitle": {
+    "description": "Title for pay for parking page",
+    "type": "text",
+    "placeholders": {}
   }
 }

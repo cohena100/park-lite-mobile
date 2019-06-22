@@ -1,6 +1,6 @@
 import 'package:pango_lite/model/elements/area.dart';
 
-import 'Polygon.dart';
+import 'polygon.dart';
 
 class City {
   static final _idKey = 'id';

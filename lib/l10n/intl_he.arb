@@ -113,5 +113,17 @@
     "description": "Star previous parking button label",
     "type": "text",
     "placeholders": {}
+  },
+  "payParkingLabel": "תשלום עבור חניה",
+  "@payParkingLabel": {
+    "description": "Pay for parking button label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "payTitle": "תשלום עבור חניה",
+  "@payTitle": {
+    "description": "Title for pay for parking page",
+    "type": "text",
+    "placeholders": {}
   }
 }

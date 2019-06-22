@@ -7,4 +7,5 @@ class Routes {
   static final selectCityPage = '/selectCityPage';
   static final selectAreaPage = '/selectAreaPage';
   static final selectRatePage = '/selectRatePage';
+  static final payPage = '/payPage';
 }

@@ -28,6 +28,7 @@ dependencies:
   location: ^2.3.5
   bluetooth_state_plugin: ^0.0.1
   flutter_local_notifications: ^0.7.0
+  webview_flutter: ^0.3.9+1
 
 dev_dependencies:
   intl_translation: ^0.17.3

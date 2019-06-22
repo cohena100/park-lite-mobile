@@ -171,6 +171,22 @@ class AppLocalizations {
     );
   }
 
+  String get payParkingLabel {
+    return Intl.message(
+      'Pay for parking',
+      name: 'payParkingLabel',
+      desc: 'Pay for parking button label',
+    );
+  }
+
+  String get payTitle {
+    return Intl.message(
+      'Pay',
+      name: 'payTitle',
+      desc: 'Title for pay for parking page',
+    );
+  }
+
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

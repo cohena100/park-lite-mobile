@@ -26,6 +26,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "carNumberHint" : MessageLookupByLibrary.simpleMessage("Please enter your car number"),
     "carNumberTitle" : MessageLookupByLibrary.simpleMessage("Fill car number"),
     "exitLabel" : MessageLookupByLibrary.simpleMessage("Exit"),
+    "payParkingLabel" : MessageLookupByLibrary.simpleMessage("Pay for parking"),
+    "payTitle" : MessageLookupByLibrary.simpleMessage("Pay"),
     "phoneNumberHint" : MessageLookupByLibrary.simpleMessage("Please enter your phone number"),
     "phoneNumberTitle" : MessageLookupByLibrary.simpleMessage("Fill phone number"),
     "removeCarLabel" : MessageLookupByLibrary.simpleMessage("Remove car"),

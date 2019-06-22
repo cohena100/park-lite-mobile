@@ -4,12 +4,14 @@ class WidgetKeys {
   static final carPageKey = Key('CarPage');
   static final carTextFieldKey = Key('CarTextField');
   static final homePageKey = Key('HomePage');
+  static final payPageKey = Key('PayPage');
   static final homePageListViewKey = Key('HomePageListView');
   static final blueKey = Key('Blue');
   static final orangeKey = Key('Orange');
   static final startKey = Key('Start');
   static final startTextKey = Key('StartText');
   static final stopKey = Key('Stop');
+  static final payKey = Key('Pay');
   static final parkTabKey = Key('ParkTab');
   static final userTabKey = Key('UserTab');
   static final nicknamePageKey = Key('NicknamePage');

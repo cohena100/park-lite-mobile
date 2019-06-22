@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2019-05-17T11:58:42.388649",
+  "@@last_modified": "2019-06-22T12:52:54.197108",
   "title": "Pango Lite",
   "@title": {
     "description": "Title for the Weather Application",
@@ -111,6 +111,18 @@
   "startPreviousParkingLabel": "Start previous parking",
   "@startPreviousParkingLabel": {
     "description": "Star previous parking button label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "payParkingLabel": "Pay for parking",
+  "@payParkingLabel": {
+    "description": "Pay for parking button label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "payTitle": "Pay",
+  "@payTitle": {
+    "description": "Title for pay for parking page",
     "type": "text",
     "placeholders": {}
   }

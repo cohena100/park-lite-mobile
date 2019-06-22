@@ -8,6 +8,7 @@ import 'package:pango_lite/model/elements/car.dart';
 import 'package:pango_lite/model/elements/city.dart';
 import 'package:pango_lite/model/elements/geo_park.dart';
 import 'package:pango_lite/model/elements/parking.dart';
+import 'package:pango_lite/model/elements/payment.dart';
 import 'package:pango_lite/model/elements/rate.dart';
 import 'package:pango_lite/model/proxies/bluetooth_proxy.dart';
 import 'package:pango_lite/model/proxies/local_db_proxy.dart';
@@ -40,24 +41,22 @@ class ParkBloc with BaseBloc {
     return ParkBlocState.success;
   }
 
-  Future<Parking> get parking async {
-    final user = await getUser(_localDbProxy);
-    if (user.parking == null) {
-      _stopBluetooth();
-      return null;
-    }
-    _startBluetooth();
-    return user.parking;
-  }
-
   Future<List<Parking>> get parkings async {
     final cache = await getCache(_localDbProxy);
     return cache.parkings.reversed.toList();
   }
 
   Future<ParkBlocState> get state async {
-    final isParking = await parking;
-    if (isParking != null) {
+    final user = await getUser(_localDbProxy);
+    if (user.parking == null) {
+      _stopBluetooth();
+    } else if (user.payment == null) {
+      _startBluetooth();
+    }
+    if (user.payment != null) {
+      return ParkBlocState.pay;
+    }
+    if (user.parking != null) {
       return ParkBlocState.parking;
     }
     return ParkBlocState.notParking;
@@ -144,7 +143,8 @@ class ParkBloc with BaseBloc {
 
   Future _handleEndParkingSuccess(Map data) async {
     final user = await getUser(_localDbProxy);
-    user.deleteParking();
+    final payment = Payment.fromJson(jsonDecode(data[NetworkProxyKeys.body]));
+    user.updatePayment(payment);
     await _localDbProxy.saveUser(jsonEncode(user));
     final cache = await getCache(_localDbProxy);
     final parking = Parking.fromJson(jsonDecode(data[NetworkProxyKeys.body]));
@@ -159,11 +159,11 @@ class ParkBloc with BaseBloc {
     }
     _bluetoothStateStream = _bluetoothProxy.stream.listen((bool data) async {
       final user = await getUser(_localDbProxy);
-      final aParking = await parking;
-      final parkingCar = user.parkingCar;
-      final title = '${parkingCar.nickname} ${parkingCar.number}';
+      final parking = user.parking;
+      final car = user.parkingCar;
+      final title = '${car.nickname} ${car.number}';
       final b =
-          '${aParking.cityName} ${aParking.areaName} ${aParking.rateName}';
+          '${parking.cityName} ${parking.areaName} ${parking.rateName}';
       _notificationProxy.showNotification(title, b);
     });
   }
@@ -180,6 +180,7 @@ class ParkBloc with BaseBloc {
 enum ParkBlocState {
   parking,
   notParking,
+  pay,
   areas,
   success,
   failure,

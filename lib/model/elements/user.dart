@@ -1,5 +1,6 @@
 import 'package:pango_lite/model/elements/car.dart';
 import 'package:pango_lite/model/elements/parking.dart';
+import 'package:pango_lite/model/elements/payment.dart';
 
 class User {
   static final _userKey = 'user';
@@ -8,6 +9,7 @@ class User {
   static final _carsKey = 'cars';
   static final _phoneKey = 'phone';
   static final _parkingKey = 'parking';
+  static final _paymentKey = 'payment';
   final Map _data;
 
   User(this._data);
@@ -24,13 +26,18 @@ class User {
   }
 
   Parking get parking {
-    final parkingData = _data[_parkingKey];
-    return parkingData == null ? null : Parking(parkingData);
+    final data = _data[_parkingKey];
+    return data == null ? null : Parking(data);
   }
 
   Car get parkingCar {
     final innerCarId = parking.carId;
     return findInnerCar(innerCarId);
+  }
+
+  Payment get payment {
+    final data = _data[_paymentKey];
+    return data == null ? null : Payment(data);
   }
 
   String get phone {
@@ -49,6 +56,10 @@ class User {
 
   void deleteParking() {
     _data.remove(_parkingKey);
+  }
+
+  void deletePayment() {
+    _data.remove(_paymentKey);
   }
 
   void deleteToken() {
@@ -75,5 +86,9 @@ class User {
 
   void updateParking(Parking parking) {
     _data[_parkingKey] = parking.data;
+  }
+
+  void updatePayment(Payment payment) {
+    _data[_paymentKey] = payment.data;
   }
 }

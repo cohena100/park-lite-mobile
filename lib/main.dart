@@ -5,6 +5,7 @@ import 'package:pango_lite/model/model.dart';
 import 'package:pango_lite/pages/car_page.dart';
 import 'package:pango_lite/pages/main_page.dart';
 import 'package:pango_lite/pages/nickname_page.dart';
+import 'package:pango_lite/pages/pay_page.dart';
 import 'package:pango_lite/pages/routes.dart';
 import 'package:pango_lite/pages/select_area_page.dart';
 import 'package:pango_lite/pages/select_city.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
         Routes.selectCityPage: (context) => SelectCityPage(),
         Routes.selectAreaPage: (context) => SelectAreaPage(),
         Routes.selectRatePage: (context) => SelectRatePage(),
+        Routes.payPage: (context) => PayPage(),
       },
       localizationsDelegates: [
         AppLocalizationsDelegate(),

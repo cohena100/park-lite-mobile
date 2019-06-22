@@ -64,6 +64,9 @@ class HomePageState extends State<HomePage> {
         case HomePageVMOtherActionState.carPage:
           Navigator.pushNamed(context, Routes.carPage);
           break;
+        case HomePageVMOtherActionState.payPage:
+          Navigator.of(context).pushNamed(Routes.payPage);
+          break;
         case HomePageVMOtherActionState.rootPage:
           Navigator.of(context).pushReplacementNamed(Routes.rootPage);
           break;
@@ -152,6 +155,25 @@ class HomePageState extends State<HomePage> {
                     ])))),
             onTap: () async {
               await vm.startPreviousParking(parking, car);
+            });
+      case HomePageVMItemType.pay:
+        final Parking parking = item.data[HomePageVMItemDataKey.parking];
+        final Car car = item.data[HomePageVMItemDataKey.car];
+        return InkWell(
+            child: Card(
+                key: WidgetKeys.payKey,
+                child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Center(
+                        child: Column(children: [
+                          Text(AppLocalizations.of(context).payParkingLabel),
+                          Text('${car.nickname} (${car.number})'),
+                          Text(parking.cityName),
+                          Text(parking.areaName),
+                          Text(parking.rateName),
+                        ])))),
+            onTap: () {
+              vm.payParking();
             });
       default:
         return Container();

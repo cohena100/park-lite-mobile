@@ -23,8 +23,26 @@ class HomePageVM {
     _otherActionSubject.close();
   }
 
+  Future endParking() async {
+    _addBusyAction();
+    final state = await model.parkBloc.endParking();
+    switch (state) {
+      case ParkBlocState.authorize:
+        await model.userBloc.userLogout(isForced: true);
+        _addRootPageOtherAction();
+        break;
+      default:
+        await _addHomeAction();
+        break;
+    }
+  }
+
   Future init() async {
     await _addHomeAction();
+  }
+
+  void payParking() {
+    _addPayPageOtherAction();
   }
 
   void startParking() {
@@ -48,20 +66,6 @@ class HomePageVM {
             await _addHomeAction();
             break;
         }
-        break;
-      default:
-        await _addHomeAction();
-        break;
-    }
-  }
-
-  Future endParking() async {
-    _addBusyAction();
-    final state = await model.parkBloc.endParking();
-    switch (state) {
-      case ParkBlocState.authorize:
-        await model.userBloc.userLogout(isForced: true);
-        _addRootPageOtherAction();
         break;
       default:
         await _addHomeAction();
@@ -95,6 +99,9 @@ class HomePageVM {
     }
     final parkingState = await model.parkBloc.state;
     switch (parkingState) {
+      case ParkBlocState.pay:
+        await _addHomeActionPopulatePay(decorateItems, user);
+        break;
       case ParkBlocState.parking:
         await _addHomeActionPopulateParking(decorateItems, user);
         break;
@@ -107,7 +114,9 @@ class HomePageVM {
   }
 
   Future _addHomeActionPopulateNotParking(
-      List<HomePageVMItem> decorateItems, User user) async {
+    List<HomePageVMItem> decorateItems,
+    User user,
+  ) async {
     final parkings = await model.parkBloc.parkings;
     final parkingItems = parkings.map((parking) {
       final car = user.findInnerCar(parking.carId);
@@ -134,8 +143,10 @@ class HomePageVM {
   }
 
   Future _addHomeActionPopulateParking(
-      List<HomePageVMItem> decorateItems, User user) async {
-    final parking = await model.parkBloc.parking;
+    List<HomePageVMItem> decorateItems,
+    User user,
+  ) async {
+    final parking = user.parking;
     final car = user.parkingCar;
     final data = {
       HomePageVMItemDataKey.parking: parking,
@@ -143,6 +154,33 @@ class HomePageVM {
     };
     final items = [
       HomePageVMItem(data: data, type: HomePageVMItemType.stop),
+    ];
+    final allItems = [
+      decorateItems,
+      items,
+      decorateItems,
+    ].expand((x) => x).toList();
+    _actionSubject.add(
+      HomePageVMAction(
+          data: {HomePageVMActionDataKey.items: allItems},
+          state: HomePageVMActionState.home),
+    );
+  }
+
+  Future _addHomeActionPopulatePay(
+    List<HomePageVMItem> decorateItems,
+    User user,
+  ) async {
+    final parking = user.parking;
+    final payment = user.payment;
+    final car = user.parkingCar;
+    final data = {
+      HomePageVMItemDataKey.parking: parking,
+      HomePageVMItemDataKey.payment: payment,
+      HomePageVMItemDataKey.car: car,
+    };
+    final items = [
+      HomePageVMItem(data: data, type: HomePageVMItemType.pay),
     ];
     final allItems = [
       decorateItems,
@@ -167,6 +205,12 @@ class HomePageVM {
       data: {HomePageVMActionDataKey.items: allItems},
       state: HomePageVMActionState.home,
     ));
+  }
+
+  void _addPayPageOtherAction() {
+    _otherActionSubject.add(
+      HomePageVMOtherAction(state: HomePageVMOtherActionState.payPage),
+    );
   }
 
   void _addRootPageOtherAction() {
@@ -200,9 +244,9 @@ class HomePageVMItem {
   HomePageVMItem({this.data = const {}, this.type = HomePageVMItemType.none});
 }
 
-enum HomePageVMItemDataKey { none, parking, car }
+enum HomePageVMItemDataKey { none, parking, car, payment }
 
-enum HomePageVMItemType { none, blue, orange, start, stop, add, parking }
+enum HomePageVMItemType { none, blue, orange, start, stop, add, parking, pay }
 
 class HomePageVMOtherAction {
   final Map data;
@@ -213,4 +257,10 @@ class HomePageVMOtherAction {
 
 enum HomePageVMOtherActionDataKey { none }
 
-enum HomePageVMOtherActionState { none, selectCarPage, carPage, rootPage }
+enum HomePageVMOtherActionState {
+  none,
+  selectCarPage,
+  carPage,
+  payPage,
+  rootPage,
+}
