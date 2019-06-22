@@ -8,6 +8,8 @@ PODS:
     - Flutter
   - path_provider (0.0.1):
     - Flutter
+  - webview_flutter (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - bluetooth_state_plugin (from `.symlinks/plugins/bluetooth_state_plugin/ios`)
@@ -15,6 +17,7 @@ DEPENDENCIES:
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - location (from `.symlinks/plugins/location/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
+  - webview_flutter (from `.symlinks/plugins/webview_flutter/ios`)
 
 EXTERNAL SOURCES:
   bluetooth_state_plugin:
@@ -27,6 +30,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/location/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
+  webview_flutter:
+    :path: ".symlinks/plugins/webview_flutter/ios"
 
 SPEC CHECKSUMS:
   bluetooth_state_plugin: 6f0041b697c1231ca05bdfea34d023e57800fa9e
@@ -34,6 +39,7 @@ SPEC CHECKSUMS:
   flutter_local_notifications: 696a74904e0a0ab754e27a5f761da4a7f9153710
   location: 26c90953ad5916331d0d1d913898779910416487
   path_provider: 09407919825bfe3c2deae39453b7a5b44f467873
+  webview_flutter: 9bd234c07e99632356cba112df56fd1d47d6b6e3
 
 PODFILE CHECKSUM: aff02bfeed411c636180d6812254b2daeea14d09
 
