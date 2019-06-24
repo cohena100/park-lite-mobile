@@ -13,7 +13,14 @@ class PayPageVM {
   }
 
   Future init() async {
-    await _addPayAction();
+    final isInTestMode = model.userBloc.isInTestMode;
+    if (isInTestMode) {
+      await model.parkBloc.completeParking();
+      _addNoneAction();
+      _addFullRootPageOtherAction();
+    } else {
+      await _addPayAction();
+    }
   }
 
   Future onUrlChanged(String url) async {
@@ -29,6 +36,10 @@ class PayPageVM {
     _otherActionSubject.add(
       PayPageVMOtherAction(state: PayPageVMOtherActionState.fullRootPage),
     );
+  }
+
+  void _addNoneAction() async {
+    _actionSubject.add(PayPageVMAction());
   }
 
   Future _addPayAction() async {

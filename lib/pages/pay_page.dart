@@ -33,7 +33,11 @@ class PayPageState extends State<PayPage> {
             case PayPageVMActionState.pay:
               return pay(context, action.data[PayPageVMActionDataKey.payment]);
             default:
-              return Container();
+              return Scaffold(
+                  appBar: AppBar(
+                    title: Text(AppLocalizations.of(context).payTitle),
+                  ),
+                  body: Container());
           }
         });
   }

@@ -13,6 +13,10 @@ class UserBloc with BaseBloc {
 
   UserBloc(this._networkProxy, this._localDbProxy);
 
+  bool get isInTestMode {
+    return _localDbProxy.inMemoryUser != null;
+  }
+
   Future<User> get user async {
     return await getUser(_localDbProxy);
   }
@@ -34,7 +38,8 @@ class UserBloc with BaseBloc {
     final theUser = await user;
     final number = _localDbProxy.appContext.data[AppContextDataKey.number];
     final nickname = _localDbProxy.appContext.data[AppContextDataKey.nickname];
-    final validateId = _localDbProxy.appContext.data[AppContextDataKey.validateId];
+    final validateId =
+        _localDbProxy.appContext.data[AppContextDataKey.validateId];
     final code = _localDbProxy.appContext.data[AppContextDataKey.code];
     final data = await _networkProxy.sendAddValidate(
       theUser.id,
@@ -102,7 +107,8 @@ class UserBloc with BaseBloc {
 
   Future<AppState> userValidate() async {
     final userId = _localDbProxy.appContext.data[AppContextDataKey.userId];
-    final validateId = _localDbProxy.appContext.data[AppContextDataKey.validateId];
+    final validateId =
+        _localDbProxy.appContext.data[AppContextDataKey.validateId];
     final code = _localDbProxy.appContext.data[AppContextDataKey.code];
     final data = await _networkProxy.sendLoginValidate(
       userId,
@@ -136,7 +142,8 @@ class UserBloc with BaseBloc {
 
   void _handleUserLoginSuccess(Map data) {
     final validate = jsonDecode(data[NetworkProxyKeys.body]);
-    _localDbProxy.appContext.data[AppContextDataKey.userId] = validate['validate']['userId'];
+    _localDbProxy.appContext.data[AppContextDataKey.userId] =
+        validate['validate']['userId'];
     _localDbProxy.appContext.data[AppContextDataKey.validateId] =
         validate['validate']['validateId'];
   }

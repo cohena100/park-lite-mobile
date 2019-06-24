@@ -203,14 +203,20 @@ final parking3 = {
   'user': userId1,
   'car': innerCarId2,
 };
-final price1 = '100';
-final price2 = '200';
-final price3 = '500';
 final parkingId1 = '1';
 final parkingId2 = '2';
 final parkingId3 = '3';
 final parkingKey = 'parking';
+final payment1 = {
+  'amount': 20,
+  'sessionId': '1',
+  'parking': parking1,
+};
+final paymentKey = 'payment';
 final phone1 = '4';
+final price1 = '100';
+final price2 = '200';
+final price3 = '500';
 final rateId1 = '1';
 final rateId2 = '2';
 final rateName1 = 'a';
