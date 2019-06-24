@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:pango_lite/locale/locale.dart';
 import 'package:pango_lite/model/elements/payment.dart';
 import 'package:pango_lite/pages/pay_page_vm.dart';
 import 'package:pango_lite/pages/routes.dart';
 import 'package:pango_lite/pages/widget_keys.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class PayPage extends StatefulWidget {
   PayPage({Key key}) : super(key: WidgetKeys.payPageKey);
@@ -16,6 +16,7 @@ class PayPage extends StatefulWidget {
 class PayPageState extends State<PayPage> {
   PayPageVM vm;
   bool isDirty = true;
+  final plugin = FlutterWebviewPlugin();
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +40,7 @@ class PayPageState extends State<PayPage> {
 
   @override
   void dispose() {
+    plugin.dispose();
     vm.close();
     super.dispose();
   }
@@ -56,6 +58,9 @@ class PayPageState extends State<PayPage> {
           break;
       }
       isDirty = true;
+    });
+    plugin.onUrlChanged.listen((url) async {
+      await vm.onUrlChanged(url);
     });
     super.initState();
   }
@@ -89,11 +94,9 @@ class PayPageState extends State<PayPage> {
 </html>''',
       mimeType: 'text/html',
     ).toString();
-    return Scaffold(
-        appBar: AppBar(title: Text(AppLocalizations.of(context).payTitle)),
-        body: WebView(
-          initialUrl: url,
-          javascriptMode: JavascriptMode.unrestricted,
-        ));
+    return WebviewScaffold(
+      appBar: AppBar(title: Text(AppLocalizations.of(context).payTitle)),
+      url: url,
+    );
   }
 }

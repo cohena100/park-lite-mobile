@@ -16,6 +16,21 @@ class PayPageVM {
     await _addPayAction();
   }
 
+  Future onUrlChanged(String url) async {
+    final successUrl =
+        'https://stormy-dusk-75310.herokuapp.com/payments/success';
+    if (url == successUrl) {
+      await model.parkBloc.completeParking();
+      _addFullRootPageOtherAction();
+    }
+  }
+
+  void _addFullRootPageOtherAction() {
+    _otherActionSubject.add(
+      PayPageVMOtherAction(state: PayPageVMOtherActionState.fullRootPage),
+    );
+  }
+
   Future _addPayAction() async {
     final user = await model.userBloc.user;
     _actionSubject.add(
@@ -40,8 +55,10 @@ enum PayPageVMActionState { none, pay }
 class PayPageVMOtherAction {
   final Map data;
   final PayPageVMOtherActionState state;
-  PayPageVMOtherAction(
-      {this.data = const {}, this.state = PayPageVMOtherActionState.none});
+  PayPageVMOtherAction({
+    this.data = const {},
+    this.state = PayPageVMOtherActionState.none,
+  });
 }
 
 enum PayPageVMOtherActionDataKey { none }

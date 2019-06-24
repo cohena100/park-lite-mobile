@@ -62,6 +62,27 @@ class ParkBloc with BaseBloc {
     return ParkBlocState.notParking;
   }
 
+  Future completeParking() async {
+    final user = await getUser(_localDbProxy);
+    user.deleteParking();
+    user.deletePayment();
+    await _localDbProxy.saveUser(jsonEncode(user));
+  }
+
+  Future<ParkBlocState> endParking() async {
+    final user = await getUser(_localDbProxy);
+    final parking = user.parking;
+    final data = await _networkProxy.sendEnd(user.id, parking.id, user.token);
+    switch (data[NetworkProxyKeys.code]) {
+      case NetworkProxy.success:
+        await _handleEndParkingSuccess(data);
+        return ParkBlocState.success;
+      case NetworkProxy.authorize:
+        return ParkBlocState.authorize;
+    }
+    return ParkBlocState.failure;
+  }
+
   Future<GeoPark> geoPark() async {
     final data = await _localDbProxy.loadGeoPark();
     return GeoPark(data);
@@ -119,28 +140,6 @@ class ParkBloc with BaseBloc {
     return ParkBlocState.failure;
   }
 
-  Future<ParkBlocState> endParking() async {
-    final user = await getUser(_localDbProxy);
-    final parking = user.parking;
-    final data = await _networkProxy.sendEnd(user.id, parking.id, user.token);
-    switch (data[NetworkProxyKeys.code]) {
-      case NetworkProxy.success:
-        await _handleEndParkingSuccess(data);
-        return ParkBlocState.success;
-      case NetworkProxy.authorize:
-        return ParkBlocState.authorize;
-    }
-    return ParkBlocState.failure;
-  }
-
-  Future _handleStartParkingSuccess(Map data) async {
-    final user = await getUser(_localDbProxy);
-    final parking = Parking.fromJson(jsonDecode(data[NetworkProxyKeys.body]));
-    user.updateParking(parking);
-    await _localDbProxy.saveUser(jsonEncode(user));
-    _startBluetooth();
-  }
-
   Future _handleEndParkingSuccess(Map data) async {
     final user = await getUser(_localDbProxy);
     final payment = Payment.fromJson(jsonDecode(data[NetworkProxyKeys.body]));
@@ -153,6 +152,14 @@ class ParkBloc with BaseBloc {
     _stopBluetooth();
   }
 
+  Future _handleStartParkingSuccess(Map data) async {
+    final user = await getUser(_localDbProxy);
+    final parking = Parking.fromJson(jsonDecode(data[NetworkProxyKeys.body]));
+    user.updateParking(parking);
+    await _localDbProxy.saveUser(jsonEncode(user));
+    _startBluetooth();
+  }
+
   void _startBluetooth() {
     if (_bluetoothStateStream != null) {
       return;
@@ -162,8 +169,7 @@ class ParkBloc with BaseBloc {
       final parking = user.parking;
       final car = user.parkingCar;
       final title = '${car.nickname} ${car.number}';
-      final b =
-          '${parking.cityName} ${parking.areaName} ${parking.rateName}';
+      final b = '${parking.cityName} ${parking.areaName} ${parking.rateName}';
       _notificationProxy.showNotification(title, b);
     });
   }
