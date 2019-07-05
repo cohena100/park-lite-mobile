@@ -1,3 +1,4 @@
+import 'package:pango_lite/model/blocs/user_bloc.dart';
 import 'package:pango_lite/model/model.dart';
 import 'package:pango_lite/model/proxies/local_db_proxy.dart';
 import 'package:rxdart/rxdart.dart';
@@ -13,10 +14,10 @@ class MainPageVM {
   Future init() async {
     final state = await model.userBloc.handshake();
     switch (state) {
-      case AppState.loggedIn:
+      case UserBlocState.loggedIn:
         _addHomePageAction();
         break;
-      case AppState.notLoggedIn:
+      case UserBlocState.notLoggedIn:
         if (model.localDbProxy.appContext.state != AppContextState.login) {
           model.localDbProxy.appContext =
               AppContext(data: {}, state: AppContextState.login);

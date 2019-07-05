@@ -33,14 +33,6 @@ enum AppContextState {
   park,
 }
 
-enum AppState {
-  notLoggedIn,
-  loggedIn,
-  success,
-  failure,
-  authorize,
-}
-
 class LocalDbProxy {
   final bool inMemory;
   String inMemoryUser;

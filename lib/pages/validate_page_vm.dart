@@ -1,3 +1,4 @@
+import 'package:pango_lite/model/blocs/user_bloc.dart';
 import 'package:pango_lite/model/model.dart';
 import 'package:pango_lite/model/proxies/local_db_proxy.dart';
 import 'package:rxdart/rxdart.dart';
@@ -65,10 +66,10 @@ class ValidatePageVM {
     _addBusyAction();
     final state = await model.userBloc.addCarValidate();
     switch (state) {
-      case AppState.success:
+      case UserBlocState.success:
         _addFullRootPageOtherAction();
         break;
-      case AppState.authorize:
+      case UserBlocState.authorize:
         await model.userBloc.userLogout(isForced: true);
         _addFullRootPageOtherAction();
         break;
@@ -82,7 +83,7 @@ class ValidatePageVM {
     _addBusyAction();
     final state = await model.userBloc.userValidate();
     switch (state) {
-      case AppState.success:
+      case UserBlocState.success:
         _addRootPageOtherAction();
         break;
       default:

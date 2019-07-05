@@ -21,20 +21,20 @@ class UserBloc with BaseBloc {
     return await getUser(_localDbProxy);
   }
 
-  Future<AppState> addCar() async {
+  Future<UserBlocState> addCar() async {
     final theUser = await user;
     final data = await _networkProxy.sendAdd(theUser.id, theUser.token);
     switch (data[NetworkProxyKeys.code]) {
       case NetworkProxy.success:
         _handleAddCarSuccess(data);
-        return AppState.success;
+        return UserBlocState.success;
       case NetworkProxy.authorize:
-        return AppState.authorize;
+        return UserBlocState.authorize;
     }
-    return AppState.failure;
+    return UserBlocState.failure;
   }
 
-  Future<AppState> addCarValidate() async {
+  Future<UserBlocState> addCarValidate() async {
     final theUser = await user;
     final number = _localDbProxy.appContext.data[AppContextDataKey.number];
     final nickname = _localDbProxy.appContext.data[AppContextDataKey.nickname];
@@ -52,22 +52,22 @@ class UserBloc with BaseBloc {
     switch (data[NetworkProxyKeys.code]) {
       case NetworkProxy.success:
         await _handleAddCarValidateSuccess(data, theUser);
-        return AppState.success;
+        return UserBlocState.success;
       case NetworkProxy.authorize:
-        return AppState.authorize;
+        return UserBlocState.authorize;
     }
-    return AppState.failure;
+    return UserBlocState.failure;
   }
 
-  Future<AppState> handshake() async {
+  Future<UserBlocState> handshake() async {
     final isUser = await user;
     if (isUser == null || isUser.token == null) {
-      return AppState.notLoggedIn;
+      return UserBlocState.notLoggedIn;
     }
-    return AppState.loggedIn;
+    return UserBlocState.loggedIn;
   }
 
-  Future<AppState> removeCar() async {
+  Future<UserBlocState> removeCar() async {
     final theUser = await user;
     final Car car = _localDbProxy.appContext.data[AppContextDataKey.car];
     final data = await _networkProxy.sendRemove(
@@ -78,34 +78,34 @@ class UserBloc with BaseBloc {
     switch (data[NetworkProxyKeys.code]) {
       case NetworkProxy.success:
         await _handleRemoveCarSuccess(data, theUser, car);
-        return AppState.success;
+        return UserBlocState.success;
       case NetworkProxy.authorize:
-        return AppState.authorize;
+        return UserBlocState.authorize;
     }
-    return AppState.failure;
+    return UserBlocState.failure;
   }
 
-  Future<AppState> userLogin() async {
+  Future<UserBlocState> userLogin() async {
     final phone = _localDbProxy.appContext.data[AppContextDataKey.phone];
     final data = await _networkProxy.sendLogin(phone);
     switch (data[NetworkProxyKeys.code]) {
       case NetworkProxy.success:
         _handleUserLoginSuccess(data);
-        return AppState.success;
+        return UserBlocState.success;
     }
-    return AppState.failure;
+    return UserBlocState.failure;
   }
 
-  Future<AppState> userLogout({bool isForced = false}) async {
+  Future<UserBlocState> userLogout({bool isForced = false}) async {
     final theUser = await user;
     if (!isForced) {
       await _networkProxy.sendLogout(theUser.id, theUser.token);
     }
     await _handleUserLogout(theUser);
-    return AppState.success;
+    return UserBlocState.success;
   }
 
-  Future<AppState> userValidate() async {
+  Future<UserBlocState> userValidate() async {
     final userId = _localDbProxy.appContext.data[AppContextDataKey.userId];
     final validateId =
         _localDbProxy.appContext.data[AppContextDataKey.validateId];
@@ -118,9 +118,9 @@ class UserBloc with BaseBloc {
     switch (data[NetworkProxyKeys.code]) {
       case NetworkProxy.success:
         await _handleUserValidateSuccess(data);
-        return AppState.success;
+        return UserBlocState.success;
     }
-    return AppState.failure;
+    return UserBlocState.failure;
   }
 
   void _handleAddCarSuccess(Map data) {
@@ -157,4 +157,12 @@ class UserBloc with BaseBloc {
     final user = User.fromJson(jsonDecode(data[NetworkProxyKeys.body]));
     await _localDbProxy.saveUser(jsonEncode(user));
   }
+}
+
+enum UserBlocState {
+  notLoggedIn,
+  loggedIn,
+  success,
+  failure,
+  authorize,
 }

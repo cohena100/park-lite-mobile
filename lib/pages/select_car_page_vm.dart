@@ -1,4 +1,5 @@
 import 'package:pango_lite/model/blocs/park_bloc.dart';
+import 'package:pango_lite/model/blocs/user_bloc.dart';
 import 'package:pango_lite/model/elements/car.dart';
 import 'package:pango_lite/model/elements/user.dart';
 import 'package:pango_lite/model/model.dart';
@@ -99,10 +100,10 @@ class SelectCarPageVM {
     model.localDbProxy.appContext.data[AppContextDataKey.car] = car;
     final state = await model.userBloc.removeCar();
     switch (state) {
-      case AppState.success:
+      case UserBlocState.success:
         _addRootPageOtherAction();
         break;
-      case AppState.authorize:
+      case UserBlocState.authorize:
         await model.userBloc.userLogout(isForced: true);
         _addRootPageOtherAction();
         break;
