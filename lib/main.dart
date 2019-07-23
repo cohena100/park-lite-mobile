@@ -8,7 +8,7 @@ import 'package:pango_lite/pages/nickname_page.dart';
 import 'package:pango_lite/pages/pay_page.dart';
 import 'package:pango_lite/pages/routes.dart';
 import 'package:pango_lite/pages/select_area_page.dart';
-import 'package:pango_lite/pages/select_city.dart';
+import 'package:pango_lite/pages/select_city_page.dart';
 import 'package:pango_lite/pages/select_car_page.dart';
 import 'package:pango_lite/pages/select_rate_page.dart';
 import 'package:pango_lite/pages/validate_page.dart';
