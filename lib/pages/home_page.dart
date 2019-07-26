@@ -80,101 +80,95 @@ class HomePageState extends State<HomePage> {
     switch (item.type) {
       case HomePageVMItemType.blue:
         return Card(
-            key: WidgetKeys.blueKey,
-            color: Colors.blue,
-            child:
-                Padding(padding: const EdgeInsets.all(24), child: Container()));
+          key: WidgetKeys.blueKey,
+          color: Colors.blue,
+          child: ListTile(),
+        );
       case HomePageVMItemType.orange:
         return Card(
-            key: WidgetKeys.orangeKey,
-            color: Colors.orange,
-            child:
-                Padding(padding: const EdgeInsets.all(24), child: Container()));
+          key: WidgetKeys.orangeKey,
+          color: Colors.orange,
+          child: ListTile(),
+        );
       case HomePageVMItemType.start:
-        return InkWell(
-            child: Card(
-                key: WidgetKeys.startKey,
-                child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Center(
-                        child: Text(
-                            AppLocalizations.of(context).startParkingLabel,
-                            key: WidgetKeys.startTextKey)))),
-            onTap: () {
-              vm.startParking();
-            });
+        return Card(
+            key: WidgetKeys.startKey,
+            child: ListTile(
+              title: Column(
+                children: <Widget>[
+                  Text(AppLocalizations.of(context).startParkingLabel,
+                      key: WidgetKeys.startTextKey),
+                ],
+              ),
+              onTap: () {
+                vm.startParking();
+              },
+            ));
       case HomePageVMItemType.stop:
         final Parking parking = item.data[HomePageVMItemDataKey.parking];
         final Car car = item.data[HomePageVMItemDataKey.car];
-        return InkWell(
-            child: Card(
-                key: WidgetKeys.stopKey,
-                child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Center(
-                        child: Column(children: [
-                      Text(AppLocalizations.of(context).stopParkingLabel),
-                      Text('${car.nickname} (${car.number})'),
-                      Text(parking.cityName),
-                      Text(parking.areaName),
-                      Text(parking.rateName),
-                    ])))),
-            onTap: () async {
-              await vm.endParking();
-            });
+        return Card(
+            key: WidgetKeys.stopKey,
+            child: ListTile(
+              title: Column(children: [
+                Text(AppLocalizations.of(context).stopParkingLabel),
+                Text('${car.nickname} (${car.number})'),
+                Text(parking.cityName),
+                Text(parking.areaName),
+                Text(parking.rateName),
+              ]),
+              onTap: () async {
+                await vm.endParking();
+              },
+            ));
       case HomePageVMItemType.add:
-        return InkWell(
-            child: Card(
-                key: WidgetKeys.addKey,
-                child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Center(
-                        child:
-                            Text(AppLocalizations.of(context).addCarLabel)))),
-            onTap: () {
-              vm.addCar();
-            });
+        return Card(
+            key: WidgetKeys.addKey,
+            child: ListTile(
+              title: Column(children: [
+                Text(AppLocalizations.of(context).addCarLabel),
+              ]),
+              onTap: () {
+                vm.addCar();
+              },
+            ));
       case HomePageVMItemType.parking:
         final Parking parking = item.data[HomePageVMItemDataKey.parking];
         final Car car = item.data[HomePageVMItemDataKey.car];
-        return InkWell(
-            child: Card(
-                key: Key(parking.id),
-                child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Center(
-                        child: Column(children: [
-                      Text(
-                        AppLocalizations.of(context).startPreviousParkingLabel,
-                        key: Key(parking.id + 'Text'),
-                      ),
-                      Text('${car.nickname} (${car.number})'),
-                      Text(parking.cityName),
-                      Text(parking.areaName),
-                      Text(parking.rateName),
-                    ])))),
-            onTap: () async {
-              await vm.startPreviousParking(parking, car);
-            });
+        return Card(
+            key: Key(parking.id),
+            child: ListTile(
+              title: Column(children: [
+                Text(
+                  AppLocalizations.of(context).startPreviousParkingLabel,
+                  key: Key(parking.id + 'Text'),
+                ),
+                Text('${car.nickname} (${car.number})'),
+                Text(parking.cityName),
+                Text(parking.areaName),
+                Text(parking.rateName),
+              ]),
+              onTap: () async {
+                await vm.startPreviousParking(parking, car);
+              },
+            ));
       case HomePageVMItemType.pay:
         final Parking parking = item.data[HomePageVMItemDataKey.parking];
         final Car car = item.data[HomePageVMItemDataKey.car];
-        return InkWell(
-            child: Card(
-                key: WidgetKeys.payKey,
-                child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Center(
-                        child: Column(children: [
-                          Text(AppLocalizations.of(context).payParkingLabel),
-                          Text('${car.nickname} (${car.number})'),
-                          Text(parking.cityName),
-                          Text(parking.areaName),
-                          Text(parking.rateName),
-                        ])))),
-            onTap: () {
-              vm.payParking();
-            });
+        return Card(
+            key: WidgetKeys.payKey,
+            child: ListTile(
+              title: Column(children: [
+                Text(AppLocalizations.of(context).payParkingLabel),
+                Text('${car.nickname} (${car.number})'),
+                Text(parking.cityName),
+                Text(parking.areaName),
+                Text(parking.rateName),
+              ]),
+              onTap: () {
+                vm.payParking();
+              },
+            ));
       default:
         return Container();
     }

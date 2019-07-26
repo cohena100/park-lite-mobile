@@ -75,27 +75,28 @@ class SelectAreaPageState extends State<SelectAreaPage> {
     switch (item.type) {
       case SelectAreaPageVMItemType.blue:
         return Card(
-            key: WidgetKeys.blueKey,
-            color: Colors.blue,
-            child:
-                Padding(padding: const EdgeInsets.all(24), child: Container()));
+          key: WidgetKeys.blueKey,
+          color: Colors.blue,
+          child: ListTile(),
+        );
       case SelectAreaPageVMItemType.orange:
         return Card(
-            key: WidgetKeys.orangeKey,
-            color: Colors.orange,
-            child:
-                Padding(padding: const EdgeInsets.all(24), child: Container()));
+          key: WidgetKeys.orangeKey,
+          color: Colors.orange,
+          child: ListTile(),
+        );
       case SelectAreaPageVMItemType.area:
         final Area area = item.data[SelectAreaPageVMItemDataKey.area];
-        return InkWell(
-            child: Card(
-                key: Key(area.id),
-                child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Center(child: Text('${area.name}')))),
-            onTap: () {
-              vm.selectArea(area);
-            });
+        return Card(
+            key: Key(area.id),
+            child: ListTile(
+              title: Column(children: [
+                Text('${area.name}'),
+              ]),
+              onTap: () {
+                vm.selectArea(area);
+              },
+            ));
       default:
         return Container();
     }

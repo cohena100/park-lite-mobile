@@ -76,51 +76,47 @@ class UserPageState extends State<UserPage> {
     switch (item.type) {
       case UserPageVMItemType.blue:
         return Card(
-            key: WidgetKeys.blueKey,
-            color: Colors.blue,
-            child:
-                Padding(padding: const EdgeInsets.all(24), child: Container()));
+          key: WidgetKeys.blueKey,
+          color: Colors.blue,
+          child: ListTile(),
+        );
       case UserPageVMItemType.orange:
         return Card(
-            key: WidgetKeys.orangeKey,
-            color: Colors.orange,
-            child:
-                Padding(padding: const EdgeInsets.all(24), child: Container()));
+          key: WidgetKeys.orangeKey,
+          color: Colors.orange,
+          child: ListTile(),
+        );
       case UserPageVMItemType.add:
-        return InkWell(
-            child: Card(
-                key: WidgetKeys.addKey,
-                child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Center(
-                        child:
-                            Text(AppLocalizations.of(context).addCarLabel)))),
-            onTap: () {
-              vm.addCar();
-            });
+        return Card(
+            key: WidgetKeys.addKey,
+            child: ListTile(
+              title: Column(
+                  children: [Text(AppLocalizations.of(context).addCarLabel)]),
+              onTap: () {
+                vm.addCar();
+              },
+            ));
       case UserPageVMItemType.remove:
-        return InkWell(
-            child: Card(
-                key: WidgetKeys.removeKey,
-                child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Center(
-                        child: Text(
-                            AppLocalizations.of(context).removeCarLabel)))),
-            onTap: () {
-              vm.removeCar();
-            });
+        return Card(
+            key: WidgetKeys.removeKey,
+            child: ListTile(
+              title: Column(children: [
+                Text(AppLocalizations.of(context).removeCarLabel)
+              ]),
+              onTap: () {
+                vm.removeCar();
+              },
+            ));
       case UserPageVMItemType.exit:
-        return InkWell(
-            child: Card(
-                key: WidgetKeys.exitKey,
-                child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Center(
-                        child: Text(AppLocalizations.of(context).exitLabel)))),
-            onTap: () async {
-              vm.exit();
-            });
+        return Card(
+            key: WidgetKeys.exitKey,
+            child: ListTile(
+              title: Column(
+                  children: [Text(AppLocalizations.of(context).exitLabel)]),
+              onTap: () async {
+                vm.exit();
+              },
+            ));
       default:
         return Container();
     }

@@ -80,28 +80,29 @@ class SelectRatePageState extends State<SelectRatePage> {
         return Container();
       case SelectRatePageVMItemType.blue:
         return Card(
-            key: WidgetKeys.blueKey,
-            color: Colors.blue,
-            child:
-                Padding(padding: const EdgeInsets.all(24), child: Container()));
+          key: WidgetKeys.blueKey,
+          color: Colors.blue,
+          child: ListTile(),
+        );
       case SelectRatePageVMItemType.orange:
         return Card(
-            key: WidgetKeys.orangeKey,
-            color: Colors.orange,
-            child:
-                Padding(padding: const EdgeInsets.all(24), child: Container()));
+          key: WidgetKeys.orangeKey,
+          color: Colors.orange,
+          child: ListTile(),
+        );
       case SelectRatePageVMItemType.rate:
         final Rate rate = item.data[SelectRatePageVMItemDataKey.rate];
-        return InkWell(
-            child: Card(
-                key: Key(rate.id),
-                child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Center(child: Text('${rate.name}')))),
-            onTap: () async {
-              final rate = item.data[SelectRatePageVMItemDataKey.rate];
-              await vm.selectRate(rate);
-            });
+        return Card(
+            key: Key(rate.id),
+            child: ListTile(
+              title: Column(children: [
+                Text('${rate.name}'),
+              ]),
+              onTap: () async {
+                final rate = item.data[SelectRatePageVMItemDataKey.rate];
+                await vm.selectRate(rate);
+              },
+            ));
     }
     return Container();
   }

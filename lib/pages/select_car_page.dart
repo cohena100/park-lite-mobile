@@ -81,28 +81,27 @@ class SelectCarPageState extends State<SelectCarPage> {
     switch (item.type) {
       case SelectCarPageVMItemType.blue:
         return Card(
-            key: WidgetKeys.blueKey,
-            color: Colors.blue,
-            child:
-                Padding(padding: const EdgeInsets.all(24), child: Container()));
+          key: WidgetKeys.blueKey,
+          color: Colors.blue,
+          child: ListTile(),
+        );
       case SelectCarPageVMItemType.orange:
         return Card(
-            key: WidgetKeys.orangeKey,
-            color: Colors.orange,
-            child:
-                Padding(padding: const EdgeInsets.all(24), child: Container()));
+          key: WidgetKeys.orangeKey,
+          color: Colors.orange,
+          child: ListTile(),
+        );
       case SelectCarPageVMItemType.car:
         final Car car = item.data[SelectCarPageVMItemDataKey.car];
-        return InkWell(
-            child: Card(
-                key: Key(car.id),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Center(child: Text('${car.nickname} (${car.number})')),
-                )),
-            onTap: () async {
-              await vm.selectCar(car);
-            });
+        return Card(
+            key: Key(car.id),
+            child: ListTile(
+              title:
+                  Column(children: [Text('${car.nickname} (${car.number})')]),
+              onTap: () async {
+                await vm.selectCar(car);
+              },
+            ));
       default:
         return Container();
     }
