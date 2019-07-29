@@ -16,14 +16,8 @@ class MainPageVM {
       switch (event) {
         case UserBlocEvent.loggedInEvent:
           _addHomePageAction();
-          model.localDbProxy.appContext =
-              AppContext(data: {}, state: AppContextState.none);
           break;
         case UserBlocEvent.loggedOutEvent:
-          if (model.localDbProxy.appContext.state != AppContextState.login) {
-            model.localDbProxy.appContext =
-                AppContext(data: {}, state: AppContextState.login);
-          }
           _addPhonePageAction();
           break;
         default:
@@ -36,10 +30,6 @@ class MainPageVM {
         _addHomePageAction();
         break;
       case UserBlocState.notLoggedIn:
-        if (model.localDbProxy.appContext.state != AppContextState.login) {
-          model.localDbProxy.appContext =
-              AppContext(data: {}, state: AppContextState.login);
-        }
         _addPhonePageAction();
         break;
       default:
@@ -48,10 +38,16 @@ class MainPageVM {
   }
 
   void _addHomePageAction() {
+    model.localDbProxy.appContext =
+        AppContext(data: {}, state: AppContextState.none);
     _actionSubject.add(MainPageVMAction(state: MainPageVMActionState.homePage));
   }
 
   void _addPhonePageAction() {
+    if (model.localDbProxy.appContext.state != AppContextState.login) {
+      model.localDbProxy.appContext =
+          AppContext(data: {}, state: AppContextState.login);
+    }
     _actionSubject
         .add(MainPageVMAction(state: MainPageVMActionState.phonePage));
   }
