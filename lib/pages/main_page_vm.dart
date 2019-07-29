@@ -12,6 +12,24 @@ class MainPageVM {
   }
 
   Future init() async {
+    model.userBloc.eventStream.listen((UserBlocEvent event) {
+      switch (event) {
+        case UserBlocEvent.loggedInEvent:
+          _addHomePageAction();
+          model.localDbProxy.appContext =
+              AppContext(data: {}, state: AppContextState.none);
+          break;
+        case UserBlocEvent.loggedOutEvent:
+          if (model.localDbProxy.appContext.state != AppContextState.login) {
+            model.localDbProxy.appContext =
+                AppContext(data: {}, state: AppContextState.login);
+          }
+          _addPhonePageAction();
+          break;
+        default:
+          break;
+      }
+    });
     final state = await model.userBloc.handshake();
     switch (state) {
       case UserBlocState.loggedIn:

@@ -88,8 +88,6 @@ class HomePageVM {
       HomePageVMItem(type: HomePageVMItemType.blue),
       HomePageVMItem(type: HomePageVMItemType.orange),
       HomePageVMItem(type: HomePageVMItemType.blue),
-      HomePageVMItem(type: HomePageVMItemType.orange),
-      HomePageVMItem(type: HomePageVMItemType.blue),
     ];
     final user = await model.userBloc.user;
     final hasCars = user.cars.length > 0;

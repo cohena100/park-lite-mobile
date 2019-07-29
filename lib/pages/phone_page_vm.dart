@@ -28,6 +28,7 @@ class PhonePageVM {
     switch (state) {
       case UserBlocState.success:
         _addValidatePageOtherAction();
+        _addPhoneAction();
         break;
       default:
         _addPhoneAction();

@@ -62,8 +62,6 @@ class UserPageVM {
       UserPageVMItem(type: UserPageVMItemType.blue),
       UserPageVMItem(type: UserPageVMItemType.orange),
       UserPageVMItem(type: UserPageVMItemType.blue),
-      UserPageVMItem(type: UserPageVMItemType.orange),
-      UserPageVMItem(type: UserPageVMItemType.blue),
     ];
     final items = [
       UserPageVMItem(type: UserPageVMItemType.add),

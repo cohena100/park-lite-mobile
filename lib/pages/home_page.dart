@@ -6,6 +6,8 @@ import 'package:pango_lite/pages/home_page_vm.dart';
 import 'package:pango_lite/pages/routes.dart';
 import 'package:pango_lite/pages/widget_keys.dart';
 
+import 'base_page_vm.dart';
+
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: WidgetKeys.homePageKey);
 
@@ -13,16 +15,11 @@ class HomePage extends StatefulWidget {
   HomePageState createState() => HomePageState();
 }
 
-class HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePage> with BasePageVM {
   HomePageVM vm;
-  bool isDirty = true;
 
   @override
   Widget build(BuildContext context) {
-    if (isDirty) {
-      vm.init().then((_) {});
-      isDirty = false;
-    }
     return StreamBuilder(
         stream: vm.actionStream,
         initialData: HomePageVMAction(),
@@ -56,6 +53,7 @@ class HomePageState extends State<HomePage> {
   @override
   void initState() {
     vm = HomePageVM();
+    vm.init().then((_) {});
     vm.otherActionStream.listen((action) {
       switch (action.state) {
         case HomePageVMOtherActionState.selectCarPage:
@@ -71,7 +69,6 @@ class HomePageState extends State<HomePage> {
           Navigator.of(context).pushReplacementNamed(Routes.rootPage);
           break;
       }
-      isDirty = true;
     });
     super.initState();
   }
@@ -80,13 +77,13 @@ class HomePageState extends State<HomePage> {
     switch (item.type) {
       case HomePageVMItemType.blue:
         return Card(
-          key: WidgetKeys.blueKey,
+          key: nextKey(),
           color: Colors.blue,
           child: ListTile(),
         );
       case HomePageVMItemType.orange:
         return Card(
-          key: WidgetKeys.orangeKey,
+          key: nextKey(),
           color: Colors.orange,
           child: ListTile(),
         );

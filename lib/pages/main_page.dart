@@ -18,7 +18,6 @@ class MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    vm.init().then((_) {});
     return StreamBuilder(
         stream: vm.actionStream,
         initialData: MainPageVMAction(),
@@ -58,6 +57,7 @@ class MainPageState extends State<MainPage> {
   @override
   void initState() {
     vm = MainPageVM();
+    vm.init().then((_) {});
     super.initState();
   }
 

@@ -6,12 +6,19 @@ import 'package:pango_lite/model/elements/car.dart';
 import 'package:pango_lite/model/elements/user.dart';
 import 'package:pango_lite/model/proxies/local_db_proxy.dart';
 import 'package:pango_lite/model/proxies/network_proxy.dart';
+import 'package:rxdart/rxdart.dart';
 
 class UserBloc with BaseBloc {
   final NetworkProxy _networkProxy;
   final LocalDbProxy _localDbProxy;
+  BehaviorSubject<UserBlocEvent> _eventSubject = BehaviorSubject<UserBlocEvent>();
+  Stream<UserBlocEvent> get eventStream => _eventSubject.stream;
 
   UserBloc(this._networkProxy, this._localDbProxy);
+
+  void close() {
+    _eventSubject.close();
+  }
 
   bool get isInTestMode {
     return _localDbProxy.inMemoryUser != null;
@@ -151,11 +158,13 @@ class UserBloc with BaseBloc {
   Future _handleUserLogout(User user) async {
     user.deleteToken();
     await _localDbProxy.saveUser(jsonEncode(user));
+    _eventSubject.add(UserBlocEvent.loggedOutEvent);
   }
 
   Future _handleUserValidateSuccess(Map data) async {
     final user = User.fromJson(jsonDecode(data[NetworkProxyKeys.body]));
     await _localDbProxy.saveUser(jsonEncode(user));
+    _eventSubject.add(UserBlocEvent.loggedInEvent);
   }
 }
 
@@ -165,4 +174,9 @@ enum UserBlocState {
   success,
   failure,
   authorize,
+}
+
+enum UserBlocEvent {
+loggedInEvent,
+loggedOutEvent
 }

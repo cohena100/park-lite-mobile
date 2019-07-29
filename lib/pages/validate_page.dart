@@ -13,16 +13,11 @@ class ValidatePage extends StatefulWidget {
 
 class ValidatePageState extends State<ValidatePage> {
   static const textFieldMaxLength = 4;
-  ValidatePageVM vm = ValidatePageVM();
+  ValidatePageVM vm;
   final _textEditingController = TextEditingController();
-  bool isDirty = true;
 
   @override
   Widget build(BuildContext context) {
-    if (isDirty) {
-      vm.init().then((_) {});
-      isDirty = false;
-    }
     return StreamBuilder(
         stream: vm.actionStream,
         initialData: ValidatePageVMAction(),
@@ -57,6 +52,8 @@ class ValidatePageState extends State<ValidatePage> {
 
   @override
   void initState() {
+    vm = ValidatePageVM();
+    vm.init().then((_) {});
     vm.otherActionStream.listen((action) {
       switch (action.state) {
         case ValidatePageVMOtherActionState.fullRootPage:
@@ -69,7 +66,6 @@ class ValidatePageState extends State<ValidatePage> {
         default:
           break;
       }
-      isDirty = true;
     });
     super.initState();
   }

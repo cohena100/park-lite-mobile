@@ -5,6 +5,8 @@ import 'package:pango_lite/pages/routes.dart';
 import 'package:pango_lite/pages/select_car_page_vm.dart';
 import 'package:pango_lite/pages/widget_keys.dart';
 
+import 'base_page_vm.dart';
+
 class SelectCarPage extends StatefulWidget {
   SelectCarPage({Key key}) : super(key: WidgetKeys.selectCarPageKey);
 
@@ -12,7 +14,7 @@ class SelectCarPage extends StatefulWidget {
   SelectCarPageState createState() => SelectCarPageState();
 }
 
-class SelectCarPageState extends State<SelectCarPage> {
+class SelectCarPageState extends State<SelectCarPage> with BasePageVM {
   SelectCarPageVM vm = SelectCarPageVM();
   bool isDirty = true;
 
@@ -81,13 +83,13 @@ class SelectCarPageState extends State<SelectCarPage> {
     switch (item.type) {
       case SelectCarPageVMItemType.blue:
         return Card(
-          key: WidgetKeys.blueKey,
+          key: nextKey(),
           color: Colors.blue,
           child: ListTile(),
         );
       case SelectCarPageVMItemType.orange:
         return Card(
-          key: WidgetKeys.orangeKey,
+          key: nextKey(),
           color: Colors.orange,
           child: ListTile(),
         );

@@ -15,14 +15,9 @@ class PhonePageState extends State<PhonePage> {
   static const textFieldMaxLength = 10;
   PhonePageVM vm;
   final _textEditingController = TextEditingController();
-  bool isDirty = true;
 
   @override
   Widget build(BuildContext context) {
-    if (isDirty) {
-      vm.init().then((_) {});
-      isDirty = false;
-    }
     return StreamBuilder(
         stream: vm.actionStream,
         initialData: PhonePageVMAction(),
@@ -49,6 +44,7 @@ class PhonePageState extends State<PhonePage> {
   @override
   void initState() {
     vm = PhonePageVM();
+    vm.init().then((_) {});
     vm.otherActionStream.listen((action) {
       switch (action.state) {
         case PhonePageVMOtherActionState.validatePage:
@@ -57,7 +53,6 @@ class PhonePageState extends State<PhonePage> {
         default:
           break;
       }
-      isDirty = true;
     });
     super.initState();
   }

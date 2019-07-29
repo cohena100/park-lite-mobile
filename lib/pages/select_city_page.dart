@@ -5,6 +5,8 @@ import 'package:pango_lite/pages/routes.dart';
 import 'package:pango_lite/pages/select_city_page_vm.dart';
 import 'package:pango_lite/pages/widget_keys.dart';
 
+import 'base_page_vm.dart';
+
 class SelectCityPage extends StatefulWidget {
   SelectCityPage({Key key}) : super(key: WidgetKeys.selectCityPageKey);
 
@@ -12,7 +14,7 @@ class SelectCityPage extends StatefulWidget {
   SelectCityPageState createState() => SelectCityPageState();
 }
 
-class SelectCityPageState extends State<SelectCityPage> {
+class SelectCityPageState extends State<SelectCityPage> with BasePageVM {
   SelectCityPageVM vm;
   bool isDirty = true;
 
@@ -76,13 +78,13 @@ class SelectCityPageState extends State<SelectCityPage> {
         return Container();
       case SelectCityPageVMItemType.blue:
         return Card(
-          key: WidgetKeys.blueKey,
+          key: nextKey(),
           color: Colors.blue,
           child: ListTile(),
         );
       case SelectCityPageVMItemType.orange:
         return Card(
-          key: WidgetKeys.orangeKey,
+          key: nextKey(),
           color: Colors.orange,
           child: ListTile(),
         );

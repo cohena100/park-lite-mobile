@@ -47,8 +47,6 @@ class SelectCarPageVM {
       SelectCarPageVMItem(type: SelectCarPageVMItemType.blue),
       SelectCarPageVMItem(type: SelectCarPageVMItemType.orange),
       SelectCarPageVMItem(type: SelectCarPageVMItemType.blue),
-      SelectCarPageVMItem(type: SelectCarPageVMItemType.orange),
-      SelectCarPageVMItem(type: SelectCarPageVMItemType.blue),
     ];
     final items = user.cars.map((car) {
       final data = {SelectCarPageVMItemDataKey.car: car};

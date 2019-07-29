@@ -4,6 +4,8 @@ import 'package:pango_lite/pages/routes.dart';
 import 'package:pango_lite/pages/user_page_vm.dart';
 import 'package:pango_lite/pages/widget_keys.dart';
 
+import 'base_page_vm.dart';
+
 class UserPage extends StatefulWidget {
   UserPage({Key key}) : super(key: WidgetKeys.userPageKey);
 
@@ -11,7 +13,7 @@ class UserPage extends StatefulWidget {
   UserPageState createState() => UserPageState();
 }
 
-class UserPageState extends State<UserPage> {
+class UserPageState extends State<UserPage> with BasePageVM {
   UserPageVM vm;
   bool isDirty = true;
 
@@ -76,13 +78,13 @@ class UserPageState extends State<UserPage> {
     switch (item.type) {
       case UserPageVMItemType.blue:
         return Card(
-          key: WidgetKeys.blueKey,
+          key: nextKey(),
           color: Colors.blue,
           child: ListTile(),
         );
       case UserPageVMItemType.orange:
         return Card(
-          key: WidgetKeys.orangeKey,
+          key: nextKey(),
           color: Colors.orange,
           child: ListTile(),
         );
