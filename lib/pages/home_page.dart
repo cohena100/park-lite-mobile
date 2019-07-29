@@ -6,8 +6,6 @@ import 'package:pango_lite/pages/home_page_vm.dart';
 import 'package:pango_lite/pages/routes.dart';
 import 'package:pango_lite/pages/widget_keys.dart';
 
-import 'base_page_vm.dart';
-
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: WidgetKeys.homePageKey);
 
@@ -15,7 +13,7 @@ class HomePage extends StatefulWidget {
   HomePageState createState() => HomePageState();
 }
 
-class HomePageState extends State<HomePage> with BasePageVM {
+class HomePageState extends State<HomePage> {
   HomePageVM vm;
 
   @override
@@ -77,13 +75,11 @@ class HomePageState extends State<HomePage> with BasePageVM {
     switch (item.type) {
       case HomePageVMItemType.blue:
         return Card(
-          key: nextKey(),
           color: Colors.blue,
           child: ListTile(),
         );
       case HomePageVMItemType.orange:
         return Card(
-          key: nextKey(),
           color: Colors.orange,
           child: ListTile(),
         );

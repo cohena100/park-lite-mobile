@@ -5,8 +5,6 @@ import 'package:pango_lite/pages/routes.dart';
 import 'package:pango_lite/pages/select_rate_page_vm.dart';
 import 'package:pango_lite/pages/widget_keys.dart';
 
-import 'base_page_vm.dart';
-
 class SelectRatePage extends StatefulWidget {
   SelectRatePage({Key key}) : super(key: WidgetKeys.selectRatePageKey);
 
@@ -14,7 +12,7 @@ class SelectRatePage extends StatefulWidget {
   SelectRatePageState createState() => SelectRatePageState();
 }
 
-class SelectRatePageState extends State<SelectRatePage> with BasePageVM {
+class SelectRatePageState extends State<SelectRatePage> {
   SelectRatePageVM vm;
   bool isDirty = true;
 
@@ -82,13 +80,11 @@ class SelectRatePageState extends State<SelectRatePage> with BasePageVM {
         return Container();
       case SelectRatePageVMItemType.blue:
         return Card(
-          key: nextKey(),
           color: Colors.blue,
           child: ListTile(),
         );
       case SelectRatePageVMItemType.orange:
         return Card(
-          key: nextKey(),
           color: Colors.orange,
           child: ListTile(),
         );
