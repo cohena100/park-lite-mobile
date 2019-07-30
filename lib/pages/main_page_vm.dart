@@ -13,6 +13,9 @@ class MainPageVM {
 
   Future init() async {
     model.userBloc.eventStream.listen((UserBlocEvent event) {
+      if (_actionSubject.isClosed) {
+        return;
+      }
       switch (event) {
         case UserBlocEvent.loggedInEvent:
           _addHomePageAction();

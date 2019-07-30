@@ -11,7 +11,8 @@ import 'package:rxdart/rxdart.dart';
 class UserBloc with BaseBloc {
   final NetworkProxy _networkProxy;
   final LocalDbProxy _localDbProxy;
-  BehaviorSubject<UserBlocEvent> _eventSubject = BehaviorSubject<UserBlocEvent>();
+  BehaviorSubject<UserBlocEvent> _eventSubject =
+      BehaviorSubject<UserBlocEvent>();
   Stream<UserBlocEvent> get eventStream => _eventSubject.stream;
 
   UserBloc(this._networkProxy, this._localDbProxy);
@@ -140,6 +141,7 @@ class UserBloc with BaseBloc {
     final car = Car.fromJson(jsonDecode(data[NetworkProxyKeys.body]));
     user.addCar(car);
     await _localDbProxy.saveUser(jsonEncode(user));
+    _eventSubject.add(UserBlocEvent.carAddedEvent);
   }
 
   Future _handleRemoveCarSuccess(Map data, User user, Car car) async {
@@ -177,6 +179,7 @@ enum UserBlocState {
 }
 
 enum UserBlocEvent {
-loggedInEvent,
-loggedOutEvent
+  loggedInEvent,
+  loggedOutEvent,
+  carAddedEvent,
 }

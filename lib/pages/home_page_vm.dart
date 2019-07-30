@@ -1,4 +1,5 @@
 import 'package:pango_lite/model/blocs/park_bloc.dart';
+import 'package:pango_lite/model/blocs/user_bloc.dart';
 import 'package:pango_lite/model/elements/car.dart';
 import 'package:pango_lite/model/elements/parking.dart';
 import 'package:pango_lite/model/elements/user.dart';
@@ -38,6 +39,18 @@ class HomePageVM {
   }
 
   Future init() async {
+    model.userBloc.eventStream.listen((UserBlocEvent event) {
+      if (_actionSubject.isClosed) {
+        return;
+      }
+      switch (event) {
+        case UserBlocEvent.carAddedEvent:
+          _addHomeAction();
+          break;
+        default:
+          break;
+      }
+    });
     await _addHomeAction();
   }
 

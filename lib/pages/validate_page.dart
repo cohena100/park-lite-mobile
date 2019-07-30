@@ -56,10 +56,6 @@ class ValidatePageState extends State<ValidatePage> {
     vm.init().then((_) {});
     vm.otherActionStream.listen((action) {
       switch (action.state) {
-        case ValidatePageVMOtherActionState.fullRootPage:
-          Navigator.of(context).popUntil(ModalRoute.withName(Routes.rootPage));
-          Navigator.of(context).pushReplacementNamed(Routes.rootPage);
-          break;
         case ValidatePageVMOtherActionState.rootPage:
           Navigator.of(context).popUntil(ModalRoute.withName(Routes.rootPage));
           break;
