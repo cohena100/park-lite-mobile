@@ -13,16 +13,11 @@ class NicknamePage extends StatefulWidget {
 
 class NicknamePageState extends State<NicknamePage> {
   static const textFieldMaxLength = 20;
-  NicknamePageVM vm = NicknamePageVM();
+  NicknamePageVM vm;
   final _textEditingController = TextEditingController();
-  bool isDirty = true;
 
   @override
   Widget build(BuildContext context) {
-    if (isDirty) {
-      vm.init().then((_) {});
-      isDirty = false;
-    }
     return StreamBuilder(
         stream: vm.actionStream,
         initialData: NicknamePageVMAction(),
@@ -57,6 +52,8 @@ class NicknamePageState extends State<NicknamePage> {
 
   @override
   void initState() {
+    vm = NicknamePageVM();
+    vm.init().then((_) {});
     vm.otherActionStream.listen((action) {
       switch (action.state) {
         case NicknamePageVMOtherActionState.validatePage:
@@ -68,7 +65,6 @@ class NicknamePageState extends State<NicknamePage> {
         default:
           break;
       }
-      isDirty = true;
     });
     super.initState();
   }

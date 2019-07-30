@@ -28,6 +28,7 @@ class NicknamePageVM {
     switch (state) {
       case UserBlocState.success:
         _addValidatePageOtherAction();
+        _addNicknameAction();
         break;
       case UserBlocState.authorize:
         await model.userBloc.userLogout(isForced: true);
