@@ -15,14 +15,9 @@ class CarPageState extends State<CarPage> {
   static const textFieldMaxLength = 8;
   CarPageVM vm;
   final _textEditingController = TextEditingController();
-  bool isDirty = true;
 
   @override
   Widget build(BuildContext context) {
-    if (isDirty) {
-      vm.init().then((_) {});
-      isDirty = false;
-    }
     return StreamBuilder(
         stream: vm.actionStream,
         initialData: CarPageVMAction(),
@@ -76,6 +71,7 @@ class CarPageState extends State<CarPage> {
   @override
   void initState() {
     vm = CarPageVM();
+    vm.init().then((_) {});
     vm.otherActionStream.listen((action) {
       switch (action.state) {
         case CarPageVMOtherActionState.nicknamePage:
@@ -84,7 +80,6 @@ class CarPageState extends State<CarPage> {
         default:
           break;
       }
-      isDirty = true;
     });
     super.initState();
   }
