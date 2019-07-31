@@ -9,8 +9,8 @@ class CarPageVM {
   Stream get otherActionStream => _otherActionSubject.stream;
 
   void close() {
-    _actionSubject.close();
-    _otherActionSubject.close();
+    _actionSubject.close().then((_) {});
+    _otherActionSubject.close().then((_) {});
   }
 
   Future init() async {
@@ -26,7 +26,8 @@ class CarPageVM {
   }
 
   void _addCarAction() {
-    String number = model.localDbProxy.appContext.data[AppContextDataKey.number];
+    String number =
+        model.localDbProxy.appContext.data[AppContextDataKey.number];
     _actionSubject.add(
       CarPageVMAction(
           data: {CarPageVMActionDataKey.number: number},

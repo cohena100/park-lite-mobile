@@ -18,7 +18,7 @@ class UserBloc with BaseBloc {
   UserBloc(this._networkProxy, this._localDbProxy);
 
   void close() {
-    _eventSubject.close();
+    _eventSubject.close().then((_) {});
   }
 
   bool get isInTestMode {

@@ -11,8 +11,8 @@ class SelectAreaPageVM {
   Stream get otherActionStream => _otherActionSubject.stream;
 
   void close() {
-    _actionSubject.close();
-    _otherActionSubject.close();
+    _actionSubject.close().then((_) {});
+    _otherActionSubject.close().then((_) {});
   }
 
   void _addAreasAction() {

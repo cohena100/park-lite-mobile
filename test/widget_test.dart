@@ -24,6 +24,10 @@ import 'package:rxdart/rxdart.dart';
 void main() {
   final bluetoothProxyStream = BehaviorSubject<bool>();
 
+  setUpAll(() {
+    model = null;
+  });
+
   tearDownAll(() {
     bluetoothProxyStream.close();
   });
@@ -31,6 +35,9 @@ void main() {
   setUp(() {
     final localDBProxy = LocalDbProxy(inMemory: true);
     localDBProxy.geoPark = geoPark1;
+    if (model != null) {
+      model.close();
+    }
     model = Model(
       MockNetworkProxy(),
       localDBProxy,

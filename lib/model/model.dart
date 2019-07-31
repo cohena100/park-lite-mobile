@@ -41,6 +41,11 @@ class Model {
           notificationProxy,
         );
 
+  void close() {
+    userBloc.close();
+    parkBloc.close();
+  }
+
   void setup(bool isIOS) {
     networkProxy.setup(isIOS);
   }

@@ -8,7 +8,7 @@ class MainPageVM {
   Stream get actionStream => _actionSubject.stream;
 
   void close() {
-    _actionSubject.close();
+    _actionSubject.close().then((_) {});
   }
 
   Future init() async {
