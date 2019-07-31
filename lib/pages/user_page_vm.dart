@@ -22,7 +22,6 @@ class UserPageVM {
   void exit() async {
     _addBusyAction();
     await model.userBloc.userLogout();
-    _addRootPageOtherAction();
   }
 
   Future init() async {
@@ -44,12 +43,6 @@ class UserPageVM {
   void _addCarPageOtherAction() {
     _otherActionSubject
         .add(UserPageVMOtherAction(state: UserPageVMOtherActionState.carPage));
-  }
-
-  void _addRootPageOtherAction() {
-    _otherActionSubject.add(
-      UserPageVMOtherAction(state: UserPageVMOtherActionState.rootPage),
-    );
   }
 
   void _addSelectCarPageOtherAction() {
@@ -122,5 +115,4 @@ enum UserPageVMOtherActionState {
   none,
   carPage,
   selectCarPage,
-  rootPage,
 }

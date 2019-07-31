@@ -57,9 +57,6 @@ class UserPageState extends State<UserPage> {
         case UserPageVMOtherActionState.selectCarPage:
           Navigator.pushNamed(context, Routes.selectCarPage);
           break;
-        case UserPageVMOtherActionState.rootPage:
-          Navigator.of(context).pushReplacementNamed(Routes.rootPage);
-          break;
         default:
           break;
       }

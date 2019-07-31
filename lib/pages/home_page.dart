@@ -63,9 +63,6 @@ class HomePageState extends State<HomePage> {
         case HomePageVMOtherActionState.payPage:
           Navigator.of(context).pushNamed(Routes.payPage);
           break;
-        case HomePageVMOtherActionState.rootPage:
-          Navigator.of(context).pushReplacementNamed(Routes.rootPage);
-          break;
       }
     });
     super.initState();

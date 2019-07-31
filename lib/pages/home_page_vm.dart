@@ -30,7 +30,6 @@ class HomePageVM {
     switch (state) {
       case ParkBlocState.authorize:
         await model.userBloc.userLogout(isForced: true);
-        _addRootPageOtherAction();
         break;
       default:
         await _addHomeAction();
@@ -91,7 +90,6 @@ class HomePageVM {
         switch (state) {
           case ParkBlocState.authorize:
             await model.userBloc.userLogout(isForced: true);
-            _addRootPageOtherAction();
             break;
           default:
             await _addHomeAction();
@@ -242,12 +240,6 @@ class HomePageVM {
     );
   }
 
-  void _addRootPageOtherAction() {
-    _otherActionSubject.add(
-      HomePageVMOtherAction(state: HomePageVMOtherActionState.rootPage),
-    );
-  }
-
   void _addSelectCarPageOtherAction() {
     _otherActionSubject.add(
       HomePageVMOtherAction(state: HomePageVMOtherActionState.selectCarPage),
@@ -291,5 +283,4 @@ enum HomePageVMOtherActionState {
   selectCarPage,
   carPage,
   payPage,
-  rootPage,
 }
