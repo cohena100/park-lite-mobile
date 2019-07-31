@@ -15,15 +15,10 @@ class PayPage extends StatefulWidget {
 
 class PayPageState extends State<PayPage> {
   PayPageVM vm;
-  bool isDirty = true;
   final plugin = FlutterWebviewPlugin();
 
   @override
   Widget build(BuildContext context) {
-    if (isDirty) {
-      vm.init().then((_) {});
-      isDirty = false;
-    }
     return StreamBuilder(
         stream: vm.actionStream,
         initialData: PayPageVMAction(),
@@ -52,16 +47,15 @@ class PayPageState extends State<PayPage> {
   @override
   void initState() {
     vm = PayPageVM();
+    vm.init().then((_) {});
     vm.otherActionStream.listen((action) {
       switch (action.state) {
-        case PayPageVMOtherActionState.fullRootPage:
+        case PayPageVMOtherActionState.rootPage:
           Navigator.of(context).popUntil(ModalRoute.withName(Routes.rootPage));
-          Navigator.of(context).pushReplacementNamed(Routes.rootPage);
           break;
         default:
           break;
       }
-      isDirty = true;
     });
     plugin.onUrlChanged.listen((url) async {
       await vm.onUrlChanged(url);

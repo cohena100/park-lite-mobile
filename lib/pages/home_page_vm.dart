@@ -51,6 +51,24 @@ class HomePageVM {
           break;
       }
     });
+    model.parkBloc.eventStream.listen((ParkBlocEvent event) {
+      if (_actionSubject.isClosed) {
+        return;
+      }
+      switch (event) {
+        case ParkBlocEvent.parkingStartedEvent:
+          _addHomeAction();
+          break;
+        case ParkBlocEvent.parkingEndedEvent:
+          _addHomeAction();
+          break;
+        case ParkBlocEvent.paymentEndedEvent:
+          _addHomeAction();
+          break;
+        default:
+          break;
+      }
+    });
     await _addHomeAction();
   }
 

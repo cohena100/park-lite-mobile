@@ -14,14 +14,9 @@ class SelectRatePage extends StatefulWidget {
 
 class SelectRatePageState extends State<SelectRatePage> {
   SelectRatePageVM vm;
-  bool isDirty = true;
 
   @override
   Widget build(BuildContext context) {
-    if (isDirty) {
-      vm.init().then((_) {});
-      isDirty = false;
-    }
     return StreamBuilder(
         stream: vm.actionStream,
         initialData: SelectRatePageVMAction(),
@@ -60,16 +55,15 @@ class SelectRatePageState extends State<SelectRatePage> {
   @override
   void initState() {
     vm = SelectRatePageVM();
+    vm.init().then((_) {});
     vm.otherActionStream.listen((action) {
       switch (action.state) {
         case SelectRatePageVMOtherActionState.rootPage:
           Navigator.of(context).popUntil(ModalRoute.withName(Routes.rootPage));
-          Navigator.of(context).pushReplacementNamed(Routes.rootPage);
           break;
         default:
           break;
       }
-      isDirty = true;
     });
     super.initState();
   }

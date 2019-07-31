@@ -13,15 +13,10 @@ class SelectCarPage extends StatefulWidget {
 }
 
 class SelectCarPageState extends State<SelectCarPage> {
-  SelectCarPageVM vm = SelectCarPageVM();
-  bool isDirty = true;
+  SelectCarPageVM vm;
 
   @override
   Widget build(BuildContext context) {
-    if (isDirty) {
-      vm.init().then((_) {});
-      isDirty = false;
-    }
     return StreamBuilder(
         stream: vm.actionStream,
         initialData: SelectCarPageVMAction(),
@@ -61,6 +56,8 @@ class SelectCarPageState extends State<SelectCarPage> {
 
   @override
   void initState() {
+    vm = SelectCarPageVM();
+    vm.init().then((_) {});
     vm.otherActionStream.listen((action) {
       switch (action.state) {
         case SelectCarPageVMOtherActionState.selectCityPage:
@@ -72,7 +69,6 @@ class SelectCarPageState extends State<SelectCarPage> {
         default:
           break;
       }
-      isDirty = true;
     });
     super.initState();
   }

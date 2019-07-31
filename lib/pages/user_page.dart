@@ -13,14 +13,9 @@ class UserPage extends StatefulWidget {
 
 class UserPageState extends State<UserPage> {
   UserPageVM vm;
-  bool isDirty = true;
 
   @override
   Widget build(BuildContext context) {
-    if (isDirty) {
-      vm.init().then((_) {});
-      isDirty = false;
-    }
     return StreamBuilder(
         stream: vm.actionStream,
         initialData: UserPageVMAction(),
@@ -53,6 +48,7 @@ class UserPageState extends State<UserPage> {
   @override
   void initState() {
     vm = UserPageVM();
+    vm.init().then((_) {});
     vm.otherActionStream.listen((action) {
       switch (action.state) {
         case UserPageVMOtherActionState.carPage:
@@ -67,7 +63,6 @@ class UserPageState extends State<UserPage> {
         default:
           break;
       }
-      isDirty = true;
     });
     super.initState();
   }

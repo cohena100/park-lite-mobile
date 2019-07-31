@@ -15,6 +15,7 @@ import 'package:pango_lite/model/proxies/local_db_proxy.dart';
 import 'package:pango_lite/model/proxies/location_proxy.dart';
 import 'package:pango_lite/model/proxies/network_proxy.dart';
 import 'package:pango_lite/model/proxies/notification_proxy.dart';
+import 'package:rxdart/rxdart.dart';
 
 class ParkBloc with BaseBloc {
   final LocalDbProxy _localDbProxy;
@@ -24,7 +25,8 @@ class ParkBloc with BaseBloc {
   final NotificationProxy _notificationProxy;
   LocationData locationData;
   StreamSubscription _bluetoothStateStream;
-
+  BehaviorSubject<ParkBlocEvent> _eventSubject =
+      BehaviorSubject<ParkBlocEvent>();
   ParkBloc(
     this._localDbProxy,
     this._networkProxy,
@@ -32,6 +34,8 @@ class ParkBloc with BaseBloc {
     this._bluetoothProxy,
     this._notificationProxy,
   );
+
+  Stream<ParkBlocEvent> get eventStream => _eventSubject.stream;
 
   Future<ParkBlocState> get location async {
     locationData = await _locationProxy.location;
@@ -62,11 +66,16 @@ class ParkBloc with BaseBloc {
     return ParkBlocState.notParking;
   }
 
+  void close() {
+    _eventSubject.close();
+  }
+
   Future completeParking() async {
     final user = await getUser(_localDbProxy);
     user.deleteParking();
     user.deletePayment();
     await _localDbProxy.saveUser(jsonEncode(user));
+    _eventSubject.add(ParkBlocEvent.paymentEndedEvent);
   }
 
   Future<ParkBlocState> endParking() async {
@@ -150,6 +159,7 @@ class ParkBloc with BaseBloc {
     cache.updateParkings(parking);
     await _localDbProxy.saveCache(jsonEncode(cache));
     _stopBluetooth();
+    _eventSubject.add(ParkBlocEvent.parkingStartedEvent);
   }
 
   Future _handleStartParkingSuccess(Map data) async {
@@ -158,6 +168,7 @@ class ParkBloc with BaseBloc {
     user.updateParking(parking);
     await _localDbProxy.saveUser(jsonEncode(user));
     _startBluetooth();
+    _eventSubject.add(ParkBlocEvent.parkingStartedEvent);
   }
 
   void _startBluetooth() {
@@ -181,6 +192,12 @@ class ParkBloc with BaseBloc {
     _bluetoothStateStream.cancel();
     _bluetoothStateStream = null;
   }
+}
+
+enum ParkBlocEvent {
+  parkingStartedEvent,
+  parkingEndedEvent,
+  paymentEndedEvent,
 }
 
 enum ParkBlocState {

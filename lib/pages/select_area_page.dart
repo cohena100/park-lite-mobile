@@ -14,14 +14,9 @@ class SelectAreaPage extends StatefulWidget {
 
 class SelectAreaPageState extends State<SelectAreaPage> {
   SelectAreaPageVM vm;
-  bool isDirty = true;
 
   @override
   Widget build(BuildContext context) {
-    if (isDirty) {
-      vm.init().then((_) {});
-      isDirty = false;
-    }
     return StreamBuilder(
         stream: vm.actionStream,
         initialData: SelectAreaPageVMAction(),
@@ -58,6 +53,7 @@ class SelectAreaPageState extends State<SelectAreaPage> {
   @override
   void initState() {
     vm = SelectAreaPageVM();
+    vm.init().then((_) {});
     vm.otherActionStream.listen((action) {
       switch (action.state) {
         case SelectAreaPageVMOtherActionState.selectRatePage:
@@ -66,7 +62,6 @@ class SelectAreaPageState extends State<SelectAreaPage> {
         default:
           break;
       }
-      isDirty = true;
     });
     super.initState();
   }

@@ -17,7 +17,7 @@ class PayPageVM {
     if (isInTestMode) {
       await model.parkBloc.completeParking();
       _addNoneAction();
-      _addFullRootPageOtherAction();
+      _addRootPageOtherAction();
     } else {
       await _addPayAction();
     }
@@ -28,13 +28,13 @@ class PayPageVM {
         'https://stormy-dusk-75310.herokuapp.com/payments/success';
     if (url == successUrl) {
       await model.parkBloc.completeParking();
-      _addFullRootPageOtherAction();
+      _addRootPageOtherAction();
     }
   }
 
-  void _addFullRootPageOtherAction() {
+  void _addRootPageOtherAction() {
     _otherActionSubject.add(
-      PayPageVMOtherAction(state: PayPageVMOtherActionState.fullRootPage),
+      PayPageVMOtherAction(state: PayPageVMOtherActionState.rootPage),
     );
   }
 
@@ -74,4 +74,4 @@ class PayPageVMOtherAction {
 
 enum PayPageVMOtherActionDataKey { none }
 
-enum PayPageVMOtherActionState { none, fullRootPage }
+enum PayPageVMOtherActionState { none, rootPage }
