@@ -87,6 +87,7 @@ class SelectCarPageVM {
       case ParkBlocState.success:
         model.localDbProxy.appContext.data[AppContextDataKey.car] = car;
         _addSelectCityPageOtherAction();
+        _addCarsAction();
         break;
       default:
         await _addCarsAction();

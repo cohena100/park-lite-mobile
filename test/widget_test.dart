@@ -642,6 +642,29 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byKey(WidgetKeys.phonePageKey), findsOneWidget);
     });
+
+    testWidgets('navigate back to car selection from city selection',
+        (WidgetTester tester) async {
+      user1[carsKey] = [car1];
+      model.localDbProxy.inMemoryUser = jsonEncode(user1);
+      await tester.pumpWidget(MyApp());
+      await tester.pumpAndSettle();
+      await tester.pump();
+      expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
+      await tester.tap(find.byKey(WidgetKeys.startKey));
+      await tester.pumpAndSettle();
+      when(model.locationProxy.location).thenAnswer((_) async => location1);
+      expect(find.byKey(WidgetKeys.selectCarPageKey), findsOneWidget);
+      await tester.tap(find.byKey(Key(carId1)));
+      await tester.pumpAndSettle();
+      expect(find.byKey(WidgetKeys.selectCityPageKey), findsOneWidget);
+      final NavigatorState navigator =
+          tester.state<NavigatorState>(find.byType(Navigator));
+      navigator.pop();
+      await tester.pumpAndSettle();
+      expect(find.byKey(WidgetKeys.selectCarPageKey), findsOneWidget);
+      expect(find.byKey(Key(carId1)), findsOneWidget);
+    });
   });
 
   group('parkings', () {
