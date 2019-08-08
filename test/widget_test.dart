@@ -6,8 +6,10 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:pango_lite/main.dart';
@@ -24,16 +26,36 @@ import 'package:rxdart/rxdart.dart';
 void main() {
   final bluetoothProxyStream = BehaviorSubject<bool>();
 
-  setUpAll(() {
+  Future seedUser1(WidgetTester tester) async {
+    await model.localDbProxy.saveUser(jsonEncode(user1));
+    model.userBloc.seed();
+    await tester.pumpAndSettle();
+  }
+
+  Future seedCache1(WidgetTester tester) async {
+    await model.localDbProxy.saveCache(jsonEncode(cache1));
+    model.userBloc.seed();
+    await tester.pumpAndSettle();
+  }
+
+  setUpAll(() async {
     model = null;
+    final directory = await Directory.systemTemp.createTemp();
+    const MethodChannel('plugins.flutter.io/path_provider')
+        .setMockMethodCallHandler((MethodCall methodCall) async {
+      if (methodCall.method == 'getApplicationDocumentsDirectory') {
+        return directory.path;
+      }
+      return null;
+    });
   });
 
   tearDownAll(() {
     bluetoothProxyStream.close();
   });
 
-  setUp(() {
-    final localDBProxy = LocalDbProxy(inMemory: true);
+  setUp(() async {
+    final localDBProxy = LocalDbProxy(isInTestModel: true);
     localDBProxy.geoPark = geoPark1;
     if (model != null) {
       model.close();
@@ -50,7 +72,7 @@ void main() {
     when(model.notificationProxy.showNotification(any, any)).thenAnswer((_) {
       return;
     });
-    model.localDbProxy.inMemoryUser = null;
+    await model.localDbProxy.drop();
     user1 = {
       '_id': userId1,
       'phone': phone1,
@@ -60,82 +82,80 @@ void main() {
   });
 
   group('login', () {
-    testWidgets('Login success', (WidgetTester tester) async {
-      await tester.pumpWidget(MyApp());
-      await tester.pumpAndSettle();
-      expect(find.byKey(WidgetKeys.phonePageKey), findsOneWidget);
-      when(model.networkProxy.sendLogin(phone1)).thenAnswer((_) async => {
-            NetworkProxyKeys.code: NetworkProxy.success,
-            NetworkProxyKeys.body: jsonEncode({validateKey: validate1}),
-          });
-      await tester.enterText(find.byKey(WidgetKeys.phoneTextFieldKey), phone1);
-      await tester.testTextInput.receiveAction(TextInputAction.done);
-      await tester.pumpAndSettle();
-      expect(find.byKey(WidgetKeys.validatePageKey), findsOneWidget);
-      when(model.networkProxy.sendLoginValidate(userId1, validateId1, code1))
-          .thenAnswer((_) async => {
-                NetworkProxyKeys.code: NetworkProxy.success,
-                NetworkProxyKeys.body: jsonEncode({userKey: user1}),
-              });
-      await tester.enterText(
-          find.byKey(WidgetKeys.validateTextFieldKey), code1);
-      await tester.testTextInput.receiveAction(TextInputAction.done);
-      await tester.pumpAndSettle();
-      expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
-    });
+  testWidgets('Login success', (WidgetTester tester) async {
+    await tester.pumpWidget(MyApp());
+    await tester.pumpAndSettle();
+    expect(find.byKey(WidgetKeys.phonePageKey), findsOneWidget);
+    when(model.networkProxy.sendLogin(phone1)).thenAnswer((_) async => {
+          NetworkProxyKeys.code: NetworkProxy.success,
+          NetworkProxyKeys.body: jsonEncode({validateKey: validate1}),
+        });
+    await tester.enterText(find.byKey(WidgetKeys.phoneTextFieldKey), phone1);
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tester.pumpAndSettle();
+    expect(find.byKey(WidgetKeys.validatePageKey), findsOneWidget);
+    when(model.networkProxy.sendLoginValidate(userId1, validateId1, code1))
+        .thenAnswer((_) async => {
+              NetworkProxyKeys.code: NetworkProxy.success,
+              NetworkProxyKeys.body: jsonEncode({userKey: user1}),
+            });
+    await tester.enterText(find.byKey(WidgetKeys.validateTextFieldKey), code1);
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tester.pumpAndSettle();
+    expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
+  });
 
-    testWidgets('Not logged in', (WidgetTester tester) async {
-      await tester.pumpWidget(MyApp());
-      await tester.pumpAndSettle();
-      expect(find.byKey(WidgetKeys.phonePageKey), findsOneWidget);
-    });
+  testWidgets('Not logged in', (WidgetTester tester) async {
+    await tester.pumpWidget(MyApp());
+    await tester.pumpAndSettle();
+    expect(find.byKey(WidgetKeys.phonePageKey), findsOneWidget);
+  });
 
-    testWidgets('Not logged in because no token', (WidgetTester tester) async {
-      user1.remove(tokenKey);
-      model.localDbProxy.inMemoryUser = jsonEncode(user1);
-      await tester.pumpWidget(MyApp());
-      await tester.pumpAndSettle();
-      expect(find.byKey(WidgetKeys.phonePageKey), findsOneWidget);
-    });
+  testWidgets('Not logged in because no token', (WidgetTester tester) async {
+    user1.remove(tokenKey);
+    await tester.pumpWidget(MyApp());
+    await tester.pumpAndSettle();
+    await seedUser1(tester);
+    expect(find.byKey(WidgetKeys.phonePageKey), findsOneWidget);
+  });
 
-    testWidgets('Already logged in', (WidgetTester tester) async {
-      model.localDbProxy.inMemoryUser = jsonEncode(user1);
-      await tester.pumpWidget(MyApp());
-      await tester.pumpAndSettle();
-      expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
-    });
+  testWidgets('Already logged in', (WidgetTester tester) async {
+    await tester.pumpWidget(MyApp());
+    await tester.pumpAndSettle();
+    await seedUser1(tester);
+    expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
+  });
 
-    testWidgets('Login failed', (WidgetTester tester) async {
-      await tester.pumpWidget(MyApp());
-      await tester.pumpAndSettle();
-      expect(find.byKey(WidgetKeys.phonePageKey), findsOneWidget);
-      when(model.networkProxy.sendLogin(phone1)).thenAnswer((_) async => {
-            NetworkProxyKeys.code: NetworkProxy.error,
-            NetworkProxyKeys.body: null,
-          });
-      await tester.enterText(find.byKey(WidgetKeys.phoneTextFieldKey), phone1);
-      await tester.testTextInput.receiveAction(TextInputAction.done);
-      await tester.pumpAndSettle();
-      expect(find.byKey(WidgetKeys.phonePageKey), findsOneWidget);
-      when(model.networkProxy.sendLogin(phone1)).thenAnswer((_) async => {
-            NetworkProxyKeys.code: NetworkProxy.success,
-            NetworkProxyKeys.body: jsonEncode({validateKey: validate1}),
-          });
-      await tester.enterText(find.byKey(WidgetKeys.phoneTextFieldKey), phone1);
-      await tester.testTextInput.receiveAction(TextInputAction.done);
-      await tester.pumpAndSettle();
-      expect(find.byKey(WidgetKeys.validatePageKey), findsOneWidget);
-      when(model.networkProxy.sendLoginValidate(userId1, validateId1, code1))
-          .thenAnswer((_) async => {
-                NetworkProxyKeys.code: NetworkProxy.error,
-                NetworkProxyKeys.body: null,
-              });
-      await tester.enterText(
-          find.byKey(WidgetKeys.validateTextFieldKey), code1);
-      await tester.testTextInput.receiveAction(TextInputAction.done);
-      await tester.pumpAndSettle();
-      expect(find.byKey(WidgetKeys.validatePageKey), findsOneWidget);
-    });
+  testWidgets('Login failed', (WidgetTester tester) async {
+    await tester.pumpWidget(MyApp());
+    await tester.pumpAndSettle();
+    expect(find.byKey(WidgetKeys.phonePageKey), findsOneWidget);
+    when(model.networkProxy.sendLogin(phone1)).thenAnswer((_) async => {
+          NetworkProxyKeys.code: NetworkProxy.error,
+          NetworkProxyKeys.body: null,
+        });
+    await tester.enterText(find.byKey(WidgetKeys.phoneTextFieldKey), phone1);
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tester.pumpAndSettle();
+    expect(find.byKey(WidgetKeys.phonePageKey), findsOneWidget);
+    when(model.networkProxy.sendLogin(phone1)).thenAnswer((_) async => {
+          NetworkProxyKeys.code: NetworkProxy.success,
+          NetworkProxyKeys.body: jsonEncode({validateKey: validate1}),
+        });
+    await tester.enterText(find.byKey(WidgetKeys.phoneTextFieldKey), phone1);
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tester.pumpAndSettle();
+    expect(find.byKey(WidgetKeys.validatePageKey), findsOneWidget);
+    when(model.networkProxy.sendLoginValidate(userId1, validateId1, code1))
+        .thenAnswer((_) async => {
+              NetworkProxyKeys.code: NetworkProxy.error,
+              NetworkProxyKeys.body: null,
+            });
+    await tester.enterText(find.byKey(WidgetKeys.validateTextFieldKey), code1);
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tester.pumpAndSettle();
+    expect(find.byKey(WidgetKeys.validatePageKey), findsOneWidget);
+  });
 
     testWidgets('Push and pop between pages', (WidgetTester tester) async {
       await tester.pumpWidget(MyApp());
@@ -177,9 +197,9 @@ void main() {
     });
 
     testWidgets('Exit', (WidgetTester tester) async {
-      model.localDbProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
+      await seedUser1(tester);
       expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
       await tester.tap(find.byKey(WidgetKeys.userTabKey));
       await tester.pumpAndSettle();
@@ -197,9 +217,9 @@ void main() {
 
     testWidgets('Exit still even after NetworkProxy.error',
         (WidgetTester tester) async {
-      model.localDbProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
+      await seedUser1(tester);
       expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
       await tester.tap(find.byKey(WidgetKeys.userTabKey));
       await tester.pumpAndSettle();
@@ -215,9 +235,9 @@ void main() {
     });
 
     testWidgets('needs validate after exit', (WidgetTester tester) async {
-      model.localDbProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
+      await seedUser1(tester);
       expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
       await tester.tap(find.byKey(WidgetKeys.userTabKey));
       await tester.pumpAndSettle();
@@ -235,8 +255,9 @@ void main() {
 
   group('car', () {
     testWidgets('Add first car after login', (WidgetTester tester) async {
-      model.localDbProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
+      await tester.pumpAndSettle();
+      await seedUser1(tester);
       await tester.pumpAndSettle();
       expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
       expect(find.byKey(WidgetKeys.startKey), findsNothing);
@@ -274,9 +295,9 @@ void main() {
     });
 
     testWidgets('add car success', (WidgetTester tester) async {
-      model.localDbProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
+      await seedUser1(tester);
       expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
       await tester.tap(find.byKey(WidgetKeys.userTabKey));
       await tester.pumpAndSettle();
@@ -322,9 +343,9 @@ void main() {
     });
 
     testWidgets('needs validate after add car', (WidgetTester tester) async {
-      model.localDbProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
+      await seedUser1(tester);
       expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
       await tester.tap(find.byKey(WidgetKeys.userTabKey));
       await tester.pumpAndSettle();
@@ -351,9 +372,9 @@ void main() {
 
     testWidgets('needs validate after add car validate',
         (WidgetTester tester) async {
-      model.localDbProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
+      await seedUser1(tester);
       expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
       await tester.tap(find.byKey(WidgetKeys.userTabKey));
       await tester.pumpAndSettle();
@@ -391,10 +412,10 @@ void main() {
 
     testWidgets('remove car success', (WidgetTester tester) async {
       user1[carsKey] = [car1];
-      model.localDbProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
-      await tester.pump();
+      await seedUser1(tester);
+      await tester.pumpAndSettle();
       expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
       expect(find.byKey(WidgetKeys.startKey), findsOneWidget);
       await tester.tap(find.byKey(WidgetKeys.userTabKey));
@@ -420,9 +441,9 @@ void main() {
 
     testWidgets('remove car failed', (WidgetTester tester) async {
       user1[carsKey] = [car1];
-      model.localDbProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
+      await seedUser1(tester);
       await tester.tap(find.byKey(WidgetKeys.userTabKey));
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(WidgetKeys.removeKey));
@@ -441,9 +462,9 @@ void main() {
 
     testWidgets('needs validate after remove car', (WidgetTester tester) async {
       user1[carsKey] = [car1];
-      model.localDbProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
+      await seedUser1(tester);
       await tester.tap(find.byKey(WidgetKeys.userTabKey));
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(WidgetKeys.removeKey));
@@ -464,10 +485,10 @@ void main() {
   group('park', () {
     testWidgets('start parking success', (WidgetTester tester) async {
       user1[carsKey] = [car1];
-      model.localDbProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
-      await tester.pump();
+      await seedUser1(tester);
+      await tester.pumpAndSettle();
       expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
       expect(find.byKey(WidgetKeys.startKey), findsOneWidget);
       await tester.tap(find.byKey(WidgetKeys.startKey));
@@ -507,10 +528,10 @@ void main() {
     testWidgets('start parking failed because no location',
         (WidgetTester tester) async {
       user1[carsKey] = [car1];
-      model.localDbProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
-      await tester.pump();
+      await seedUser1(tester);
+      await tester.pumpAndSettle();
       expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
       expect(find.byKey(WidgetKeys.startKey), findsOneWidget);
       await tester.tap(find.byKey(WidgetKeys.startKey));
@@ -525,9 +546,9 @@ void main() {
     testWidgets('stop parking success', (WidgetTester tester) async {
       user1[carsKey] = [car1];
       user1[parkingKey] = parking1;
-      model.localDbProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
+      await seedUser1(tester);
       expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
       when(model.networkProxy.sendEnd(userId1, parkingId1, token1))
           .thenAnswer((_) async => {
@@ -537,10 +558,10 @@ void main() {
                   paymentKey: payment1,
                 }),
               });
-      await tester.pump();
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(WidgetKeys.stopKey));
       await tester.pumpAndSettle();
-      await tester.pump();
+      await tester.pumpAndSettle();
       expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
       expect(find.byKey(WidgetKeys.payKey), findsOneWidget);
       await tester.tap(find.byKey(WidgetKeys.payKey));
@@ -553,10 +574,10 @@ void main() {
     testWidgets('needs validate after start parking',
         (WidgetTester tester) async {
       user1[carsKey] = [car1];
-      model.localDbProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
-      await tester.pump();
+      await seedUser1(tester);
+      await tester.pumpAndSettle();
       expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
       expect(find.byKey(WidgetKeys.startKey), findsOneWidget);
       await tester.tap(find.byKey(WidgetKeys.startKey));
@@ -597,16 +618,16 @@ void main() {
         (WidgetTester tester) async {
       user1[carsKey] = [car1];
       user1[parkingKey] = parking1;
-      model.localDbProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
+      await seedUser1(tester);
       expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
       when(model.networkProxy.sendEnd(userId1, parkingId1, token1))
           .thenAnswer((_) async => {
                 NetworkProxyKeys.code: NetworkProxy.authorize,
                 NetworkProxyKeys.body: null,
               });
-      await tester.pump();
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(WidgetKeys.stopKey));
       await tester.pumpAndSettle();
       expect(find.byKey(WidgetKeys.phonePageKey), findsOneWidget);
@@ -615,11 +636,11 @@ void main() {
     testWidgets('needs validate after start previous parking',
         (WidgetTester tester) async {
       user1[carsKey] = [car1];
-      model.localDbProxy.inMemoryUser = jsonEncode(user1);
-      model.localDbProxy.inMemoryCache = jsonEncode(cache1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
       await tester.pump();
+      await seedUser1(tester);
+      await seedCache1(tester);
       expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
       when(model.locationProxy.location).thenAnswer((_) async => location1);
       when(model.networkProxy.sendStart(
@@ -646,10 +667,10 @@ void main() {
     testWidgets('navigate back to car selection from city selection',
         (WidgetTester tester) async {
       user1[carsKey] = [car1];
-      model.localDbProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
-      await tester.pump();
+      await seedUser1(tester);
+      await tester.pumpAndSettle();
       expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
       await tester.tap(find.byKey(WidgetKeys.startKey));
       await tester.pumpAndSettle();
@@ -670,10 +691,10 @@ void main() {
   group('parkings', () {
     testWidgets('show last parking on home page', (WidgetTester tester) async {
       user1[carsKey] = [car1];
-      model.localDbProxy.inMemoryUser = jsonEncode(user1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
-      await tester.pump();
+      await seedUser1(tester);
+      await tester.pumpAndSettle();
       expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
       await tester.tap(find.byKey(WidgetKeys.startKey));
       await tester.pumpAndSettle();
@@ -741,11 +762,11 @@ void main() {
     testWidgets('show last 2 parkings on home page',
         (WidgetTester tester) async {
       user1[carsKey] = [car1, car2];
-      model.localDbProxy.inMemoryUser = jsonEncode(user1);
-      model.localDbProxy.inMemoryCache = jsonEncode(cache1);
       await tester.pumpWidget(MyApp());
       await tester.pumpAndSettle();
-      await tester.pump();
+      await seedUser1(tester);
+      await seedCache1(tester);
+      await tester.pumpAndSettle();
       expect(find.byKey(WidgetKeys.homePageKey), findsOneWidget);
       expect(find.byKey(Key(parkingId1)), findsOneWidget);
       when(model.locationProxy.location).thenAnswer((_) async => location2);

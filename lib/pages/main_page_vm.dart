@@ -13,15 +13,26 @@ class MainPageVM {
 
   Future init() async {
     model.userBloc.eventStream.listen((UserBlocEvent event) {
-      if (_actionSubject.isClosed) {
-        return;
-      }
       switch (event) {
         case UserBlocEvent.loggedInEvent:
           _addHomePageAction();
           break;
         case UserBlocEvent.loggedOutEvent:
           _addPhonePageAction();
+          break;
+        case UserBlocEvent.seedEvent:
+          model.userBloc.handshake().then((state) {
+            switch (state) {
+              case UserBlocState.loggedIn:
+                _addHomePageAction();
+                break;
+              case UserBlocState.notLoggedIn:
+                _addPhonePageAction();
+                break;
+              default:
+                break;
+            }
+          });
           break;
         default:
           break;

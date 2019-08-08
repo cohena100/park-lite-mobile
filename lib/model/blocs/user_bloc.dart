@@ -21,10 +21,6 @@ class UserBloc with BaseBloc {
     _eventSubject.close().then((_) {});
   }
 
-  bool get isInTestMode {
-    return _localDbProxy.inMemoryUser != null;
-  }
-
   Future<User> get user async {
     return await getUser(_localDbProxy);
   }
@@ -131,6 +127,10 @@ class UserBloc with BaseBloc {
     return UserBlocState.failure;
   }
 
+  void seed() {
+    _eventSubject.add(UserBlocEvent.seedEvent);
+  }
+
   void _handleAddCarSuccess(Map data) {
     final validate = jsonDecode(data[NetworkProxyKeys.body]);
     _localDbProxy.appContext.data[AppContextDataKey.validateId] =
@@ -182,4 +182,5 @@ enum UserBlocEvent {
   loggedInEvent,
   loggedOutEvent,
   carAddedEvent,
+  seedEvent,
 }

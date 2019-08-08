@@ -222,6 +222,9 @@ class HomePageVM {
   }
 
   void _addHomeStatePopulateNoCars(List<HomePageVMItem> decorateItems) {
+    if (_actionSubject.isClosed) {
+      return;
+    }
     final items = [HomePageVMItem(type: HomePageVMItemType.add)];
     final allItems = [
       decorateItems,
