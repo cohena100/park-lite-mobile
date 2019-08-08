@@ -50,15 +50,15 @@ void main() {
     });
   });
 
-  tearDownAll(() {
-    bluetoothProxyStream.close();
+  tearDownAll(() async {
+    await bluetoothProxyStream.close();
   });
 
   setUp(() async {
     final localDBProxy = LocalDbProxy(isInTestModel: true);
     localDBProxy.geoPark = geoPark1;
     if (model != null) {
-      model.close();
+      await model.close();
     }
     model = Model(
       MockNetworkProxy(),

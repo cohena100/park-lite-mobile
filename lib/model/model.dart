@@ -41,9 +41,9 @@ class Model {
           notificationProxy,
         );
 
-  void close() {
-    userBloc.close();
-    parkBloc.close();
+  Future close() async {
+    await userBloc.close();
+    await parkBloc.close();
   }
 
   void setup(bool isIOS) {

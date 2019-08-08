@@ -66,8 +66,8 @@ class ParkBloc with BaseBloc {
     return ParkBlocState.notParking;
   }
 
-  void close() {
-    _eventSubject.close().then((_) {});
+  Future close() async {
+    await _eventSubject.close();
   }
 
   Future completeParking() async {

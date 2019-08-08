@@ -17,8 +17,8 @@ class UserBloc with BaseBloc {
 
   UserBloc(this._networkProxy, this._localDbProxy);
 
-  void close() {
-    _eventSubject.close().then((_) {});
+  Future close() async {
+    await _eventSubject.close();
   }
 
   Future<User> get user async {
