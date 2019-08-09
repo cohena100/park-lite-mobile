@@ -4,8 +4,8 @@ import 'package:test/test.dart';
 
 void main() {
   group('Home page', () {
-    final parking5CardFinder = find.byValueKey('5');
-    final parking1CardFinder = find.byValueKey('1');
+    final parking3TextFinder = find.byValueKey('3Text');
+    final parking1TextFinder = find.byValueKey('1Text');
     final listFinder = find.byValueKey('HomePageListView');
     FlutterDriver driver;
 
@@ -20,20 +20,22 @@ void main() {
       }
     });
 
-    setUp(() async {
-      await driver.requestData('reset');
-    });
-
-    test('show last 5 parkings on home page', () async {
-      await driver.waitFor(parking5CardFinder, timeout: Duration(seconds: 1));
-      await driver.waitForAbsent(parking1CardFinder, timeout: Duration(seconds: 1));
+    test('show last 3 parkings on home page', () async {
+      expect(
+          await driver.getText(
+            parking3TextFinder,
+            timeout: Duration(seconds: 1),
+          ),
+          isNotNull);
       await driver.scrollUntilVisible(
         listFinder,
-        parking1CardFinder,
+        parking1TextFinder,
         dyScroll: -300.0,
       );
-      await driver.waitFor(parking1CardFinder, timeout: Duration(seconds: 1));
-      await driver.waitForAbsent(parking5CardFinder, timeout: Duration(seconds: 1));
+      expect(
+          await driver.getText(parking1TextFinder,
+              timeout: Duration(seconds: 1)),
+          isNotNull);
     });
   });
 }

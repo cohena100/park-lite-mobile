@@ -13,7 +13,7 @@ class PayPageVM {
   }
 
   Future init() async {
-    final isInTestMode = model.localDbProxy.isInTestModel;
+    final isInTestMode = model.userBloc.isInTestMode;
     if (isInTestMode) {
       await model.parkBloc.completeParking();
       _addNoneAction();

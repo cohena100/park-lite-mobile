@@ -8,7 +8,8 @@ import 'package:path_provider/path_provider.dart';
 class AppContext {
   final Map data;
   final AppContextState state;
-  AppContext({this.data = const {}, this.state = AppContextState.none});
+  AppContext(
+      {this.data = const {}, this.state = AppContextState.none});
 }
 
 enum AppContextDataKey {
@@ -33,11 +34,13 @@ enum AppContextState {
 }
 
 class LocalDbProxy {
+  final bool inMemory;
+  String inMemoryUser;
+  String inMemoryCache;
   Map geoPark;
-  final bool isInTestModel;
   AppContext appContext = AppContext();
 
-  LocalDbProxy({this.isInTestModel = false});
+  LocalDbProxy({this.inMemory = false});
 
   Future<File> get _cacheFile async {
     final path = await _localPath;
@@ -54,31 +57,23 @@ class LocalDbProxy {
     return File('$path/user.json');
   }
 
-  Future drop() async {
-    try {
-      final userFile = await _userFile;
-      if (userFile.existsSync()) {
-        userFile.deleteSync();
-      }
-      final cacheFile = await _cacheFile;
-      if (cacheFile.existsSync()) {
-        cacheFile.deleteSync();
-      }
-    } catch (e) {
-      return;
-    }
-  }
-
   Future<Map> loadCache() async {
-    try {
-      final file = await _cacheFile;
-      if (file.existsSync() == false) {
+    if (inMemory) {
+      if (inMemoryCache == null) {
         return null;
       }
-      final jsonString = await file.readAsString();
-      return jsonDecode(jsonString);
-    } catch (e) {
-      return null;
+      return jsonDecode(inMemoryCache);
+    } else {
+      try {
+        final file = await _cacheFile;
+        if (file.existsSync() == false) {
+          return null;
+        }
+        final jsonString = await file.readAsString();
+        return jsonDecode(jsonString);
+      } catch (e) {
+        return null;
+      }
     }
   }
 
@@ -92,28 +87,43 @@ class LocalDbProxy {
   }
 
   Future<Map> loadUser() async {
-    try {
-      final file = await _userFile;
-      if (file.existsSync() == false) {
+    if (inMemory) {
+      if (inMemoryUser == null) {
         return null;
       }
-      final jsonString = await file.readAsString();
-      return jsonDecode(jsonString);
-    } catch (e) {
-      return null;
+      return jsonDecode(inMemoryUser);
+    } else {
+      try {
+        final file = await _userFile;
+        if (file.existsSync() == false) {
+          return null;
+        }
+        final jsonString = await file.readAsString();
+        return jsonDecode(jsonString);
+      } catch (e) {
+        return null;
+      }
     }
   }
 
   Future saveCache(String json) async {
-    try {
-      await _writeCache(json);
-    } catch (e) {}
+    if (inMemory) {
+      inMemoryCache = json;
+    } else {
+      try {
+        await _writeCache(json);
+      } catch (e) {}
+    }
   }
 
   Future saveUser(String json) async {
-    try {
-      await _writeUser(json);
-    } catch (e) {}
+    if (inMemory) {
+      inMemoryUser = json;
+    } else {
+      try {
+        await _writeUser(json);
+      } catch (e) {}
+    }
   }
 
   Future<File> _writeCache(String json) async {
