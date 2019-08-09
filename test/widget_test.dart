@@ -32,7 +32,7 @@ void main() {
     await bluetoothProxyStream.close();
   });
 
-  setUp(() {
+  setUp(() async {
     final localDBProxy = LocalDbProxy(inMemory: true);
     localDBProxy.geoPark = geoPark1;
     if (model != null) {
