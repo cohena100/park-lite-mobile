@@ -17,12 +17,13 @@ void main() {
   Future<String> dataHandler(String msg) async {
     switch (msg) {
       case "teardown":
-        bluetoothProxyStream.close();
+        await bluetoothProxyStream.close();
         return 'ok';
       default:
         return 'error';
     }
   }
+
   enableFlutterDriverExtension(handler: dataHandler);
   final localDbProxy = LocalDbProxy(inMemory: true);
   localDbProxy.geoPark = geoPark1;
@@ -50,6 +51,8 @@ void main() {
       parking1,
       parking2,
       parking3,
+      parking4,
+      parking5,
     ]
   };
   model.localDbProxy.inMemoryCache = jsonEncode(cache);

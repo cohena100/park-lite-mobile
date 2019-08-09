@@ -203,9 +203,37 @@ final parking3 = {
   'user': userId1,
   'car': innerCarId2,
 };
+final parking4 = {
+  '_id': parkingId4,
+  'cityId': cityId3,
+  'cityName': cityName3,
+  'areaId': areaId3,
+  'areaName': areaName3,
+  'rateId': rateId1,
+  'rateName': rateName1,
+  'lat': lat1.toString(),
+  'lon': lon1.toString(),
+  'user': userId1,
+  'car': innerCarId2,
+};
+final parking5 = {
+  '_id': parkingId5,
+  'cityId': cityId2,
+  'cityName': cityName2,
+  'areaId': areaId3,
+  'areaName': areaName3,
+  'rateId': rateId2,
+  'rateName': rateName2,
+  'lat': lat1.toString(),
+  'lon': lon1.toString(),
+  'user': userId1,
+  'car': innerCarId2,
+};
 final parkingId1 = '1';
 final parkingId2 = '2';
 final parkingId3 = '3';
+final parkingId4 = '4';
+final parkingId5 = '5';
 final parkingKey = 'parking';
 final payment1 = {
   'amount': 20,
