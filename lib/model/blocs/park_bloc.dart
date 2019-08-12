@@ -159,7 +159,7 @@ class ParkBloc with BaseBloc {
     cache.updateParkings(parking);
     await _localDbProxy.saveCache(jsonEncode(cache));
     _stopBluetooth();
-    _eventSubject.add(ParkBlocEvent.parkingStartedEvent);
+    _eventSubject.add(ParkBlocEvent.parkingEndedEvent);
   }
 
   Future _handleStartParkingSuccess(Map data) async {
