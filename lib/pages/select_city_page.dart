@@ -27,11 +27,9 @@ class SelectCityPageState extends State<SelectCityPage> {
             case SelectCityPageVMActionState.cities:
               final List<SelectCityPageVMItem> items =
                   action.data[SelectCityPageVMActionDataKey.items];
-              body = Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ListView(
-                      key: WidgetKeys.selectCityPageListViewKey,
-                      children: items.map(_buildItem).toList()));
+              body = ListView(
+                  key: WidgetKeys.selectCityPageListViewKey,
+                  children: items.map(_buildItem).toList());
               break;
             default:
               body = Container();

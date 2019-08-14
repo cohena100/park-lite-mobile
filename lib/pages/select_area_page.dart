@@ -30,11 +30,9 @@ class SelectAreaPageState extends State<SelectAreaPage> {
             case SelectAreaPageVMActionState.areas:
               final List<SelectAreaPageVMItem> items =
                   action.data[SelectAreaPageVMActionDataKey.items];
-              body = Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ListView(
-                      key: WidgetKeys.selectAreaPageListViewKey,
-                      children: items.map(_buildItem).toList()));
+              body = ListView(
+                  key: WidgetKeys.selectAreaPageListViewKey,
+                  children: items.map(_buildItem).toList());
               break;
           }
           return Scaffold(

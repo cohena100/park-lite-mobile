@@ -28,11 +28,9 @@ class UserPageState extends State<UserPage> {
             case UserPageVMActionState.user:
               final List<UserPageVMItem> items =
                   action.data[UserPageVMActionDataKey.items];
-              return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ListView(
-                      key: WidgetKeys.userPageListViewKey,
-                      children: items.map(_buildItem).toList()));
+              return ListView(
+                  key: WidgetKeys.userPageListViewKey,
+                  children: items.map(_buildItem).toList());
             default:
               return Container();
           }

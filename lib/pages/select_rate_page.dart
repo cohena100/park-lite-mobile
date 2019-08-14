@@ -27,11 +27,9 @@ class SelectRatePageState extends State<SelectRatePage> {
             case SelectRatePageVMActionState.rates:
               final List<SelectRatePageVMItem> items =
                   action.data[SelectRatePageVMActionDataKey.items];
-              body = Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ListView(
-                      key: WidgetKeys.selectRatePageListViewKey,
-                      children: items.map(_buildItem).toList()));
+              body = ListView(
+                  key: WidgetKeys.selectRatePageListViewKey,
+                  children: items.map(_buildItem).toList());
               break;
             case SelectRatePageVMActionState.busy:
               body = Center(child: CircularProgressIndicator());
