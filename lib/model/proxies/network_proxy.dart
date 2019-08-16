@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class NetworkProxy {
-  static const uuid = '6518BCEC-D521-40C2-8CB4-A780CDA382EF';
   static const Map<String, String> headers = {
     'Content-type': 'application/json',
     'Accept': 'application/json',
