@@ -24,9 +24,7 @@ class PayPageVM {
   }
 
   Future onUrlChanged(String url) async {
-    final successUrl =
-        'https://stormy-dusk-75310.herokuapp.com/payments/success';
-    if (url == successUrl) {
+    if (!url.contains('checkout.stripe.com')) {
       await model.parkBloc.completeParking();
       _addRootPageOtherAction();
     }
