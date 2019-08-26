@@ -39,6 +39,7 @@ class CarPageVM {
     _otherActionSubject.add(
       CarPageVMOtherAction(state: CarPageVMOtherActionState.nicknamePage),
     );
+    _addCarAction();
   }
 }
 
