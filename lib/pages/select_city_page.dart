@@ -17,28 +17,28 @@ class SelectCityPageState extends State<SelectCityPage> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-        stream: vm.actionStream,
-        initialData: SelectCityPageVMAction(),
-        builder: (context, snapshot) {
-          final action = snapshot.data;
-          Widget body;
-          switch (action.state) {
-            case SelectCityPageVMActionState.cities:
-              final List<SelectCityPageVMItem> items =
-                  action.data[SelectCityPageVMActionDataKey.items];
-              body = ListView(
-                  key: WidgetKeys.selectCityPageListViewKey,
-                  children: items.map(_buildItem).toList());
-              break;
-            default:
-              body = Container();
-          }
-          return Scaffold(
-              appBar: AppBar(
-                  title: Text(AppLocalizations.of(context).selectCityTitle)),
-              body: body);
-        });
+    return Scaffold(
+        appBar:
+            AppBar(title: Text(AppLocalizations.of(context).selectCityTitle)),
+        body: StreamBuilder(
+            stream: vm.actionStream,
+            initialData: SelectCityPageVMAction(),
+            builder: (context, snapshot) {
+              final action = snapshot.data;
+              Widget body;
+              switch (action.state) {
+                case SelectCityPageVMActionState.cities:
+                  final List<SelectCityPageVMItem> items =
+                      action.data[SelectCityPageVMActionDataKey.items];
+                  body = ListView(
+                      key: WidgetKeys.selectCityPageListViewKey,
+                      children: items.map(_buildItem).toList());
+                  break;
+                default:
+                  body = Container();
+              }
+              return body;
+            }));
   }
 
   @override

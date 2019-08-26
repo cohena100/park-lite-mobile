@@ -17,29 +17,29 @@ class SelectAreaPageState extends State<SelectAreaPage> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-        stream: vm.actionStream,
-        initialData: SelectAreaPageVMAction(),
-        builder: (context, snapshot) {
-          final action = snapshot.data;
-          Widget body;
-          switch (action.state) {
-            case SelectAreaPageVMActionState.none:
-              body = Container();
-              break;
-            case SelectAreaPageVMActionState.areas:
-              final List<SelectAreaPageVMItem> items =
-                  action.data[SelectAreaPageVMActionDataKey.items];
-              body = ListView(
-                  key: WidgetKeys.selectAreaPageListViewKey,
-                  children: items.map(_buildItem).toList());
-              break;
-          }
-          return Scaffold(
-              appBar: AppBar(
-                  title: Text(AppLocalizations.of(context).selectAreaTitle)),
-              body: body);
-        });
+    return Scaffold(
+        appBar:
+            AppBar(title: Text(AppLocalizations.of(context).selectAreaTitle)),
+        body: StreamBuilder(
+            stream: vm.actionStream,
+            initialData: SelectAreaPageVMAction(),
+            builder: (context, snapshot) {
+              final action = snapshot.data;
+              Widget body;
+              switch (action.state) {
+                case SelectAreaPageVMActionState.none:
+                  body = Container();
+                  break;
+                case SelectAreaPageVMActionState.areas:
+                  final List<SelectAreaPageVMItem> items =
+                      action.data[SelectAreaPageVMActionDataKey.items];
+                  body = ListView(
+                      key: WidgetKeys.selectAreaPageListViewKey,
+                      children: items.map(_buildItem).toList());
+                  break;
+              }
+              return body;
+            }));
   }
 
   @override

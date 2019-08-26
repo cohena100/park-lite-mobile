@@ -19,22 +19,23 @@ class PayPageState extends State<PayPage> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-        stream: vm.actionStream,
-        initialData: PayPageVMAction(),
-        builder: (context, snapshot) {
-          final action = snapshot.data;
-          switch (action.state) {
-            case PayPageVMActionState.pay:
-              return pay(context, action.data[PayPageVMActionDataKey.payment]);
-            default:
-              return Scaffold(
-                  appBar: AppBar(
-                    title: Text(AppLocalizations.of(context).payTitle),
-                  ),
-                  body: Container());
-          }
-        });
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(AppLocalizations.of(context).payTitle),
+        ),
+        body: StreamBuilder(
+            stream: vm.actionStream,
+            initialData: PayPageVMAction(),
+            builder: (context, snapshot) {
+              final action = snapshot.data;
+              switch (action.state) {
+                case PayPageVMActionState.pay:
+                  return pay(
+                      context, action.data[PayPageVMActionDataKey.payment]);
+                default:
+                  return Container();
+              }
+            }));
   }
 
   @override

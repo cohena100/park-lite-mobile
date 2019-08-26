@@ -17,31 +17,31 @@ class SelectRatePageState extends State<SelectRatePage> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-        stream: vm.actionStream,
-        initialData: SelectRatePageVMAction(),
-        builder: (context, snapshot) {
-          final action = snapshot.data;
-          Widget body;
-          switch (action.state) {
-            case SelectRatePageVMActionState.rates:
-              final List<SelectRatePageVMItem> items =
-                  action.data[SelectRatePageVMActionDataKey.items];
-              body = ListView(
-                  key: WidgetKeys.selectRatePageListViewKey,
-                  children: items.map(_buildItem).toList());
-              break;
-            case SelectRatePageVMActionState.busy:
-              body = Center(child: CircularProgressIndicator());
-              break;
-            default:
-              body = Container();
-          }
-          return Scaffold(
-              appBar: AppBar(
-                  title: Text(AppLocalizations.of(context).selectRateTitle)),
-              body: body);
-        });
+    return Scaffold(
+        appBar:
+            AppBar(title: Text(AppLocalizations.of(context).selectRateTitle)),
+        body: StreamBuilder(
+            stream: vm.actionStream,
+            initialData: SelectRatePageVMAction(),
+            builder: (context, snapshot) {
+              final action = snapshot.data;
+              Widget body;
+              switch (action.state) {
+                case SelectRatePageVMActionState.rates:
+                  final List<SelectRatePageVMItem> items =
+                      action.data[SelectRatePageVMActionDataKey.items];
+                  body = ListView(
+                      key: WidgetKeys.selectRatePageListViewKey,
+                      children: items.map(_buildItem).toList());
+                  break;
+                case SelectRatePageVMActionState.busy:
+                  body = Center(child: CircularProgressIndicator());
+                  break;
+                default:
+                  body = Container();
+              }
+              return body;
+            }));
   }
 
   @override

@@ -18,48 +18,48 @@ class CarPageState extends State<CarPage> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-        stream: vm.actionStream,
-        initialData: CarPageVMAction(),
-        builder: (context, snapshot) {
-          final action = snapshot.data;
-          switch (action.state) {
-            case CarPageVMActionState.number:
-              return car(context, action.data[CarPageVMActionDataKey.number]);
-            default:
-              return Container();
-          }
-        });
+    return Scaffold(
+        appBar:
+            AppBar(title: Text(AppLocalizations.of(context).carNumberTitle)),
+        body: StreamBuilder(
+            stream: vm.actionStream,
+            initialData: CarPageVMAction(),
+            builder: (context, snapshot) {
+              final action = snapshot.data;
+              switch (action.state) {
+                case CarPageVMActionState.number:
+                  return car(
+                      context, action.data[CarPageVMActionDataKey.number]);
+                default:
+                  return Container();
+              }
+            }));
   }
 
   Widget car(BuildContext context, String number) {
     _textEditingController.value =
         number == null ? TextEditingValue() : TextEditingValue(text: number);
     bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
-    return Scaffold(
-        appBar:
-            AppBar(title: Text(AppLocalizations.of(context).carNumberTitle)),
-        body: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              TextField(
-                  key: WidgetKeys.carTextFieldKey,
-                  controller: _textEditingController,
-                  autofocus: true,
-                  keyboardType:
-                      isIOS ? TextInputType.text : TextInputType.number,
-                  maxLength: CarPageState.textFieldMaxLength,
-                  textAlign: TextAlign.center,
-                  decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context).carNumberHint),
-                  onChanged: (String s) {
-                    vm.numberChanged(s);
-                  },
-                  onSubmitted: (String s) async {
-                    vm.numberSubmitted();
-                  })
-            ]));
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          TextField(
+              key: WidgetKeys.carTextFieldKey,
+              controller: _textEditingController,
+              autofocus: true,
+              keyboardType: isIOS ? TextInputType.text : TextInputType.number,
+              maxLength: CarPageState.textFieldMaxLength,
+              textAlign: TextAlign.center,
+              decoration: InputDecoration(
+                  hintText: AppLocalizations.of(context).carNumberHint),
+              onChanged: (String s) {
+                vm.numberChanged(s);
+              },
+              onSubmitted: (String s) async {
+                vm.numberSubmitted();
+              })
+        ]);
   }
 
   @override

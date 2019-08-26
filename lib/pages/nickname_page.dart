@@ -18,30 +18,30 @@ class NicknamePageState extends State<NicknamePage> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-        stream: vm.actionStream,
-        initialData: NicknamePageVMAction(),
-        builder: (context, snapshot) {
-          final action = snapshot.data;
-          Widget body;
-          switch (action.state) {
-            case NicknamePageVMActionState.busy:
-              body = Center(child: CircularProgressIndicator());
-              break;
-            case NicknamePageVMActionState.nickname:
-              body = nickname(
-                  context, action.data[NicknamePageVMActionDataKey.nickname]);
-              break;
-            default:
-              body = Container();
-              break;
-          }
-          return Scaffold(
-            appBar: AppBar(
-                title: Text(AppLocalizations.of(context).carNicknameTitle)),
-            body: body,
-          );
-        });
+    return Scaffold(
+      appBar:
+          AppBar(title: Text(AppLocalizations.of(context).carNicknameTitle)),
+      body: StreamBuilder(
+          stream: vm.actionStream,
+          initialData: NicknamePageVMAction(),
+          builder: (context, snapshot) {
+            final action = snapshot.data;
+            Widget body;
+            switch (action.state) {
+              case NicknamePageVMActionState.busy:
+                body = Center(child: CircularProgressIndicator());
+                break;
+              case NicknamePageVMActionState.nickname:
+                body = nickname(
+                    context, action.data[NicknamePageVMActionDataKey.nickname]);
+                break;
+              default:
+                body = Container();
+                break;
+            }
+            return body;
+          }),
+    );
   }
 
   @override
